@@ -81,10 +81,10 @@ class App():
     __package = ""  # package of the App
     __version = ""  # version of the App
     __sdk = ""  # target SDK of the App
-    __services = []  # Services declared by the App
-    __activities = []  # Activities declared by the App
-    __receivers = []  # BroadcastReceivers declared by the App
-    __permissions = []  # premissions requested by the App
+    __services = None  # Services declared by the App
+    __activities = None  # Activities declared by the App
+    __receivers = None  # BroadcastReceivers declared by the App
+    __permissions = None  # premissions requested by the App
     #__md5 = ""  # MD5 of the App
 
 
@@ -98,9 +98,23 @@ class App():
     # @param apkFile  the name of the APK package to be analyzed.
     ##
     def __init__(self, apkDir, apkFile):
-        apkAbsoluteDir = os.path.join(apkDir, apkFile)
-
+        #Attributes initialization:
+        self.__authorName = ""
+        self.__authorEmail = ""
+        self.__authorCompany = ""
+        self.__authorCountry = ""
+        self.__certificateMD5 = ""
+        self.__name = ""
+        self.__package = ""
+        self.__version = ""
+        self.__sdk = ""
+        self.__services = []
+        self.__activities = []
+        self.__receivers = []
+        self.__permissions = []
+        
         #Extract the certificate (META-INF/CERT.RSA) from the APK package and save it (temporarily):
+        apkAbsoluteDir = os.path.join(apkDir, apkFile)
         with zipfile.ZipFile(apkAbsoluteDir) as z:
             with z.open(certDir+certFile) as zf, open(os.path.join(apkDir, os.path.basename(certFile)), 'wb') as f:
                 shutil.copyfileobj(zf, f)

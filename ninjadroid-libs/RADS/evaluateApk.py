@@ -65,7 +65,7 @@ else:  # os.path.isfile(apkFile)
 	os.chdir(apkDir)
 
 
-	app = App(apkDir, apkFile);
+	app = App(apkDir, apkFile)
 
 
 	#Debug:

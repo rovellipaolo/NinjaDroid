@@ -22,28 +22,28 @@ from App import *
 #Example Call: python printApkManifestInfo.py -d /Users/paolo/Development/ninjadroid/ -t DroidRoot.A.apk
 
 #Folders:
-directory = os.path.dirname( os.path.realpath(__file__) )  # the scanned directory (if not specified it will be the current directory)
+apkDir = os.path.dirname( os.path.realpath(__file__) )  # the scanned directory (if not specified it will be the current directory)
 
 #Retrieve the user's parameters:
 opts, extraparams = getopt.getopt(sys.argv[1:], "d:t:") 
 for o,p in opts:
 	if o in ['-d', '--dir']:
-		directory = p
+		apkDir = p
 	if o in ['-t', '--target']:
-		apkfile = p
+		apkFile = p
 
 #Debug:
-print "Directory: " + directory
-print "Target: " + apkfile
+print "Directory: " + apkDir
+print "Target: " + apkFile
 #-------------------------------- END Retrieving parameters. --------------------------------#
 
 
 
 #Move to the scanned directory:
-os.chdir(directory)
+os.chdir(apkDir)
 
 
-app = App(directory, apkfile)
+app = App(apkDir, apkFile)
 
 
 #Debug:

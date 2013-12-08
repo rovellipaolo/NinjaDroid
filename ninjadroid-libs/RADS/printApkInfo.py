@@ -22,7 +22,7 @@ from App import *
 #Example Call: python printApkInfo.py -d /Users/paolo/Development/ninjadroid/ -t DroidRoot.A.apk
 
 #Folders:
-directory = os.path.dirname( os.path.realpath(__file__) )  # the scanned directory (if not specified it will be the current directory)
+apkDir = os.path.dirname( os.path.realpath(__file__) )  # the scanned directory (if not specified it will be the current directory)
 
 #Retrieve the user's parameters:
 opts, extraparams = getopt.getopt(sys.argv[1:], "d:t:") 
@@ -43,7 +43,7 @@ print "Target: " + apkFile
 os.chdir(apkDir)
 
 
-app = App(apkDir, apkFile);
+app = App(apkDir, apkFile)
 
 
 #Debug:

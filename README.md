@@ -13,7 +13,6 @@ NinjaDroid uses apktool (https://code.google.com/p/android-apktool/) and dex2jar
 - the assets/ and res/ folders together with their content (thanks to apktool);
 
 Finally it creates an HTML report file containing a review of the APK package. This HTML file contains a simple table with a list of useful information that characterize the app (e.g. its name, package, version and author, together with the lists of permissions, Activities, Services and BroadcastReceiver).
-Use NinjaDroid
 
 
 Installation:

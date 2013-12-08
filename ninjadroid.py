@@ -38,8 +38,8 @@ outputFileExtension = ".html"
 
 
 #------------------------------- BEGIN Retrieving parameters: -----------------------------#
-#Example Call: python printApkInfo.py -t DroidRoot.A.apk
-#Example Call: python printApkInfo.py -d /Users/paolo/Development/NinjaDroid/ -t DroidRoot.A.apk
+#Example Call: python ninjadroid.py -t DroidRoot.A.apk
+#Example Call: python ninjadroid.py -d /Users/paolo/Development/NinjaDroid/ -t DroidRoot.A.apk
 
 #Folders:
 curpath = os.path.dirname( os.path.realpath(__file__) )  # the scanned directory (if not specified it will be the current directory)

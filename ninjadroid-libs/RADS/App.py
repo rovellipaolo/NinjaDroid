@@ -98,10 +98,7 @@ class App():
     # @param apkFile  the name of the APK package to be analyzed.
     ##
     def __init__(self, apkDir, apkFile):
-        if string.rfind(apkDir, "/", len(apkDir)-1) != -1:  # the directory ends with "/"
-            apkAbsoluteDir = apkDir + apkFile
-        else:  # string.rfind(apkDir, "/", len(apkDir)-1) == -1  # the directory does NOT end with "/"
-            apkAbsoluteDir = apkDir + "/" + apkFile
+        apkAbsoluteDir = os.path.join(apkDir, apkFile)
 
         #Extract the certificate (META-INF/CERT.RSA) from the APK package and save it (temporarily):
         with zipfile.ZipFile(apkAbsoluteDir) as z:

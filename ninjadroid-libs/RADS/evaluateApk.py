@@ -112,22 +112,22 @@ else:  # os.path.isfile(apkFile)
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>App Name:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getName() + "</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Package:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getPackage() + "</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Version:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getVersion() + "</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Target SDK:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getTargetSdk() + "</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Author:</td>" + "\n"
@@ -141,12 +141,12 @@ else:  # os.path.isfile(apkFile)
 	if app.getAuthorCountry() != "":
 		table += "\t\t\t\t" + app.getAuthorCountry() + "\n"
 	table += "\t\t\t</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Author Certificate MD5:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getCertificateMD5() + "</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Permissions:</td>" + "\n"
@@ -154,7 +154,7 @@ else:  # os.path.isfile(apkFile)
 	for permission in app.getPermissions():
 		table += "\t\t\t\t" + permission + "<br />\n"
 	table += "\t\t\t</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Activities:</td>" + "\n"
@@ -162,7 +162,7 @@ else:  # os.path.isfile(apkFile)
 	for activity in app.getActivities():
 		table += "\t\t\t\t" + activity + "<br />\n"
 	table += "\t\t\t</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Services:</td>" + "\n"
@@ -170,7 +170,7 @@ else:  # os.path.isfile(apkFile)
 	for service in app.getServices():
 		table += "\t\t\t\t" + service + "<br />\n"
 	table += "\t\t\t</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>BroadcastReceivers:</td>" + "\n"
@@ -178,7 +178,7 @@ else:  # os.path.isfile(apkFile)
 	for receiver in app.getBroadcastReceivers():
 		table += "\t\t\t\t" + receiver + "<br />\n"
 	table += "\t\t\t</td>" + "\n"
-	table += "\t\t<tr>" + "\n"
+	table += "\t\t</tr>" + "\n"
 
 
 	#Append to the file:

@@ -27,6 +27,8 @@ It is also possible to launch NinjaDroid on an APK package which is not in the N
 
 python ninjadroid.py -d /[AbsolutePathToTheApkFolder]/ -t MyPackage.apk
 
+Please, note that you need to have the Android SDK and Python installed on your computer.
+
 
 Licence:
 ========

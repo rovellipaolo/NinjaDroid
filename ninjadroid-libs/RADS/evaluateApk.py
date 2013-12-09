@@ -48,7 +48,7 @@ for o,p in opts:
 print "Directory: " + apkDir
 print "Target: " + apkFile
 
-apkName = str(apkFile[0:len(apkFile)-4])  # the APK file name without the ".apk" extension (that is also the name of the folder we will create)
+apkName = apkFile[0:len(apkFile)-4]  # the APK file name without the ".apk" extension (that is also the name of the folder we will create)
 #-------------------------------- END Retrieving parameters. --------------------------------#
 
 

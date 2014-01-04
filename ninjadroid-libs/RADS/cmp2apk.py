@@ -151,6 +151,16 @@ else:  # os.path.isfile(apkFile1) && os.path.isfile(apkFile2)
 	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
+	table += "\t\t\t<td>MD5:</td>" + "\n"
+	table += "\t\t\t<td style=\"font-weight: bold;\">" + app1.getApkMD5() + "</td>" + "\n"
+	if app1.getApkMD5() != app2.getApkMD5():
+		table += "\t\t\t<td style=\"font-weight: bold; color: #FF0000;\">"
+	else:  # app1.getApkMD5() == app2.getApkMD5()
+		table += "\t\t\t<td style=\"font-weight: bold;\">"
+	table += app2.getApkMD5() + "</td>" + "\n"
+	table += "\t\t</tr>" + "\n"
+
+	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Version:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app1.getVersion() + "</td>" + "\n"
 	if app1.getVersion() != app2.getVersion():

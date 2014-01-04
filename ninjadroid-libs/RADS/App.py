@@ -14,6 +14,7 @@ import fnmatch
 import string
 import zipfile
 import shutil
+import hashlib
 #-------------------------------- END Import Python types. --------------------------------#
 
 
@@ -85,7 +86,7 @@ class App():
     __activities = None  # Activities declared by the App
     __receivers = None  # BroadcastReceivers declared by the App
     __permissions = None  # premissions requested by the App
-    #__md5 = ""  # MD5 of the App
+    __md5 = ""  # MD5 of the App
 
 
 
@@ -98,6 +99,8 @@ class App():
     # @param apkFile  the name of the APK package to be analyzed.
     ##
     def __init__(self, apkDir, apkFile):
+        apkAbsoluteDir = os.path.join(apkDir, apkFile)
+        
         #Attributes initialization:
         self.__authorName = ""
         self.__authorEmail = ""
@@ -112,9 +115,11 @@ class App():
         self.__activities = []
         self.__receivers = []
         self.__permissions = []
+
+        #Calculate APK MD5:
+        self.__md5 = hashlib.md5(open(apkAbsoluteDir, 'rb').read()).hexdigest()
         
         #Extract the certificate (META-INF/CERT.RSA) from the APK package and save it (temporarily):
-        apkAbsoluteDir = os.path.join(apkDir, apkFile)
         with zipfile.ZipFile(apkAbsoluteDir) as z:
             with z.open(certDir+certFile) as zf, open(os.path.join(apkDir, os.path.basename(certFile)), 'wb') as f:
                 shutil.copyfileobj(zf, f)
@@ -267,6 +272,16 @@ class App():
     ##
     def getTargetSdk(self):
         return self.__sdk
+
+
+
+    ##
+    # Get the app MD5.
+    #
+    # @return the app MD5.
+    ##
+    def getApkMD5(self):
+        return self.__md5
 
 
 

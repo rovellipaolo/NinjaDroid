@@ -120,6 +120,11 @@ else:  # os.path.isfile(apkFile)
 	table += "\t\t</tr>" + "\n"
 
 	table += "\t\t<tr>" + "\n"
+	table += "\t\t\t<td>MD5:</td>" + "\n"
+	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getApkMD5() + "</td>" + "\n"
+	table += "\t\t</tr>" + "\n"
+
+	table += "\t\t<tr>" + "\n"
 	table += "\t\t\t<td>Version:</td>" + "\n"
 	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getVersion() + "</td>" + "\n"
 	table += "\t\t</tr>" + "\n"

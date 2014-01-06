@@ -11,7 +11,6 @@ import os
 import subprocess
 import sys
 import fnmatch
-import string
 import zipfile
 import shutil
 import hashlib
@@ -100,7 +99,7 @@ class App():
     ##
     def __init__(self, apkDir, apkFile):
         apkAbsoluteDir = os.path.join(apkDir, apkFile)
-        
+
         #Attributes initialization:
         self.__authorName = ""
         self.__authorEmail = ""
@@ -118,7 +117,7 @@ class App():
 
         #Calculate APK MD5:
         self.__md5 = hashlib.md5(open(apkAbsoluteDir, 'rb').read()).hexdigest()
-        
+
         #Extract the certificate (META-INF/CERT.RSA) from the APK package and save it (temporarily):
         with zipfile.ZipFile(apkAbsoluteDir) as z:
             with z.open(certDir+certFile) as zf, open(os.path.join(apkDir, os.path.basename(certFile)), 'wb') as f:
@@ -332,29 +331,37 @@ class App():
             #print "info: " + info
 
             #Owner info:
-            if string.find(info, "Owner: ", 0, 7) != -1:
-                authorInfo = string.lstrip(info, "Owner: ").split(", ")
+            pathPrefix = "Owner: "
+            if info[0:len(pathPrefix)] == pathPrefix:
+                authorInfo = info[len(pathPrefix):].split(", ")
 
                 for field in authorInfo:
-                    if string.find(field, "CN=", 0, 3) != -1:
-                        self.__authorName = string.lstrip(field, "CN=")
+                    pathPrefix = "CN="
+                    if field[0:len(pathPrefix)] == pathPrefix:
+                        self.__authorName = field[len(pathPrefix):]
                         continue
-                    if string.find(field, "O=", 0, 2) != -1:
-                        self.__authorCompany = string.lstrip(field, "O=")
+
+                    pathPrefix = "O="
+                    if field[0:len(pathPrefix)] == pathPrefix:
+                        self.__authorCompany = field[len(pathPrefix):]
                         continue
-                    if string.find(field, "EMAILADDRESS=", 0, 13) != -1:
-                        self.__authorEmail = string.lstrip(field, "EMAILADDRESS=")
+
+                    pathPrefix = "EMAILADDRESS="
+                    if field[0:len(pathPrefix)] == pathPrefix:
+                        self.__authorEmail = field[len(pathPrefix):]
                         continue
-                    if string.find(field, "C=", 0, 2) != -1:
-                        self.__authorCountry = string.lstrip(field, "C=")
+
+                    pathPrefix = "C="
+                    if field[0:len(pathPrefix)] == pathPrefix:
+                        self.__authorCountry = field[len(pathPrefix):]
                         continue
 
                 continue
 
-            #Certificate fingerprints:
-            #if string.find(info, "Certificate fingerprints:") != -1:
-            if string.find(info, "\t MD5:") != -1:
-                self.__certificateMD5 = string.lstrip(info, "\t MD5:")
+            #Certificate fingerprints (MD5):
+            pathPrefix = "\t MD5:"
+            if info[0:len(pathPrefix)] == pathPrefix:
+                self.__certificateMD5 = info[len(pathPrefix):]
                 continue
                 
 
@@ -423,23 +430,27 @@ class App():
             #print "info: " + info
 
             #Package info:
-            if string.find(info, "package:", 0) != -1:
+            pathPrefix = "package:"
+            if info[0:len(pathPrefix)] == pathPrefix:
                 self.__package = findBetween(info, "name='", "'")
                 self.__version = findBetween(info, "versionName='", "'")
                 continue
 
             #Target SDK version:
-            if string.find(info, "targetSdkVersion:", 0) != -1:
+            pathPrefix = "targetSdkVersion:"
+            if info[0:len(pathPrefix)] == pathPrefix:
                 self.__sdk = findBetween(info, "targetSdkVersion:'", "'")
                 continue
 
             #App name:
-            if string.find(info, "application:", 0) != -1:
+            pathPrefix = "application:"
+            if info[0:len(pathPrefix)] == pathPrefix:
                 self.__name = findBetween(info, "label='", "'")
                 continue
 
             #Main Activity:
-            #if string.find(info, "launchable-activity:", 0) != -1:
+            #pathPrefix = "launchable-activity:"
+            #if info[0:len(pathPrefix)] == pathPrefix:
             #    self.__activities.append( findBetween(info, "name='", "'") )
             #    continue
 

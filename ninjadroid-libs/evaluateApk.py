@@ -1,15 +1,25 @@
-###########################################################################################################################
-# @file evaluateApk.py                                                                                                    #
-# @brief Extract all the information from an APK package and save all into an HTML output file.                           #
-# @update 2013-11-20 19:59:00 (Wed Nov 20, 2013 at 7:59 PM)                                                               #
-# @author Paolo Rovelli                                                                                                   #
-###########################################################################################################################
+#####################################################################################################
+# @file evaluateApk.py																				#
+# @brief Extract all the information from an APK package and save all into an HTML output file.		#
+# @update 2013-11-20 19:59:00 (Wed Nov 20, 2013 at 7:59 PM)											#
+# @author Paolo Rovelli																				#
+#####################################################################################################
+
+
+
+
+#Example Call:
+# $ python printApkInfo.py -d /Users/paolo/Development/ninjadroid/ -t DroidRoot.A.apk
+
+
 
 
 #-------------------------------- BEGIN Import Python types: ------------------------------#
 import os
 import getopt
 #-------------------------------- END Import Python types. --------------------------------#
+
+
 
 
 #-------------------------------- BEGIN Import Classes: -----------------------------------#
@@ -28,8 +38,6 @@ outputFileExtension = ".html"
 
 
 #-------------------------------- BEGIN Retrieving parameters: ------------------------------#
-#Example Call: python printApkInfo.py -d /Users/paolo/Development/ninjadroid/ -t DroidRoot.A.apk
-
 #Folders:
 apkDir = os.path.dirname( os.path.realpath(__file__) )  # the scanned directory (if not specified it will be the current directory)
 ninjadroidDir = apkDir
@@ -65,6 +73,7 @@ else:  # os.path.isfile(apkFile)
 	os.chdir(apkDir)
 
 
+	#Instantiate the App object:
 	app = App(apkDir, apkFile)
 
 
@@ -83,107 +92,117 @@ else:  # os.path.isfile(apkFile)
 	#print "BroadcastReceivers (" + str(len(app.getBroadcastReceivers())) + "): " + str(app.getBroadcastReceivers())
 	#print "Permissions (" + str(app.getNumberOfPermissions()) + "): " + str(app.getPermissions())
 
+
 	#Move to the directory in which to save the output path:
 	os.chdir(ninjadroidDir)
 
-	#-------------------------------- BEGIN Table header: ------------------------------#
-	table = "<html>" + "\n"
-	table += "\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">" + "\n"
-	table += "\t\t<tr style='font-size: 150%; font-weight: bold;'>" + "\n"
-	table += "\t\t\t<td colspan=\"2\" style=\"text-align: center;\">" + apkFile + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+
+
+
+	#-------------------------------- BEGIN report header: ------------------------------#
+	report = "<html>" + "\n"
+	report += "\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">" + "\n"
+	report += "\t\t<tr style='font-size: 150%; font-weight: bold;'>" + "\n"
+	report += "\t\t\t<td colspan=\"2\" style=\"text-align: center;\">" + apkFile + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
 
 	#Open file and append the instance:
 	fp = open(outputFileName, "w")  # b: write only (overwrites the file or creates a new one)
 
 	#Write to the file:
-	#fp.write(table)
+	#fp.write(report)
 
 	#Close file:
 	#fp.close()
-	#-------------------------------- END Table header. --------------------------------#
+	#-------------------------------- END report header. --------------------------------#
+
 
 
 
 	#Open file and append the instance:
 	#fp = open(outputFileName, "a")  # a: open for appending
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>App Name:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getName() + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>App Name:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getName() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Package:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getPackage() + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Package:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getPackage() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>MD5:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getApkMD5() + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>MD5:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getApkMD5() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Version:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getVersion() + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>SHA-256:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getApkSHA256() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Target SDK:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getTargetSdk() + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Version:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getVersion() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Author:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Target SDK:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getTargetSdk() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
+
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Author:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 	if app.getAuthorName() != "":
-		table += "\t\t\t\t" + app.getAuthorName() + "<br />\n"
+		report += "\t\t\t\t" + app.getAuthorName() + "<br />\n"
 	if app.getAuthorEmail() != "":
-		table += "\t\t\t\t" + app.getAuthorEmail() + "<br />\n"
+		report += "\t\t\t\t" + app.getAuthorEmail() + "<br />\n"
 	if app.getAuthorCompany() != "":
-		table += "\t\t\t\t" + app.getAuthorCompany() + "<br />\n"
+		report += "\t\t\t\t" + app.getAuthorCompany() + "<br />\n"
 	if app.getAuthorCountry() != "":
-		table += "\t\t\t\t" + app.getAuthorCountry() + "\n"
-	table += "\t\t\t</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+		report += "\t\t\t\t" + app.getAuthorCountry() + "\n"
+	report += "\t\t\t</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Author Certificate MD5:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">" + app.getCertificateMD5() + "</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Author Certificate MD5:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">" + app.getCertificateMD5() + "</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Permissions:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Permissions:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 	for permission in app.getPermissions():
-		table += "\t\t\t\t" + permission + "<br />\n"
-	table += "\t\t\t</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+		report += "\t\t\t\t" + permission + "<br />\n"
+	report += "\t\t\t</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Activities:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Activities:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 	for activity in app.getActivities():
-		table += "\t\t\t\t" + activity + "<br />\n"
-	table += "\t\t\t</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+		report += "\t\t\t\t" + activity + "<br />\n"
+	report += "\t\t\t</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>Services:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>Services:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 	for service in app.getServices():
-		table += "\t\t\t\t" + service + "<br />\n"
-	table += "\t\t\t</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+		report += "\t\t\t\t" + service + "<br />\n"
+	report += "\t\t\t</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
-	table += "\t\t<tr>" + "\n"
-	table += "\t\t\t<td>BroadcastReceivers:</td>" + "\n"
-	table += "\t\t\t<td style=\"font-weight: bold;\">\n"
+	report += "\t\t<tr>" + "\n"
+	report += "\t\t\t<td>BroadcastReceivers:</td>" + "\n"
+	report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 	for receiver in app.getBroadcastReceivers():
-		table += "\t\t\t\t" + receiver + "<br />\n"
-	table += "\t\t\t</td>" + "\n"
-	table += "\t\t</tr>" + "\n"
+		report += "\t\t\t\t" + receiver + "<br />\n"
+	report += "\t\t\t</td>" + "\n"
+	report += "\t\t</tr>" + "\n"
 
 
 	#Append to the file:
@@ -194,20 +213,20 @@ else:  # os.path.isfile(apkFile)
 
 
 
-	#-------------------------------- BEGIN Table footer: ------------------------------#
-	table += "\t</table>" + "\n"
-	table += "</html>" + "\n"
+	#-------------------------------- BEGIN report footer: ------------------------------#
+	report += "\t</report>" + "\n"
+	report += "</html>" + "\n"
 
 
 	#Open file and append the instance:
 	#fp = open(outputFileName, "a")  # a: open for appending
 
 	#Write to the file:
-	fp.write(table)
+	fp.write(report)
 
 	#Close file:
 	fp.close()
-	#-------------------------------- END Table footer. --------------------------------#
+	#-------------------------------- END report footer. --------------------------------#
 
 	#Debug:
 	print outputFileName + " was created!"

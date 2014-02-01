@@ -154,6 +154,22 @@ if not os.path.exists(outputDirectory):
 
 
 
+#Extract the META-INF/CERT.RSA certificate from the APK package and the classes.dex:
+with ZipFile(apkAbsPath) as z:
+	with z.open(dexFile) as zf, open(os.path.join(outputDirectory, os.path.basename(dexFile)), 'wb') as f:
+		shutil.copyfileobj(zf, f)
+
+		#Debug:
+		logger.info("Creating " + outputDirectory + "/classes.dex...")
+	with z.open(certDir+certFile) as zf, open(os.path.join(outputDirectory, os.path.basename(certFile)), 'wb') as f:
+		shutil.copyfileobj(zf, f)
+
+		#Debug:
+		logger.info("Creating " + outputDirectory + "/CERT.RSA...")
+
+
+
+
 #Launch apktool in order to extract the (decrypted) AndroidManifest.xml, the resources and to generate the disassembled smali files:
 shellcommand = "java -jar ninjadroid-libs/apktool1.5.2/apktool.jar -q d -f " + apkAbsPath + " " + outputDirectory
 process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
@@ -168,8 +184,6 @@ logger.info("Creating " + outputDirectory + "/assets/...")
 
 
 
-#TODO: UPDATE dex2jar to version 0.0.9.15!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 #Launch dex2jar in order to generate a jar file from the classes.dex:
 jarFile = outputDirectory + ".jar"
 shellcommand = "./ninjadroid-libs/dex2jar-0.0.9.15/d2j-dex2jar.sh -f " + apkAbsPath + " -o " + outputDirectory + "/" + jarFile
@@ -177,23 +191,8 @@ process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, sh
 #result = process.communicate()
 
 #Debug:
-#logger.info("Creating " + outputDirectory + "/" + jarFile + "...")
+logger.info("Creating " + outputDirectory + "/" + jarFile + "...")
 
-
-
-
-#Extract the META-INF/CERT.RSA certificate from the APK package and the classes.dex:
-with ZipFile(apkAbsPath) as z:
-	with z.open(dexFile) as zf, open(os.path.join(outputDirectory, os.path.basename(dexFile)), 'wb') as f:
-		shutil.copyfileobj(zf, f)
-
-		#Debug:
-		logger.info("Creating " + outputDirectory + "/classes.dex...")
-	with z.open(certDir+certFile) as zf, open(os.path.join(outputDirectory, os.path.basename(certFile)), 'wb') as f:
-		shutil.copyfileobj(zf, f)
-
-		#Debug:
-		logger.info("Creating " + outputDirectory + "/CERT.RSA...")
 
 
 

@@ -29,6 +29,14 @@ import logging
 
 
 
+#-------------------------------- BEGIN Import Classes: -----------------------------------#
+from libs.App import *
+from libs.Report import *
+#-------------------------------- END Import Classes. -------------------------------------#
+
+
+
+
 #----------------------------------- BEGIN Configuration: ---------------------------------#
 #Certificate file:
 certDir = "META-INF/"
@@ -56,7 +64,7 @@ logger.setLevel(logging.DEBUG)
 #Create a console handler for the logger:
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)  # log only until warning messages (no debug)
-ch.setFormatter( logging.Formatter("  > %(name)s: %(message)s") )  # log message format
+ch.setFormatter( logging.Formatter("  > %(name)s: [%(levelname)s] %(message)s") )  # log message format
 logger.addHandler(ch)  # add the handler to the logger
 #-------------------------------- END Logging Configuration. ------------------------------#
 
@@ -71,7 +79,7 @@ curpath = os.path.dirname( os.path.realpath(__file__) )  # the current directory
 #Retrieve the target APK package:
 target = ""
 try:
-	opts, extraparams = getopt.getopt(sys.argv[1:], "t:") 
+	opts, extraparams = getopt.getopt(sys.argv[1:], "t:")
 except:
 	pass
 else:
@@ -128,19 +136,19 @@ logger.debug(apkAbsPath)
 
 
 #Check whether the target APK package exists or not:
-if not os.path.isfile(apkFile):
+if not os.path.isfile(apkAbsPath):
 	#Debug:
 	logger.error(apkAbsPath + " does NOT exist!")
 
 	#Terminate the script:
 	sys.exit()
+#------------------------------- END Retrieving parameters. -------------------------------#
+
+
 
 
 #Retrieve the output folder name and path:
 outputDirectory = str( apkFile[0:targetNameLen-4] )  # the name of the output folder in which copy the extracted files and the analysis results (i.e. the APK package name without the ".apk" extension - e.g. for DroidRoot.A.apk -> DroidRoot.A/)
-#------------------------------- END Retrieving parameters. -------------------------------#
-
-
 
 
 #Check whether the output folder exists or not:
@@ -152,16 +160,19 @@ if not os.path.exists(outputDirectory):
 	logger.info("Creating " + outputDirectory + "/...")
 
 
+#Move to the output directory:
+#os.chdir(outputDirectory)
 
 
-#Extract the META-INF/CERT.RSA certificate from the APK package and the classes.dex:
+#Extract the META-INF/CERT.RSA certificate and the classes.dex file from the APK package:
 with ZipFile(apkAbsPath) as z:
 	with z.open(dexFile) as zf, open(os.path.join(outputDirectory, os.path.basename(dexFile)), 'wb') as f:
 		shutil.copyfileobj(zf, f)
 
 		#Debug:
 		logger.info("Creating " + outputDirectory + "/classes.dex...")
-	with z.open(certDir+certFile) as zf, open(os.path.join(outputDirectory, os.path.basename(certFile)), 'wb') as f:
+
+	with z.open(os.path.join(certDir, certFile)) as zf, open(os.path.join(outputDirectory, os.path.basename(certFile)), 'wb') as f:
 		shutil.copyfileobj(zf, f)
 
 		#Debug:
@@ -171,7 +182,7 @@ with ZipFile(apkAbsPath) as z:
 
 
 #Launch apktool in order to extract the (decrypted) AndroidManifest.xml, the resources and to generate the disassembled smali files:
-shellcommand = "java -jar ninjadroid-libs/apktool1.5.2/apktool.jar -q d -f " + apkAbsPath + " " + outputDirectory
+shellcommand = "java -jar libs/apktool1.5.2/apktool.jar -q d " + apkAbsPath + " " + outputDirectory
 process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 #result = process.communicate()
 
@@ -186,7 +197,7 @@ logger.info("Creating " + outputDirectory + "/assets/...")
 
 #Launch dex2jar in order to generate a jar file from the classes.dex:
 jarFile = outputDirectory + ".jar"
-shellcommand = "./ninjadroid-libs/dex2jar-0.0.9.15/d2j-dex2jar.sh -f " + apkAbsPath + " -o " + outputDirectory + "/" + jarFile
+shellcommand = "./libs/dex2jar-0.0.9.15/d2j-dex2jar.sh -f " + apkAbsPath + " -o " + outputDirectory + "/" + jarFile
 process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 #result = process.communicate()
 
@@ -196,10 +207,61 @@ logger.info("Creating " + outputDirectory + "/" + jarFile + "...")
 
 
 
-#Launch the NinjaDroid statical analysis:
-shellcommand = "python ./ninjadroid-libs/evaluateApk.py -n " + os.path.join(curpath, outputDirectory) + " -d " + apkDir + " -t " + apkFile
+#Instantiate the App object:
+app = App(apkDir, apkFile)
+author = app.getAuthor()
+certificate = app.getCertificate()
+
+
+
+
+#Launch strings command in order to extract the strings from the classes.dex file:
+shellcommand = "strings " + os.path.join(outputDirectory, dexFile)
 process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
-result = process.communicate()
+app.setDexStrings( list(process.communicate())[0].splitlines() )
 
 #Debug:
-logger.info("Creating " + outputDirectory + "/dogwar.html...")
+logger.info("Extract strings from the classes.dex...")
+
+
+
+
+#Retrieving the output file name:
+analysisOutputFileName = "report-" + apkFile[0:targetNameLen-4] + ".html"  # "report-[APKNAME].html" (e.g. for DroidRoot.A.apk -> report-DroidRoot.A.html)
+
+#Debug:
+logger.info("Creating " + outputDirectory + "/" + analysisOutputFileName + "...")
+
+#Debug:
+logger.info("----------------------------------------------------------------")
+logger.info("App Package: " + app.getPackage())
+logger.info("App Name: " + app.getName())
+logger.info("App Version: " + app.getVersion())
+#logger.info("APK Size: " + str(self.__app.getSize()) + " Bytes")
+logger.info("App MD5: " + app.getAppMD5())
+logger.info("App SHA-256: " + app.getAppSHA256())
+#logger.info("App SHA-512: " + app.getAppSHA512())
+#logger.info("Target SDK: " + app.getTargetSdk())
+#logger.info("Activities (" + str(len(app.getActivities())) + "): " + str(app.getActivities()))
+#logger.info("Services (" + str(len(app.getServices())) + "): " + str(app.getServices()))
+#logger.info("BroadcastReceivers (" + str(len(app.getBroadcastReceivers())) + "): " + str(app.getBroadcastReceivers()))
+#logger.info("Permissions (" + str(app.getNumberOfPermissions()) + "): " + str(app.getPermissions()))
+logger.info("Author Name: " + author.getName())
+#logger.info("Author Email: " + author.getEmail())
+#logger.info("Author Company Unit: " + author.getCompanyUnit())
+logger.info("Author Company: " + author.getCompany())
+#logger.info("Author Locality: " + author.getLocality())
+#logger.info("Author State: " + author.getState())
+#logger.info("Author Country: " + author.getCountry())
+#logger.info("Author Domain Component: " + author.getDomainComponent())
+logger.info("Certificate Validity: " + certificate.getValidity())
+#logger.info("Certificate Serial Number: " + certificate.getSerialNumber())
+logger.info("Certificate MD5: " + certificate.getMD5())
+#logger.info("Certificate SHA-1: " + certificate.getSHA1())
+logger.info("Certificate SHA-256: " + certificate.getSHA256())
+#logger.info("Certificate Signature: " + certificate.getSignature())
+logger.info("----------------------------------------------------------------")
+
+#Generate the statical analysis report of the app:
+Report(apkDir, apkFile, os.path.join(outputDirectory, analysisOutputFileName), app)
+

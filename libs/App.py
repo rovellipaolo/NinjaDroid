@@ -1,7 +1,7 @@
 #################################################################################################
 # @file App.py																					#
 # @brief The App class representing an Android app.												#
-# @update 2014-02-01 19:59:00 (Sun Feb 2, 2014 at 7:59 PM)										#
+# @update 2014-02-02 19:59:00 (Sun Feb 2, 2014 at 7:59 PM)										#
 # @author Paolo Rovelli																			#
 #################################################################################################
 
@@ -17,6 +17,14 @@ import zipfile
 import shutil
 import hashlib
 #-------------------------------- END Import Python types. --------------------------------#
+
+
+
+
+#-------------------------------- BEGIN Import Classes: -----------------------------------#
+from Author import *
+from Certificate import *
+#-------------------------------- END Import Classes. -------------------------------------#
 
 
 
@@ -76,23 +84,22 @@ def findAll(haystack, needle):
 ##
 class App():
 	#-------- Class attributes: --------#
-	__authorName = ""  # name of the developer
-	__authorEmail = ""  # email address of the developer
-	__authorCompany = ""  # company name of the developer
-	__authorCountry = ""  # country of the developer
+	__author = None  # the author of the app
+	__certificate = None  # the digital certificate of the app
 
-	__certificateMD5 = ""  # the MD5 fingerprint of the certificate of the App
-
-	__name = ""  # name of the App
-	__package = ""  # package of the App
-	__version = ""  # version of the App
-	__sdk = ""  # target SDK of the App
-	__services = None  # Services declared by the App
-	__activities = None  # Activities declared by the App
-	__receivers = None  # BroadcastReceivers declared by the App
-	__permissions = None  # premissions requested by the App
-	__md5 = ""  # MD5 hash of the App
-	__sha256 = ""  # SHA-256 hash of the App
+	__name = ""  # name of the app
+	__package = ""  # package of the app
+	__version = ""  # version of the app
+	__sdk = ""  # target SDK of the app
+	__services = None  # Services declared by the app
+	__activities = None  # Activities declared by the app
+	__receivers = None  # BroadcastReceivers declared by the app
+	__permissions = None  # premissions requested by the app
+	__size = ""  # The app size
+	__md5 = ""  # MD5 hash of the app
+	__sha256 = ""  # SHA-256 hash of the app
+	__sha512 = ""  # SHA-512 hash of the app
+	__dexStrings = ""  # strings found in the classes.dex file
 
 
 
@@ -108,11 +115,8 @@ class App():
 		apkAbsoluteDir = os.path.join(apkDir, apkFile)
 
 		#Attributes initialization:
-		self.__authorName = ""
-		self.__authorEmail = ""
-		self.__authorCompany = ""
-		self.__authorCountry = ""
-		self.__certificateMD5 = ""
+		self.__author = None
+		self.__certificate = None
 		self.__name = ""
 		self.__package = ""
 		self.__version = ""
@@ -121,23 +125,27 @@ class App():
 		self.__activities = []
 		self.__receivers = []
 		self.__permissions = []
+		self.__dexStrings = []
 
 		#Calculate the MD5 and SHA-256 hashes of the APK package:
 		try:
+			self.__size = os.path.getsize(apkAbsoluteDir)  # os.stat(apkAbsoluteDir).st_size
 			apkFileContent = open(apkAbsoluteDir, 'rb').read()
 		except:
 			pass
 		else:
 			self.__md5 = hashlib.md5(apkFileContent).hexdigest()
 			self.__sha256 = hashlib.sha256(apkFileContent).hexdigest()
+			self.__sha512 = hashlib.sha512(apkFileContent).hexdigest()
 
 		#Extract the certificate (META-INF/CERT.RSA) from the APK package and save it (temporarily):
 		with zipfile.ZipFile(apkAbsoluteDir) as z:
-			with z.open(certDir+certFile) as zf, open(os.path.join(apkDir, os.path.basename(certFile)), 'wb') as f:
+			with z.open(os.path.join(certDir, certFile)) as zf, open(os.path.join(apkDir, os.path.basename(certFile)), 'wb') as f:
 				shutil.copyfileobj(zf, f)
 
-		#Extract the author information from the certificate file (META-INF/CERT.RSA):
-		self.extractAuthorInfo(certFile)
+		#Extract the author and certificate information from the digital certificate file (META-INF/CERT.RSA):
+		self.__author = Author(certFile)
+		self.__certificate = Certificate(certFile)
 
 		#Remove the (temp) created file:
 		os.remove(certFile)
@@ -149,56 +157,23 @@ class App():
 
 
 	##
-	# Get the author name of the app.
+	# Get the author of the app.
 	#
-	# @return the author name of the app.
+	# @return the author of the app.
 	##
-	def getAuthorName(self):
-		return self.__authorName
+	def getAuthor(self):
+		return self.__author
 
 
 
 
 	##
-	# Get the author's email address, if any.
+	# Get the digital certificate of the app.
 	#
-	# @return the author's email address.
+	# @return the digital certificate of the app.
 	##
-	def getAuthorEmail(self):
-		return self.__authorEmail
-
-
-
-
-	##
-	# Get the author's company name.
-	#
-	# @return the author's company name.
-	##
-	def getAuthorCompany(self):
-		return self.__authorCompany
-
-
-
-
-	##
-	# Get the author's country.
-	#
-	# @return the author's country.
-	##
-	def getAuthorCountry(self):
-		return self.__authorCountry
-
-
-
-
-	##
-	# Get the author's certificate MD5 fingerprint.
-	#
-	# @return the author's certificate MD5 fingerprint.
-	##
-	def getCertificateMD5(self):
-		return self.__certificateMD5
+	def getCertificate(self):
+		return self.__certificate
 
 
 
@@ -303,11 +278,22 @@ class App():
 
 
 	##
+	# Get the size of the APK package.
+	#
+	# @return the size of the APK package.
+	##
+	def getSize(self):
+		return self.__size
+
+
+
+
+	##
 	# Get the MD5 hash of the APK package.
 	#
 	# @return the MD5 hash of the APK package.
 	##
-	def getApkMD5(self):
+	def getAppMD5(self):
 		return self.__md5
 
 
@@ -318,99 +304,43 @@ class App():
 	#
 	# @return the SHA-256 hash of the APK package.
 	##
-	def getApkSHA256(self):
+	def getAppSHA256(self):
 		return self.__sha256
 
 
 
 
 	##
-	# Extract the author information from the certificate file (META-INF/CERT.RSA).
-	# 
-	# @param certFile  the certificate file (META-INF/CERT.RSA)
+	# Get the SHA-512 hash of the APK package.
+	#
+	# @return the SHA-512 hash of the APK package.
 	##
-	def extractAuthorInfo(self, certFile):
-		#Extract the author info from the certificate file (META-INF/CERT.RSA):
-		shellcommand = "keytool -printcert -file " + certFile
-		process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
-		apkCertificate = process.communicate()[0].splitlines()  # apkPermissions.split('\n')
+	def getAppSHA512(self):
+		return self.__sha512
 
-		#Debug:
-		#print apkCertificate
 
-		##
-		# Example of DroidRoot.A:
-		# -----------------------
-		# Owner: CN=Android Debug, O=Android, C=US
-		# Issuer: CN=Android Debug, O=Android, C=US
-		# Serial number: 4ba340d1
-		# Valid from: Fri Mar 19 10:16:01 CET 2010 until: Sat Mar 19 10:16:01 CET 2011
-		# Certificate fingerprints:
-		#	 MD5:  B1:C9:88:EB:7B:72:D2:04:3A:9D:1F:E4:74:0D:6F:78
-		#	 SHA1: CD:82:17:48:51:61:85:75:EB:6E:08:E9:4F:DF:05:11:DD:38:63:CC
-		#	 SHA256: A3:22:0F:2D:48:63:44:E3:F4:D9:4D:44:58:8A:CD:9A:F7:82:44:78:ED:32:77:7C:E2:3F:FF:55:97:32:33:CC
-		#	 Signature algorithm name: SHA1withRSA
-		#	 Version: 3
-		##
 
-		##################################
-		# CERTIFICATE OWNER FIELDS :	 #
-		# ------------------------------ #
-		# CN: Common Name				#
-		# E: Email address			   #
-		# OU: Organization Unit		  #
-		# O: Organization name		   #
-		# L: Locality name			   #
-		# ST: State or province Name	 #
-		# C: Country					 #
-		# DC: Domain Component		   #
-		##################################
 
-		for info in apkCertificate:
-			#Debug
-			#print "info: " + info
+	##
+	# Get the classes.dex strings.
+	#
+	# @return the strings inside the classes.dex file.
+	##
+	def getDexStrings(self):
+		return self.__dexStrings
 
-			#Owner info:
-			pathPrefix = "Owner: "
-			if info[0:len(pathPrefix)] == pathPrefix:
-				authorInfo = info[len(pathPrefix):].split(", ")
 
-				for field in authorInfo:
-					pathPrefix = "CN="
-					if field[0:len(pathPrefix)] == pathPrefix:
-						self.__authorName = field[len(pathPrefix):]
-						continue
 
-					pathPrefix = "O="
-					if field[0:len(pathPrefix)] == pathPrefix:
-						self.__authorCompany = field[len(pathPrefix):]
-						continue
 
-					pathPrefix = "EMAILADDRESS="
-					if field[0:len(pathPrefix)] == pathPrefix:
-						self.__authorEmail = field[len(pathPrefix):]
-						continue
-
-					pathPrefix = "C="
-					if field[0:len(pathPrefix)] == pathPrefix:
-						self.__authorCountry = field[len(pathPrefix):]
-						continue
-
-				continue
-
-			#Certificate fingerprints (MD5):
-			pathPrefix = "\t MD5:"
-			if info[0:len(pathPrefix)] == pathPrefix:
-				self.__certificateMD5 = info[len(pathPrefix):]
-				continue
-				
-
-		#Debug:
-		#print "Author Name: " + self.__authorName
-		#print "Author Email: " + self.__authorEmail
-		#print "Author Company: " + self.__authorCompany
-		#print "Author Country: " + self.__authorCountry
-		#print "Certificate MD5: " + self.__certificateMD5
+	##
+	# Set the classes.dex strings.
+	#
+	# @param strings  the strings inside the classes.dex file.
+	##
+	def setDexStrings(self, strings):
+		for string in strings:
+			self.__dexStrings.append(string)
+		#self.__dexStrings = strings
 
 
 
@@ -585,5 +515,5 @@ class App():
 		self.__permissions = process.communicate()[0].splitlines()
 
 		#Debug:
-		#print "APK Permission: " + str(self.__permissions)
-		#print "APK Number of Permissions: " + str(len(self.__permissions))
+		#print "App Permission: " + str(self.__permissions)
+		#print "App Number of Permissions: " + str(len(self.__permissions))

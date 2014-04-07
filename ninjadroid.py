@@ -164,25 +164,10 @@ if not os.path.exists(outputDirectory):
 #os.chdir(outputDirectory)
 
 
-#Extract the META-INF/CERT.RSA certificate and the classes.dex file from the APK package:
-with ZipFile(apkAbsPath) as z:
-	with z.open(dexFile) as zf, open(os.path.join(outputDirectory, os.path.basename(dexFile)), 'wb') as f:
-		shutil.copyfileobj(zf, f)
-
-		#Debug:
-		logger.info("Creating " + outputDirectory + "/classes.dex...")
-
-	with z.open(os.path.join(certDir, certFile)) as zf, open(os.path.join(outputDirectory, os.path.basename(certFile)), 'wb') as f:
-		shutil.copyfileobj(zf, f)
-
-		#Debug:
-		logger.info("Creating " + outputDirectory + "/CERT.RSA...")
-
-
 
 
 #Launch apktool in order to extract the (decrypted) AndroidManifest.xml, the resources and to generate the disassembled smali files:
-shellcommand = "java -jar libs/apktool1.5.2/apktool.jar -q d " + apkAbsPath + " " + outputDirectory
+shellcommand = "java -jar libs/apktool1.5.2/apktool.jar -q d -f " + apkAbsPath + " " + outputDirectory
 process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 #result = process.communicate()
 
@@ -211,6 +196,21 @@ logger.info("Creating " + outputDirectory + "/" + jarFile + "...")
 app = App(apkDir, apkFile)
 author = app.getAuthor()
 certificate = app.getCertificate()
+
+
+#Extract the META-INF/CERT.RSA certificate and the classes.dex file from the APK package:
+with ZipFile(apkAbsPath) as z:
+	with z.open(os.path.join(certDir, certFile)) as zf, open(os.path.join(outputDirectory, os.path.basename(certFile)), 'wb') as f:
+		shutil.copyfileobj(zf, f)
+
+		#Debug:
+		logger.info("Creating " + outputDirectory + "/CERT.RSA...")
+
+	with z.open(dexFile) as zf, open(os.path.join(outputDirectory, os.path.basename(dexFile)), 'wb') as f:
+		shutil.copyfileobj(zf, f)
+
+		#Debug:
+		logger.info("Creating " + outputDirectory + "/classes.dex...")
 
 
 

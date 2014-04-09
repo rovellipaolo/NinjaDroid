@@ -5,18 +5,18 @@ NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 NinjaDroid uses apktool (https://code.google.com/p/android-apktool/) and dex2jar (https://code.google.com/p/dex2jar/), together with other Python scripts in order to extract from an APK package:
 
-- the classes.dex file
-- the translated .jar file (thanks to dex2jar)
+- the classes.dex file;
+- the translated .jar file (thanks to dex2jar);
 - the disassembled smali files (thanks to apktool);
 - the AndroidManifest.xml file (thanks to apktool);
 - the CERT.RSA file;
-- the assets/ and res/ folders together with their content (thanks to apktool);
+- the assets/ and res/ folders together with their content (thanks to apktool).
 
 Finally, NinjaDroid creates an HTML report file containing a review of the APK package.
 This HTML file contains a table with a list of information that characterise the app, such as:
 - APK package info (e.g. file size, MD5, SHA-256 and SHA-512);
-- App info (e.g. package, name, version, lists of permissions, list of Activities/Services/BroadcastReceivers, ecc...)
-- Author info (e.g. name, email, company, country, ecc...)
+- App info (e.g. package, name, version, lists of permissions, list of Activities/Services/BroadcastReceivers, ecc...);
+- Author info (e.g. name, email, company, country, ecc...);
 - Digital certificate info (e.g. validity, serial number, MD5, SHA-1, SHA-256 and signture);
 - URLs, shell commands and strings hard-coded into the classes.dex file;
 - List of files inside the APK package.

@@ -12,8 +12,7 @@ NinjaDroid uses apktool (https://code.google.com/p/android-apktool/) and dex2jar
 - the CERT.RSA file;
 - the assets/ and res/ folders together with their content (thanks to apktool).
 
-Finally, NinjaDroid creates an HTML report file containing a review of the APK package.
-This HTML file contains a table with a list of information that characterise the app, such as:
+Finally, NinjaDroid creates an HTML report file which contains several information about the app, such as:
 - APK package info (e.g. file size, MD5, SHA-256 and SHA-512);
 - App info (e.g. package, name, version, lists of permissions, list of Activities/Services/BroadcastReceivers, ecc...);
 - Author info (e.g. name, email, company, country, ecc...);

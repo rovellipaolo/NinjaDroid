@@ -99,7 +99,9 @@ class App():
 	__md5 = ""  # MD5 hash of the app
 	__sha256 = ""  # SHA-256 hash of the app
 	__sha512 = ""  # SHA-512 hash of the app
-	__dexStrings = ""  # strings found in the classes.dex file
+	__dexStrings = None  # strings hard-coded in the classes.dex file
+	__dexURLs = None  # URLs hard-coded in the classes.dex file
+	__dexShellCommands = None  # commands hard-coded in the classes.dex file
 
 
 
@@ -126,6 +128,8 @@ class App():
 		self.__receivers = []
 		self.__permissions = []
 		self.__dexStrings = []
+		self.__dexURLs = []
+		self.__dexShellCommands = []
 
 		#Calculate the MD5 and SHA-256 hashes of the APK package:
 		try:
@@ -322,9 +326,31 @@ class App():
 
 
 	##
-	# Get the classes.dex strings.
+	# Get the classes.dex encoded URLs.
 	#
-	# @return the strings inside the classes.dex file.
+	# @return the URLs hard-coded into the classes.dex file.
+	##
+	def getDexURLs(self):
+		return self.__dexURLs
+
+
+
+
+	##
+	# Get the classes.dex encoded shell commands.
+	#
+	# @return the shell commands hard-coded into the classes.dex file.
+	##
+	def getDexShellCommands(self):
+		return self.__dexShellCommands
+
+
+
+
+	##
+	# Get the classes.dex encoded strings.
+	#
+	# @return the strings hard-coded into the classes.dex file.
 	##
 	def getDexStrings(self):
 		return self.__dexStrings
@@ -333,14 +359,23 @@ class App():
 
 
 	##
-	# Set the classes.dex strings.
+	# Set the classes.dex encoded strings and URLs.
 	#
-	# @param strings  the strings inside the classes.dex file.
+	# @param strings  the strings and URLs hard-coded into the classes.dex file.
 	##
 	def setDexStrings(self, strings):
 		for string in strings:
-			self.__dexStrings.append(string)
-		#self.__dexStrings = strings
+			if string != "":
+				if "www" in string.lower() or "http" in string.lower() or ".com" in string.lower() or ".net" in string.lower() or ".org" in string.lower() or ".eu" in string.lower() or ".co.uk" in string.lower() or ".es" in string.lower() or ".it" in string.lower() or ".de" in string.lower() or ".fr" in string.lower() or ".us" in string.lower() or ".ru" in string.lower() or ".biz" in string.lower() or ".info" in string.lower():
+					self.__dexURLs.append(string)
+				elif "su " in string.lower() or "su_" in string.lower() or "chmod" in string.lower() or "chown" in string.lower() or "mount" in string.lower() or "dexopt" in string.lower() or "dhcpcd" in string.lower() or "dmesg" in string.lower() or "dnsmasq" in string.lower() or "dumpstate" in string.lower() or "dumpsys" in string.lower() or "fsck" in string.lower() or "iptables" in string.lower() or "keystore" in string.lower() or "lsmod" in string.lower() or "kill" in string.lower() or "rmdir" in string.lower() or "exit" in string.lower() or "logcat" in string.lower() or string.lower() == "pm" or string.lower() == "am" or "apk" in string.lower():
+					self.__dexShellCommands.append(string)
+				else:
+					self.__dexStrings.append(string)
+
+		#Sort the lists:
+		self.__dexURLs.sort()
+		self.__dexStrings.sort()
 
 
 

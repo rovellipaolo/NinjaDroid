@@ -190,9 +190,15 @@ class Report():
 		report += "\t\t<tr style='font-size: 120%; font-weight: bold;'>" + "\n"
 		report += "\t\t\t<td colspan=\"2\" style=\"background: #2F2F2F; color: #FFFFFF; text-align: center;\">AUTHOR INFO</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
+		appAuthorName = self.__appAuthor.getName()
 		report += "\t\t<tr>" + "\n"
 		report += "\t\t\t<td>Name:</td>" + "\n"
-		report += "\t\t\t<td style=\"font-weight: bold;\">" + self.__appAuthor.getName() + "</td>" + "\n"
+		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+		if "debug" in appAuthorName.lower() or "unknown" in appAuthorName.lower():
+			report += "\t\t\t\t<span style=\"color: #FF0000;\">" + appAuthorName + "</span><br />\n"
+		else:
+			report += "\t\t\t\t" + appAuthorName + "<br />\n"
+		report += "\t\t\t</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
 		report += "\t\t<tr>" + "\n"
 		report += "\t\t\t<td>Email:</td>" + "\n"
@@ -202,9 +208,15 @@ class Report():
 		report += "\t\t\t<td>Company Unit:</td>" + "\n"
 		report += "\t\t\t<td style=\"font-weight: bold;\">" + self.__appAuthor.getCompanyUnit() + "</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
+		appAuthorCompany = self.__appAuthor.getCompany()
 		report += "\t\t<tr>" + "\n"
 		report += "\t\t\t<td>Company:</td>" + "\n"
-		report += "\t\t\t<td style=\"font-weight: bold;\">" + self.__appAuthor.getCompany() + "</td>" + "\n"
+		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+		if "debug" in appAuthorCompany.lower() or "unknown" in appAuthorCompany.lower():
+			report += "\t\t\t\t<span style=\"color: #FF0000;\">" + appAuthorCompany + "</span><br />\n"
+		else:
+			report += "\t\t\t\t" + appAuthorCompany + "<br />\n"
+		report += "\t\t\t</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
 		report += "\t\t<tr>" + "\n"
 		report += "\t\t\t<td>Locality:</td>" + "\n"
@@ -257,10 +269,33 @@ class Report():
 		report += "\t\t\t<td colspan=\"2\" style=\"background: #2F2F2F; color: #FFFFFF; text-align: center;\">classes.dex</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
 		report += "\t\t<tr>" + "\n"
+		report += "\t\t\t<td style=\"vertical-align: top;\">URLs:</td>" + "\n"
+		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+		for string in self.__app.getDexURLs():
+			if "xxx" in string.lower() or "porn" in string.lower():
+				report += "\t\t\t\t<span style=\"color: #FF0000;\">" + str(string) + "</span><br />\n"
+			else:
+				report += "\t\t\t\t" + str(string) + "<br />\n"
+		report += "\t\t\t</td>" + "\n"
+		report += "\t\t</tr>" + "\n"
+		report += "\t\t<tr>" + "\n"
+		report += "\t\t\t<td style=\"vertical-align: top;\">Shell Commands:</td>" + "\n"
+		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+		for string in self.__app.getDexShellCommands():
+			if "su" in string.lower() or "chmod" in string.lower() or "mount" in string.lower() or "kill" in string.lower() or "rmdir" in string.lower():
+				report += "\t\t\t\t<span style=\"color: #FF0000;\">" + str(string) + "</span><br />\n"
+			else:
+				report += "\t\t\t\t" + str(string) + "<br />\n"
+		report += "\t\t\t</td>" + "\n"
+		report += "\t\t</tr>" + "\n"
+		report += "\t\t<tr>" + "\n"
 		report += "\t\t\t<td style=\"vertical-align: top;\">Strings:</td>" + "\n"
 		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 		for string in self.__app.getDexStrings():
-			report += "\t\t\t\t" + str(string) + "<br />\n"
+			if "xxx" in string.lower() or "porn" in string.lower() or "bin" in string.lower() or "install" in string.lower() or "/system" in string.lower() or "/data" in string.lower() or "root" in string.lower() or "shell" in string.lower() or "exploit" in string.lower() or "hack" in string.lower():
+				report += "\t\t\t\t<span style=\"color: #FF0000;\">" + str(string) + "</span><br />\n"
+			else:
+				report += "\t\t\t\t" + str(string) + "<br />\n"
 		report += "\t\t\t</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
 
@@ -275,7 +310,10 @@ class Report():
 		report += "\t\t\t<td style=\"vertical-align: top;\">APK Entries:</td>" + "\n"
 		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 		for fileName in zipFile.namelist():
-			report += "\t\t\t\t" + fileName + "<br />\n"
+			if "raw/su" in fileName.lower() or "superuser" in fileName.lower() or "exploit" in fileName.lower() or "exploid" in fileName.lower() or "hack" in fileName.lower() or ".so" in fileName.lower() or ".c" in fileName.lower() or ".apk" in fileName.lower():
+				report += "\t\t\t\t<span style=\"color: #FF0000;\">" + fileName + "</span><br />\n"
+			else:
+				report += "\t\t\t\t" + fileName + "<br />\n"
 		report += "\t\t\t</td>" + "\n"
 		report += "\t\t</tr>" + "\n"
 

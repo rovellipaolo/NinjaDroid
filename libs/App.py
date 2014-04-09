@@ -366,7 +366,7 @@ class App():
 	def setDexStrings(self, strings):
 		for string in strings:
 			if string != "":
-				if "www" in string.lower() or "http" in string.lower() or ".com" in string.lower() or ".net" in string.lower() or ".org" in string.lower() or ".eu" in string.lower() or ".co.uk" in string.lower() or ".es" in string.lower() or ".it" in string.lower() or ".de" in string.lower() or ".fr" in string.lower() or ".us" in string.lower() or ".ru" in string.lower() or ".biz" in string.lower() or ".info" in string.lower():
+				if "www" in string.lower() or "http://" in string.lower() or ".com" in string.lower() or ".net" in string.lower() or ".org" in string.lower() or ".eu" in string.lower() or ".co.uk" in string.lower() or ".es" in string.lower() or ".it" in string.lower() or ".de" in string.lower() or ".fr" in string.lower() or ".us" in string.lower() or ".ru" in string.lower() or ".biz" in string.lower() or ".info" in string.lower():
 					self.__dexURLs.append(string)
 				elif "su " in string.lower() or "su_" in string.lower() or "chmod" in string.lower() or "chown" in string.lower() or "mount" in string.lower() or "dexopt" in string.lower() or "dhcpcd" in string.lower() or "dmesg" in string.lower() or "dnsmasq" in string.lower() or "dumpstate" in string.lower() or "dumpsys" in string.lower() or "fsck" in string.lower() or "iptables" in string.lower() or "keystore" in string.lower() or "lsmod" in string.lower() or "kill" in string.lower() or "rmdir" in string.lower() or "exit" in string.lower() or "logcat" in string.lower() or string.lower() == "pm" or string.lower() == "am" or "apk" in string.lower():
 					self.__dexShellCommands.append(string)
@@ -532,6 +532,12 @@ class App():
 			idx = findBetween(receiver, "android:name(", ")=\"")
 			self.__receivers.append( findBetween(receiver, "android:name(" + idx + ")=\"", "\"") )
 
+
+		#Sort the lists of Activities, Services and BroadcastReceivers:
+		self.__activities.sort()
+		self.__services.sort()
+		self.__receivers.sort()
+
 		#Debug:
 		#print "Activities: " + str(self.__activities)
 		#print "Services: " + str(self.__services)
@@ -548,6 +554,9 @@ class App():
 		shellcommand = "aapt dump permissions ./" + apkFile + " | sed 1d | awk '{ print $NF }'"  # ["aapt", "dump", "permissions", apk]
 		process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 		self.__permissions = process.communicate()[0].splitlines()
+
+		#Sort the list of permissions:
+		self.__permissions.sort()
 
 		#Debug:
 		#print "App Permission: " + str(self.__permissions)

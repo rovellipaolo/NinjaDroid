@@ -82,7 +82,7 @@ def findAll(haystack, needle):
 # 
 # @author Paolo Rovelli
 ##
-class App():
+class App:
 	#-------- Class attributes: --------#
 	__author = None  # the author of the app
 	__certificate = None  # the digital certificate of the app
@@ -398,7 +398,7 @@ class App():
 	##
 	def extractAppNameFromAPK(self, apkFile):
 		#Extract the APK package info:
-		shellcommand = "aapt dump badging " + apkFile  # ["aapt", "dump", "badging", apk]
+		shellcommand = "libs/aapt/aapt dump badging " + apkFile  # ["aapt", "dump", "badging", apk]
 		process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 		apkInfo = process.communicate()[0].splitlines()
 
@@ -478,7 +478,7 @@ class App():
 	##
 	def extractAppDetailsFromAPK(self, apkFile):
 		#Extract the AndroidManifest XML tree:
-		shellcommand = "aapt dump xmltree " + apkFile + " AndroidManifest.xml"  # ["aapt", "dump", "xmltree", apk, "AndroidManifest.xml"]
+		shellcommand = "libs/aapt/aapt dump xmltree " + apkFile + " AndroidManifest.xml"  # ["aapt", "dump", "xmltree", apk, "AndroidManifest.xml"]
 		process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 		xmlTree = process.communicate()[0]
 
@@ -510,33 +510,36 @@ class App():
 		#	 A: android:name(0x01010003)="android.permission.WAKE_LOCK" (Raw: "android.permission.WAKE_LOCK")
 		##
 		
-		#Take only from the <application> TAG:
-		xmlTree = xmlTree[xmlTree.index("application"):-1]
+		try:
+			#Take only from the <application> TAG:
+			xmlTree = xmlTree[xmlTree.index("application"):-1]
 
-		#print "Number of Activities: " + str(xmlTree.count("activity"))
-		#print "Number of Services: " + str(xmlTree.count("service"))
-		#print "Number of BroadcastReceivers: " + str(xmlTree.count("receiver"))
+			#print "Number of Activities: " + str(xmlTree.count("activity"))
+			#print "Number of Services: " + str(xmlTree.count("service"))
+			#print "Number of BroadcastReceivers: " + str(xmlTree.count("receiver"))
 
-		for offs in findAll(xmlTree, "activity"):
-			activity = xmlTree[offs:-1]
-			idx = findBetween(activity, "android:name(", ")=\"")
-			self.__activities.append( findBetween(activity, "android:name(" + idx + ")=\"", "\"") )
+			for offs in findAll(xmlTree, "activity"):
+				activity = xmlTree[offs:-1]
+				idx = findBetween(activity, "android:name(", ")=\"")
+				self.__activities.append( findBetween(activity, "android:name(" + idx + ")=\"", "\"") )
 
-		for offs in findAll(xmlTree, "service"):
-			service = xmlTree[offs:-1]
-			idx = findBetween(service, "android:name(", ")=\"")
-			self.__services.append( findBetween(service, "android:name(" + idx + ")=\"", "\"") )
+			for offs in findAll(xmlTree, "service"):
+				service = xmlTree[offs:-1]
+				idx = findBetween(service, "android:name(", ")=\"")
+				self.__services.append( findBetween(service, "android:name(" + idx + ")=\"", "\"") )
 
-		for offs in findAll(xmlTree, "receiver"):
-			receiver = xmlTree[offs:-1]
-			idx = findBetween(receiver, "android:name(", ")=\"")
-			self.__receivers.append( findBetween(receiver, "android:name(" + idx + ")=\"", "\"") )
+			for offs in findAll(xmlTree, "receiver"):
+				receiver = xmlTree[offs:-1]
+				idx = findBetween(receiver, "android:name(", ")=\"")
+				self.__receivers.append( findBetween(receiver, "android:name(" + idx + ")=\"", "\"") )
 
 
-		#Sort the lists of Activities, Services and BroadcastReceivers:
-		self.__activities.sort()
-		self.__services.sort()
-		self.__receivers.sort()
+			#Sort the lists of Activities, Services and BroadcastReceivers:
+			self.__activities.sort()
+			self.__services.sort()
+			self.__receivers.sort()
+		except ValueError:  # the <application> TAG has not been found...
+			pass
 
 		#Debug:
 		#print "Activities: " + str(self.__activities)
@@ -551,7 +554,7 @@ class App():
 	##
 	def extractAppPermissionsFromManifest(self, apkFile):
 		#Extract the AndroidManifest.xml permissions:
-		shellcommand = "aapt dump permissions ./" + apkFile + " | sed 1d | awk '{ print $NF }'"  # ["aapt", "dump", "permissions", apk]
+		shellcommand = "libs/aapt/aapt dump permissions ./" + apkFile + " | sed 1d | awk '{ print $NF }'"  # ["aapt", "dump", "permissions", apk]
 		process = subprocess.Popen(shellcommand, stdout=subprocess.PIPE, stderr=None, shell=True)
 		self.__permissions = process.communicate()[0].splitlines()
 

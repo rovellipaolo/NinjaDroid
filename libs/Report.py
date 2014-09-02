@@ -292,7 +292,7 @@ class Report():
 		report += "\t\t\t<td style=\"vertical-align: top;\">Strings:</td>" + "\n"
 		report += "\t\t\t<td style=\"font-weight: bold;\">\n"
 		for string in self.__app.getDexStrings():
-			if "xxx" in string.lower() or "porn" in string.lower() or "bin" in string.lower() or "install" in string.lower() or "/system" in string.lower() or "/data" in string.lower() or "root" in string.lower() or "shell" in string.lower() or "exploit" in string.lower() or "hack" in string.lower():
+			if "%s" in string.lower() or "xxx" in string.lower() or "porn" in string.lower() or "bin" in string.lower() or "install" in string.lower() or "/system" in string.lower() or "/data" in string.lower() or "root" in string.lower() or "shell" in string.lower() or "exploit" in string.lower() or "hack" in string.lower():
 				report += "\t\t\t\t<span style=\"color: #FF0000;\">" + str(string) + "</span><br />\n"
 			else:
 				report += "\t\t\t\t" + str(string) + "<br />\n"

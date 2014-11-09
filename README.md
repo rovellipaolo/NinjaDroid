@@ -38,4 +38,4 @@ NOTE: you need to have the Android SDK and Python installed on your computer.
 
 Licence:
 ========
-NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu.org/licenses/gpl-3.0.html).
+NinjaDroid is licensed under the GNU Lesser General Public License v3.0 (http://www.gnu.org/licenses/lgpl-3.0.html).

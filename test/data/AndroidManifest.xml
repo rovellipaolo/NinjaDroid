@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.app" android:versionCode="1" android:versionName="1.0">
+    <uses-sdk android:targetSdkVersion="20" android:minSdkVersion="10" android:maxSdkVersion="20" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher" android:logo="@drawable/ic_launcher_logo" android:largeHeap="true">
+        <activity android:name="com.example.app.HomeActivity" android:label="@string/app_name" android:launchMode="singleTop" android:configChanges="orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.app.OtherActivity" android:label="@string/other_name" android:parentActivityName="com.example.app.HomeActivity" android:launchMode="singleTop" android:noHistory="true">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.example.app.HomeActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/vnd.android.package-archive" />
+            </intent-filter>
+        </activity>
+        <service android:name="com.example.app.ExampleService" />
+        <service android:name="com.example.app.ExampleService2" android:exported="true" android:enabled="false" android:isolatedProcess="true" />
+        <service android:name="com.example.app.ExampleService3" android:exported="false" android:enabled="true" android:isolatedProcess="false" />
+        <receiver android:name="com.example.app.ExampleBrodcastReceiver" />
+        <receiver android:name="com.example.app.ExampleBrodcastReceiver2" android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.example.app.ExampleBrodcastReceiver3" android:exported="false" android:enabled="true">
+            <intent-filter android:priority="800">
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.BROADCAST_PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.example.app.ExampleBrodcastReceiver4" android:exported="true" android:enabled="false" />
+    </application>
+</manifest>

@@ -42,15 +42,15 @@ A folder named as the APK package (e.g. 'myPackage/') will be created inside the
 
 NOTE: The information contained in the HTML report file are a subset of the ones contained in the JSON report file.
 
-It is also possible to launch NinjaDroid on an APK package which is not in the NinjaDroid directory, as well as storing the information in another directory, using the following command:
+It is also possible to launch NinjaDroid on an APK package which is not in the NinjaDroid directory, as well as storing the information in another directory, as follow:
 
 $ python ninjadroid.py /path/to/MyPackage.apk --extract /dir/where/to/extract/
 
-Finally, some APKs which contains many strings might require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
+Some APKs which contains many strings may require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
 
 $ python ninjadroid.py --no-string-process myPackage.apk
 
-You can mix the use of "--no-string-process" and "--export".
+NOTE: You can of course mix the use of "--no-string-process" and "--export".
 
 
 Licence:

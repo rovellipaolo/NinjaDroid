@@ -80,9 +80,13 @@ class Report(object):
 
             # App SDK version:
             sdk = man.get_sdk_version()
+            if "target" in sdk:
+                target = sdk["target"]
+            else:
+                target = ""
             report += "\t\t<tr>" + "\n"
             report += "\t\t\t<td>Target SDK:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + sdk["target"] + "</td>" + "\n"
+            report += "\t\t\t<td style=\"font-weight: bold;\">" + target + "</td>" + "\n"
             report += "\t\t</tr>" + "\n"
 
             # App permissions:

@@ -36,7 +36,7 @@ Linux:
 Due to aapt dependencies, on Linux, you may need to install some additional libraries. In particular: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.-
 
 OS X:
-If you use OS X, you will need to change the 'lib/aapt/aapt' binary with the 'lib/aapt/aapt_osx' one (just rename 'aapt_osx' into 'aapt').
+If you use NinjaDroid on OS X, you will need to change the 'lib/aapt/aapt' binary with the 'lib/aapt/aapt_osx' one (just rename 'aapt_osx' into 'aapt').
 
 
 Use:

@@ -33,7 +33,7 @@ After cloning the NinjaDroid repository, or downloading the source code, make su
 If you have the Android SDK installed, instead of the included version of aapt, you can use the SDK version. In order to do so, you need to change the aapt location in 'lib/Aapt.py' (i.e. __AAPT_EXEC_PATH = "lib/aapt/aapt").
 
 Linux:
-Due to aapt dependencies, on Linux, you may need to install some additional libraries. In particular: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.-
+Due to aapt dependencies, on Linux, you may need to install some additional libraries. In particular: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.
 
 OS X:
 If you use NinjaDroid on OS X, you will need to change the 'lib/aapt/aapt' binary with the 'lib/aapt/aapt_osx' one (just rename 'aapt_osx' into 'aapt').

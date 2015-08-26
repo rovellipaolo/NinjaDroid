@@ -38,7 +38,7 @@ logger = logging.getLogger("NinjaDroid")
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()  # console handler for the logger
 ch.setLevel(logging.INFO)
-ch.setFormatter( logging.Formatter("  > %(name)s: [%(levelname)s] %(message)s") )  # log message format
+ch.setFormatter( logging.Formatter("  >> %(name)s: [%(levelname)s] %(message)s") )  # log message format
 logger.addHandler(ch)  # add the handler to the logger
 
 
@@ -68,10 +68,10 @@ def main(argv=None):
     try:
         apk = APK(args.target, args.no_string_processing)
     except ErrorFileParsing:
-        logger.error("  >> The target file (i.e. '" + args.target + "') must be an existing, readable file!")
+        logger.error("The target file (i.e. '" + args.target + "') must be an existing, readable file!")
         sys.exit()
     except ErrorAPKParsing:
-        logger.error("  >> The target file (i.e. '" + args.target + "') must be an APK package!")
+        logger.error("The target file (i.e. '" + args.target + "') must be an APK package!")
         sys.exit()
 
     # Extract the APK file name (without extension):

@@ -91,9 +91,10 @@ class TestCERT(unittest.TestCase):
     ##
     # Test the object initialisation.
     #
-    def testInitialisation(self):
+    def test_init(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename] is not None)
+            self.assertTrue(type(self.certs[filename]) is CERT)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ErrorFileParsing):

@@ -92,9 +92,10 @@ class TestFile(unittest.TestCase):
     ##
     # Test the object initialisation.
     #
-    def testInitialisation(self):
+    def test_init(self):
         for filename in self.files:
             self.assertTrue(self.files[filename] is not None)
+            self.assertTrue(type(self.files[filename]) is File)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ErrorFileParsing):

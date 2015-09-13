@@ -65,9 +65,10 @@ class TestDex(unittest.TestCase):
     ##
     # Test the object initialisation.
     #
-    def testInitialisation(self):
+    def test_init(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename] is not None)
+            self.assertTrue(type(self.dexes[filename]) is Dex)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ErrorFileParsing):

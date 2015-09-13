@@ -160,9 +160,10 @@ class TestAPK(unittest.TestCase):
     ##
     # Test the object initialisation.
     #
-    def testInitialisation(self):
+    def test_init(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename] is not None)
+            self.assertTrue(type(self.apks[filename]) is APK)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ErrorFileParsing):

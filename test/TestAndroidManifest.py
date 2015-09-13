@@ -53,9 +53,11 @@ class TestAndroidManifest(unittest.TestCase):
     ##
     # Test the object initialisation.
     #
-    def testInitialisation(self):
+    def test_init(self):
         self.assertTrue(self.manifests['clean'] is not None)
+        self.assertTrue(type(self.manifests['clean']) is AndroidManifest)
         self.assertTrue(self.manifests['binary'] is not None)
+        self.assertTrue(type(self.manifests['binary']) is AndroidManifest)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ErrorFileParsing):

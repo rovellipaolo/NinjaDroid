@@ -6,13 +6,10 @@
 
 import unittest
 
-from lib.Shell import Shell
+from lib.signatures.ShellCommandSignature import ShellCommandSignature
 
 
-##
-# UnitTest for Shell class.
-#
-class TestShell(unittest.TestCase):
+class TestShellCommandSignature(unittest.TestCase):
     valid_commands = [
         "/bin",
         "/data",
@@ -68,52 +65,35 @@ class TestShell(unittest.TestCase):
         ' ### /system/app/xxx.apk': "/system/app/xxx.apk",
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
-        cls.shell = Shell()
+        cls.shell = ShellCommandSignature()
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the is_valid() method.
-    #
     def test_is_valid(self):
-        for command in TestShell.valid_commands:
+        for command in TestShellCommandSignature.valid_commands:
             print("Testing '" + command + "'...")
             self.assertTrue(self.shell.is_valid(command))
 
-        for command in TestShell.invalid_commands:
+        for command in TestShellCommandSignature.invalid_commands:
             print("Testing '" + command + "'...")
             self.assertFalse(self.shell.is_valid(command))
         pass
 
-    ##
-    # Test the get_matches_in_string() method.
-    #
     def test_get_matches_in_string(self):
-        for string in TestShell.strings_containing_commands:
+        for string in TestShellCommandSignature.strings_containing_commands:
             print("Testing '" + string + "'...")
-            self.assertTrue(self.shell.get_matches_in_string(string) == TestShell.strings_containing_commands[string])
+            self.assertTrue(self.shell.get_matches_in_string(string) ==
+                            TestShellCommandSignature.strings_containing_commands[string])
 
 
 if __name__ == '__main__':

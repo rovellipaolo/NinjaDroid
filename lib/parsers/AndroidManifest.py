@@ -1,7 +1,6 @@
 ##
-# @file AndroidManifest.py
-# @brief Parser for AndroidManifest.xml file.
-# @version 1.0
+# Parser for AndroidManifest.xml file.
+#
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
 #
@@ -11,24 +10,14 @@ from xml.parsers.expat import ExpatError
 import json
 
 from lib.Aapt import Aapt
-from lib.File import File
 from lib.AXMLParser import AXMLPrinter
-
-##
-# ErrorAndroidManifestParsing class.
-#
-class ErrorAndroidManifestParsing(Exception):
-    def __init__(self):
-        Exception.__init__(self)
-
-    def __str__(self):
-        return "Cannot parse the file as an AndroidManifest.xml!"
+from lib.parsers.AndroidManifestParserInterface import AndroidManifestParserInterface
+from lib.parsers.File import File
+from lib.errors.AndroidManifestParsingError import AndroidManifestParsingError
 
 
-##
-# AndroidManifest class.
-#
-class AndroidManifest(File, object):
+class AndroidManifest(File, AndroidManifestParserInterface):
+    __FILE_NAME_ANDROIDMANIFEST_XML = "AndroidManifest.xml"
     __MANIFEST_CONFIG_FILE = "etc/manifest.json"
 
     ##
@@ -64,9 +53,9 @@ class AndroidManifest(File, object):
                     self._services = man["services"]
                     self._receivers = man["receivers"]
                 else:
-                    raise ErrorAndroidManifestParsing
+                    raise AndroidManifestParsingError
             except IOError:
-                raise ErrorAndroidManifestParsing
+                raise AndroidManifestParsingError
             else:
                 manifest = xml.documentElement
 
@@ -95,6 +84,10 @@ class AndroidManifest(File, object):
                 self._activities = AndroidManifest._parse_element_to_list_of_dict(application, cfg['application']['activity'], "activity")
                 self._services = AndroidManifest._parse_element_to_list_of_dict(application, cfg['application']['service'], "service")
                 self._receivers = AndroidManifest._parse_element_to_list_of_dict(application, cfg['application']['receiver'], "receiver")
+
+    @staticmethod
+    def looks_like_a_manifest(filename):
+        return filename == AndroidManifest.__FILE_NAME_ANDROIDMANIFEST_XML
 
     ##
     # Parse the simple application elements (i.e. only the "android:name").
@@ -149,11 +142,6 @@ class AndroidManifest(File, object):
 
         return res
 
-    ##
-    # Dump the AndroidManifest object.
-    #
-    # @return A Dictionary representing the AndroidManifest object.
-    #
     def dump(self):
         dump = super(AndroidManifest, self).dump()
         dump["package_name"] = self._package_name
@@ -165,90 +153,35 @@ class AndroidManifest(File, object):
         dump["receivers"] = self._receivers
         return dump
 
-    ##
-    # Retrieve the package name.
-    #
-    # @return The package name.
-    #
     def get_package_name(self):
         return self._package_name
 
-    ##
-    # Retrieve the package version.
-    #
-    # @return The version as a dictionary (i.e. {"code": "...", "name": "..."}).
-    #
     def get_version(self):
         return self._version
 
-    ##
-    # Retrieve all the SDK versions.
-    #
-    # @return The SDK versions as a dictionary (i.e. {'target': "...", 'min': "...", 'max': "..."}).
-    #
     def get_sdk_version(self):
         return self._sdk
 
-    ##
-    # Retrieve the required permissions in the AndroidManifest.xml file.
-    #
-    # @return The list of required permissions.
-    #
     def get_permissions(self):
         return self._permissions
 
-    ##
-    # Retrieve the number of required permissions in the AndroidManifest.xml file.
-    #
-    # @return The number of required permissions.
-    #
     def get_number_of_permissions(self):
         return len(self._permissions)
 
-    ##
-    # Retrieve the Activities declared in the AndroidManifest.xml file.
-    #
-    # @return The list of Activities.
-    #
     def get_activities(self):
         return self._activities
 
-    ##
-    # Retrieve the number of Activities declared in the AndroidManifest.xml file.
-    #
-    # @return The number of Activities.
-    #
     def get_number_of_activities(self):
         return len(self._activities)
 
-    ##
-    # Retrieve the Services declared in the AndroidManifest.xml file.
-    #
-    # @return The list of Services.
-    #
     def get_services(self):
         return self._services
 
-    ##
-    # Retrieve the number of Services declared in the AndroidManifest.xml file.
-    #
-    # @return The number of Services.
-    #
     def get_number_of_services(self):
         return len(self._services)
 
-    ##
-    # Retrieve the BroadcastReceivers declared in the AndroidManifest.xml file.
-    #
-    # @return The list of BroadcastReceivers.
-    #
     def get_broadcast_receivers(self):
         return self._receivers
 
-    ##
-    # Retrieve the number of BroadcastReceivers declared in the AndroidManifest.xml file.
-    #
-    # @return The number of BroadcastReceivers.
-    #
     def get_number_of_broadcast_receivers(self):
         return len(self._receivers)

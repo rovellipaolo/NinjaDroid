@@ -8,13 +8,11 @@ from os import listdir
 from os.path import join
 import unittest
 
-from lib.CERT import CERT, ErrorCERTParsing
-from lib.File import ErrorFileParsing
+from lib.errors.CERTParsingError import CERTParsingError
+from lib.errors.ParsingError import ParsingError
+from lib.parsers.CERT import CERT
 
 
-##
-# UnitTest for CERT class.
-#
 class TestCERT(unittest.TestCase):
     cert_properties = {
         "CERT.RSA": {
@@ -57,9 +55,6 @@ class TestCERT(unittest.TestCase):
         },
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
         cls.certs = {}
@@ -69,144 +64,87 @@ class TestCERT(unittest.TestCase):
                 cls.certs[filename] = CERT(join('test', 'data', filename), filename)
                 #print(cls.certs[filename].dump())
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the object initialisation.
-    #
     def test_init(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename] is not None)
             self.assertTrue(type(self.certs[filename]) is CERT)
 
         # Test the class raise when a non-existing file is given:
-        with self.assertRaises(ErrorFileParsing):
+        with self.assertRaises(ParsingError):
             CERT(join('test', 'data', 'aaa_this_is_a_non_existent_file_xxx'))
 
         # Test the class raise when a non-CERT.RSA file is given:
-        with self.assertRaises(ErrorCERTParsing):
+        with self.assertRaises(CERTParsingError):
             CERT(join('test', 'data', 'Example.apk'))
             CERT(join('test', 'data', 'AndroidManifest.xml'))
             CERT(join('test', 'data', 'classes.dex'))
 
-    ##
-    # Test the get_raw_file() method.
-    #
     def test_get_raw_file(self):
         for filename in self.certs:
             self.assertTrue(len(self.certs[filename].get_raw_file()) > 0)
 
-    ##
-    # Test the get_file_name() method.
-    #
     def test_get_file_name(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_file_name() == self.cert_properties[filename]['name'])
 
-    ##
-    # Test the get_size() method.
-    #
     def test_get_size(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_size() == self.cert_properties[filename]['size'])
 
-    ##
-    # Test the get_md5() method.
-    #
     def test_get_md5(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_md5() == self.cert_properties[filename]['md5'])
 
-    ##
-    # Test the get_sha1() method.
-    #
     def test_get_sha1(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_sha1() == self.cert_properties[filename]['sha1'])
 
-    ##
-    # Test the get_sha256() method.
-    #
     def test_get_sha256(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_sha256() == self.cert_properties[filename]['sha256'])
 
-    ##
-    # Test the get_sha512() method.
-    #
     def test_get_sha512(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_sha512() == self.cert_properties[filename]['sha512'])
 
-    ##
-    # Test the get_serial_number() method.
-    #
     def test_get_serial_number(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_serial_number() == self.cert_properties[filename]['serial_number'])
 
-    ##
-    # Test the get_validity() method.
-    #
     def test_get_validity(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_validity() == self.cert_properties[filename]['validity'])
 
-    ##
-    # Test the get_fingerprint_md5() method.
-    #
     def test_get_fingerprint_md5(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_fingerprint_md5() == self.cert_properties[filename]['fingerprint_md5'])
 
-    ##
-    # Test the get_fingerprint_sha1() method.
-    #
     def test_get_fingerprint_sha1(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_fingerprint_sha1() == self.cert_properties[filename]['fingerprint_sha1'])
 
-    ##
-    # Test the get_fingerprint_sha256() method.
-    #
     def test_get_fingerprint_sha256(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_fingerprint_sha256() == self.cert_properties[filename]['fingerprint_sha256'])
 
-    ##
-    # Test the get_fingerprint_signature() method.
-    #
     def test_get_fingerprint_signature(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_fingerprint_signature() == self.cert_properties[filename]['fingerprint_signature'])
 
-    ##
-    # Test the get_fingerprint_version() method.
-    #
     def test_get_fingerprint_version(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename].get_fingerprint_version() == self.cert_properties[filename]['fingerprint_version'])
 
-    ##
-    # Test the get_owner() method.
-    #
     def test_get_owner(self):
         for filename in self.certs:
             owner = self.certs[filename].get_owner()
@@ -218,9 +156,7 @@ class TestCERT(unittest.TestCase):
             self.assertTrue(owner['state'] == self.cert_properties[filename]['owner']['state'])
             self.assertTrue(owner['country'] == self.cert_properties[filename]['owner']['country'])
             self.assertTrue(owner['domain'] == self.cert_properties[filename]['owner']['domain'])
-    ##
-    # Test the get_issuer() method.
-    #
+
     def test_get_issuer(self):
         for filename in self.certs:
             issuer = self.certs[filename].get_issuer()

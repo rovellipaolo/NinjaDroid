@@ -1,22 +1,9 @@
 ##
-# @file ninjadroid.py
-# @brief Ninja Reverse Engineering of Android APK packages.
-# @version 2.0
+# Ninja Reverse Engineering of Android APK packages.
+#
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-# 
-# Example calls:
-# > python ninjadroid.py MyPackage.apk
-# > python ninjadroid.py /path/to/MyPackage.apk
-# > python ninjadroid.py /path/to/MyPackage.apk --extract
-# > python ninjadroid.py /path/to/MyPackage.apk --extract /dir/where/to/extract/
-# > python ninjadroid.py --no-string-process /path/to/MyPackage.apk
-# > python ninjadroid.py --no-string-process /path/to/MyPackage.apk --extract
 #
-
-
-VERSION = "2.0"
-
 
 import argparse
 from argparse import RawTextHelpFormatter
@@ -28,9 +15,13 @@ import subprocess
 import sys
 from time import sleep
 
-from lib.APK import APK, ErrorAPKParsing
-from lib.File import ErrorFileParsing
+from lib.errors.APKParsingError import APKParsingError
+from lib.errors.ParsingError import ParsingError
+from lib.parsers.APK import APK
 from lib.Report import Report
+
+
+VERSION = "2.5"
 
 
 # Initialise the logger:
@@ -67,10 +58,10 @@ def main(argv=None):
     # Read the target file:
     try:
         apk = APK(args.target, args.no_string_processing)
-    except ErrorFileParsing:
+    except ParsingError:
         logger.error("The target file (i.e. '" + args.target + "') must be an existing, readable file!")
         sys.exit()
-    except ErrorAPKParsing:
+    except APKParsingError:
         logger.error("The target file (i.e. '" + args.target + "') must be an APK package!")
         sys.exit()
 

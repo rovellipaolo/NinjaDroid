@@ -8,12 +8,10 @@ from os import listdir
 from os.path import join
 import unittest
 
-from lib.File import File, ErrorFileParsing
+from lib.errors.ParsingError import ParsingError
+from lib.parsers.File import File
 
 
-##
-# UnitTest for File class.
-#
 class TestFile(unittest.TestCase):
     files_properties = {
         "Example.apk": {
@@ -58,9 +56,6 @@ class TestFile(unittest.TestCase):
         },
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
         cls.files = {}
@@ -70,82 +65,49 @@ class TestFile(unittest.TestCase):
                 cls.files[filename] = File(join('test', 'data', filename))
                 #print(cls.files[filename].dump())
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the object initialisation.
-    #
     def test_init(self):
         for filename in self.files:
             self.assertTrue(self.files[filename] is not None)
             self.assertTrue(type(self.files[filename]) is File)
 
         # Test the class raise when a non-existing file is given:
-        with self.assertRaises(ErrorFileParsing):
+        with self.assertRaises(ParsingError):
             File(join('test', 'data', 'aaa_this_is_a_non_existent_file_xxx'))
 
-    ##
-    # Test the get_raw_file() method.
-    #
     def test_get_raw_file(self):
         for filename in self.files:
             self.assertTrue(len(self.files[filename].get_raw_file()) > 0)
 
-    ##
-    # Test the get_file_name() method.
-    #
     def test_get_file_name(self):
         for filename in self.files:
             self.assertTrue(self.files[filename].get_file_name() == self.files_properties[filename]['name'])
 
-    ##
-    # Test the get_size() method.
-    #
     def test_get_size(self):
         for filename in self.files:
             self.assertTrue(self.files[filename].get_size() == self.files_properties[filename]['size'])
 
-    ##
-    # Test the get_md5() method.
-    #
     def test_get_md5(self):
         for filename in self.files:
             self.assertTrue(self.files[filename].get_md5() == self.files_properties[filename]['md5'])
 
-    ##
-    # Test the get_sha1() method.
-    #
     def test_get_sha1(self):
         for filename in self.files:
             self.assertTrue(self.files[filename].get_sha1() == self.files_properties[filename]['sha1'])
 
-    ##
-    # Test the get_sha256() method.
-    #
     def test_get_sha256(self):
         for filename in self.files:
             self.assertTrue(self.files[filename].get_sha256() == self.files_properties[filename]['sha256'])
 
-    ##
-    # Test the get_sha512() method.
-    #
     def test_get_sha512(self):
         for filename in self.files:
             self.assertTrue(self.files[filename].get_sha512() == self.files_properties[filename]['sha512'])

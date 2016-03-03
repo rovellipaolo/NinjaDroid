@@ -1,20 +1,16 @@
 ##
-# @file URI.py
-# @brief Parser for URI.
-# @version 1.0
+# Parser for URIs.
+#
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
 #
 
 import re
 
-from lib.Signature import Signature
+from lib.signatures.Signature import Signature
 
 
-##
-# URI class.
-#
-class URI(Signature, object):
+class URISignature(Signature, object):
     _CONFIG_FILE = "etc/uri.json"
     _SIGNATURE_KEYS_LIST = ["tlds"]
 
@@ -22,12 +18,12 @@ class URI(Signature, object):
     # Class constructor.
     #
     def __init__(self):
-        super(URI, self).__init__()
+        super(URISignature, self).__init__()
 
     ##
     # Compile the URI signature regex.
     #
-    # @param signatures  Signature regex in an hash, whose keys are the ones declared in _SIGNATURE_KEYS_LIST (i.e. {"tlds": [...]}).
+    # @param signatures  Dictinary of the signature regex, whose keys are the ones declared in _SIGNATURE_KEYS_LIST.
     #
     @classmethod
     def _compile_regex(cls, signatures):

@@ -1,6 +1,6 @@
 ##
-# @file AXMLParser.py
-# @brief AXML parser.
+# AXMLParser
+#
 # @author Anthony Desnos <desnos at t0t0.fr>
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).

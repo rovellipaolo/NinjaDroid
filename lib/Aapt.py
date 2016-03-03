@@ -1,7 +1,6 @@
 ##
-# @file Aapt.py
-# @brief Parser for the Android Asset Packaging Tool (aapt).
-# @version 1.0
+# Parser for the Android Asset Packaging Tool (aapt).
+#
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
 #
@@ -10,9 +9,6 @@ import subprocess
 import re
 
 
-##
-# Aapt class.
-#
 class Aapt:
     __AAPT_EXEC_PATH = "lib/aapt/aapt"
     __LABEL_APP_NAME = "application-label:"

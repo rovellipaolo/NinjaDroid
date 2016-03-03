@@ -7,17 +7,12 @@
 from os.path import join
 import unittest
 
-from lib.AndroidManifest import AndroidManifest, ErrorAndroidManifestParsing
-from lib.File import ErrorFileParsing
+from lib.errors.AndroidManifestParsingError import AndroidManifestParsingError
+from lib.errors.ParsingError import ParsingError
+from lib.parsers.AndroidManifest import AndroidManifest
 
 
-##
-# UnitTest for AndroidManifest class.
-#
 class TestAndroidManifest(unittest.TestCase):
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
         cls.manifests = {}
@@ -31,28 +26,16 @@ class TestAndroidManifest(unittest.TestCase):
         except:
             pass
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the object initialisation.
-    #
     def test_init(self):
         self.assertTrue(self.manifests['clean'] is not None)
         self.assertTrue(type(self.manifests['clean']) is AndroidManifest)
@@ -60,84 +43,54 @@ class TestAndroidManifest(unittest.TestCase):
         self.assertTrue(type(self.manifests['binary']) is AndroidManifest)
 
         # Test the class raise when a non-existing file is given:
-        with self.assertRaises(ErrorFileParsing):
+        with self.assertRaises(ParsingError):
             AndroidManifest(join('test', 'data', 'aaa_this_is_a_non_existent_file_xxx'))
 
         # Test the class raise when a non-AndroidManifest.xml file is given:
-        with self.assertRaises(ErrorAndroidManifestParsing):
+        with self.assertRaises(AndroidManifestParsingError):
             AndroidManifest(join('test', 'data', 'classes.dex'), False)
             AndroidManifest(join('test', 'data', 'classes.dex'), True)
             AndroidManifest(join('test', 'data', 'CERT.RSA'), False)
             AndroidManifest(join('test', 'data', 'CERT.RSA'), True)
 
-    ##
-    # Test the get_raw_file() method.
-    #
     def test_get_raw_file(self):
         self.assertTrue(len(self.manifests['clean'].get_raw_file()) > 0)
         self.assertTrue(len(self.manifests['binary'].get_raw_file()) > 0)
 
-    ##
-    # Test the get_file_name() method.
-    #
     def test_get_file_name(self):
         self.assertTrue(self.manifests['clean'].get_file_name() == "AndroidManifest.xml")
         self.assertTrue(self.manifests['binary'].get_file_name() == "AndroidManifest.xml")
 
-    ##
-    # Test the get_size() method.
-    #
     def test_get_size(self):
         self.assertTrue(self.manifests['clean'].get_size() == 3358)
         self.assertTrue(self.manifests['binary'].get_size() == 6544)
 
-    ##
-    # Test the get_md5() method.
-    #
     def test_get_md5(self):
         self.assertTrue(self.manifests['clean'].get_md5() == "c098fdd0a5dcf615118dad5457a2d016")
         self.assertTrue(self.manifests['binary'].get_md5() == "1f97f7e7ca62f39f8f81d79b1b540c37")
 
-    ##
-    # Test the get_sha1() method.
-    #
     def test_get_sha1(self):
         self.assertTrue(self.manifests['clean'].get_sha1() == "d69bbde630c8a5623b72a16d46b579432f2c944d")
         self.assertTrue(self.manifests['binary'].get_sha1() == "011316a011e5b8738c12c662cb0b0a6ffe04ca74")
 
-    ##
-    # Test the get_sha256() method.
-    #
     def test_get_sha256(self):
         self.assertTrue(self.manifests['clean'].get_sha256() == "a042569824ff2e268fdde5b8e00981293b27fe8a2a1dc72aa791e579f80bd720")
         self.assertTrue(self.manifests['binary'].get_sha256() == "7c8011a46191ecb368bf2e0104049abeb98bae8a7b1fa3328ff050aed85b1347")
 
-    ##
-    # Test the get_sha512() method.
-    #
     def test_get_sha512(self):
         self.assertTrue(self.manifests['clean'].get_sha512() == "8875e2d19725c824c93e9f4e45b9ebcd599bffafde1af4b98975a2d6e497fde76870e5129eef289a25328562f4f21d9ff214db95dcd3ddb3b58f358ec362d78a")
         self.assertTrue(self.manifests['binary'].get_sha512() == "8c7c1ede610f9c6613418b46a52a196ad6d5e8cc067c2f26b931738ad8087f998d9ea95e80ec4352c95fbdbb93a4f29c646973535068a3a3d584da95480ab45f")
 
-    ##
-    # Test the get_package_name() method.
-    #
     def test_get_package_name(self):
         for man in self.manifests:
             self.assertTrue(self.manifests[man].get_package_name() == "com.example.app")
 
-    ##
-    # Test the get_version() method.
-    #
     def test_get_version(self):
         for man in self.manifests:
             version = self.manifests[man].get_version()
             self.assertTrue(version['code'] == 1)
             self.assertTrue(version['name'] == "1.0")
 
-    ##
-    # Test the get_sdk_version() method.
-    #
     def test_get_sdk_version(self):
         for man in self.manifests:
             sdk = self.manifests[man].get_sdk_version()
@@ -145,9 +98,6 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue(('min' in sdk) and (sdk['min'] == "10"))
             self.assertTrue(('max' in sdk) and (sdk['max'] == "20"))
 
-    ##
-    # Test the get_permissions() method.
-    #
     def test_get_permissions(self):
         permissions = ['android.permission.INTERNET', 'android.permission.READ_EXTERNAL_STORAGE', 'android.permission.RECEIVE_BOOT_COMPLETED', 'android.permission.WRITE_EXTERNAL_STORAGE']
         permissions.sort()
@@ -155,16 +105,10 @@ class TestAndroidManifest(unittest.TestCase):
         for man in self.manifests:
             self.assertTrue(self.manifests[man].get_permissions() == permissions)
 
-    ##
-    # Test the get_number_of_permissions() method.
-    #
     def test_get_number_of_permissions(self):
         for man in self.manifests:
             self.assertTrue(self.manifests[man].get_number_of_permissions() == 4)
 
-    ##
-    # Test the get_activities() method.
-    #
     def test_get_activities(self):
         for man in self.manifests:
             activities = self.manifests[man].get_activities()
@@ -289,16 +233,10 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue('mimeType' in activities[1]['intent-filter'][0]['data'][2])
             self.assertTrue(activities[1]['intent-filter'][0]['data'][2]['mimeType'] == "application/vnd.android.package-archive")
 
-    ##
-    # Test the get_number_of_activities() method.
-    #
     def test_get_number_of_activities(self):
         for man in self.manifests:
             self.assertTrue(self.manifests[man].get_number_of_activities() == 2)
 
-    ##
-    # Test the get_services() method.
-    #
     def test_get_services(self):
         for man in self.manifests:
             services = self.manifests[man].get_services()
@@ -354,16 +292,10 @@ class TestAndroidManifest(unittest.TestCase):
             # Test intent-filter parsing:
             self.assertTrue('intent-filter' not in services[2])
 
-    ##
-    # Test the get_number_of_services() method.
-    #
     def test_get_number_of_services(self):
         for man in self.manifests:
             self.assertTrue(self.manifests[man].get_number_of_services() == 3)
 
-    ##
-    # Test the get_broadcast_receivers() method.
-    #
     def test_get_broadcast_receivers(self):
         for man in self.manifests:
             receivers = self.manifests[man].get_broadcast_receivers()
@@ -459,12 +391,10 @@ class TestAndroidManifest(unittest.TestCase):
             # Test intent-filter parsing:
             self.assertTrue('intent-filter' not in receivers[3])
 
-    ##
-    # Test the get_number_of_broadcast_receivers() method.
-    #
     def test_get_number_of_broadcast_receivers(self):
         for man in self.manifests:
             self.assertTrue(self.manifests[man].get_number_of_broadcast_receivers() == 4)
+
 
 if __name__ == '__main__':
     unittest.main()

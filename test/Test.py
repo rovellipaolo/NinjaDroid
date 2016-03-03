@@ -7,14 +7,14 @@
 import unittest
 
 from test.TestAapt import TestAapt
-from test.TestAndroidManifest import TestAndroidManifest, ErrorAndroidManifestParsing
+from test.TestAndroidManifest import TestAndroidManifest
 from test.TestAPK import TestAPK
 from test.TestCERT import TestCERT
 from test.TestDex import TestDex
-from test.TestFile import TestFile, ErrorFileParsing
-from test.TestShell import TestShell
+from test.TestFile import TestFile
+from test.TestShellCommandSignature import TestShellCommandSignature
 from test.TestSignature import TestSignature
-from test.TestURI import TestURI
+from test.TestURISignature import TestURISignature
 
 
 ##
@@ -30,8 +30,8 @@ def get_test_suite():
     suite.addTest(TestCERT)
     suite.addTest(TestDex)
     suite.addTest(TestSignature)
-    suite.addTest(TestURI)
-    suite.addTest(TestShell)
+    suite.addTest(TestURISignature)
+    suite.addTest(TestShellCommandSignature)
 
     return suite
 

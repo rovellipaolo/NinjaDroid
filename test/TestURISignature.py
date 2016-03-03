@@ -6,13 +6,10 @@
 
 import unittest
 
-from lib.URI import URI
+from lib.signatures.URISignature import URISignature
 
 
-##
-# UnitTest for URI class.
-#
-class TestURI(unittest.TestCase):
+class TestURISignature(unittest.TestCase):
     valid_urls = [
         "http://www.domain.com",
         "https://www.domain.com",
@@ -75,52 +72,34 @@ class TestURI(unittest.TestCase):
         'iSETUP ERROR:  Cannot use the sample publisher ID (a1496ced2842262).  Yours is available on www.admob.com.': "www.admob.com",
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
-        cls.uri = URI()
+        cls.uri = URISignature()
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the is_valid() method.
-    #
     def test_is_valid(self):
-        for url in TestURI.valid_urls:
+        for url in TestURISignature.valid_urls:
             print("Testing '" + url + "'...")
             self.assertTrue(self.uri.is_valid(url))
 
-        for url in TestURI.invalid_urls:
+        for url in TestURISignature.invalid_urls:
             print("Testing '" + url + "'...")
             self.assertFalse(self.uri.is_valid(url))
         pass
 
-    ##
-    # Test the get_matches_in_string() method.
-    #
     def test_get_matches_in_string(self):
-        for string in TestURI.strings_containing_urls:
+        for string in TestURISignature.strings_containing_urls:
             print("Testing '" + string + "'...")
-            self.assertTrue(self.uri.get_matches_in_string(string) == TestURI.strings_containing_urls[string])
+            self.assertTrue(self.uri.get_matches_in_string(string) == TestURISignature.strings_containing_urls[string])
 
 
 if __name__ == '__main__':

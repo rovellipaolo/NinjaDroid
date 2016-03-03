@@ -7,9 +7,6 @@
 #
 
 
-##
-# Report class.
-#
 class Report(object):
     ##
     # Generate the analysis report in HTML format.

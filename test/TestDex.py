@@ -8,13 +8,10 @@ from os import listdir
 from os.path import join
 import unittest
 
-from lib.Dex import Dex
-from lib.File import ErrorFileParsing
+from lib.parsers.Dex import Dex
+from lib.errors.ParsingError import ParsingError
 
 
-##
-# UnitTest for Dex class.
-#
 class TestDex(unittest.TestCase):
     dex_properties = {
         "classes.dex": {
@@ -31,9 +28,6 @@ class TestDex(unittest.TestCase):
         },
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
         cls.dexes = {}
@@ -43,110 +37,65 @@ class TestDex(unittest.TestCase):
                 cls.dexes[file] = Dex(join('test', 'data', file))
                 #print(cls.dexes[filename].dump())
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the object initialisation.
-    #
     def test_init(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename] is not None)
             self.assertTrue(type(self.dexes[filename]) is Dex)
 
         # Test the class raise when a non-existing file is given:
-        with self.assertRaises(ErrorFileParsing):
+        with self.assertRaises(ParsingError):
             Dex(join('test', 'data', 'aaa_this_is_a_non_existent_file_xxx'))
 
-    ##
-    # Test the get_raw_file() method.
-    #
     def test_get_raw_file(self):
         for filename in self.dexes:
             self.assertTrue(len(self.dexes[filename].get_raw_file()) > 0)
 
-    ##
-    # Test the get_file_name() method.
-    #
     def test_get_file_name(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_file_name() == self.dex_properties[filename]['name'])
 
-    ##
-    # Test the get_size() method.
-    #
     def test_get_size(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_size() == self.dex_properties[filename]['size'])
 
-    ##
-    # Test the get_md5() method.
-    #
     def test_get_md5(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_md5() == self.dex_properties[filename]['md5'])
 
-    ##
-    # Test the get_sha1() method.
-    #
     def test_get_sha1(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_sha1() == self.dex_properties[filename]['sha1'])
 
-    ##
-    # Test the get_sha256() method.
-    #
     def test_get_sha256(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_sha256() == self.dex_properties[filename]['sha256'])
 
-    ##
-    # Test the get_sha512() method.
-    #
     def test_get_sha512(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_sha512() == self.dex_properties[filename]['sha512'])
 
-    ##
-    # Test the get_strings() method.
-    #
     def test_get_strings(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_strings() == self.dex_properties[filename]['strings'])
 
-    ##
-    # Test the get_urls() method.
-    #
     def test_get_urls(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_urls() == self.dex_properties[filename]['urls'])
 
-    ##
-    # Test the get_shell_commands() method.
-    #
     def test_get_shell_commands(self):
         for filename in self.dexes:
             self.assertTrue(self.dexes[filename].get_shell_commands() == self.dex_properties[filename]['shell_commands'])
 
-    ##
-    # Test the get_custom_signatures() method.
-    #
     #def test_get_custom_signatures(self):
     #    for filename in self.dexes:
     #        self.assertTrue(self.dexes[filename].get_custom_signatures() == self.dex_properties[filename]['custom_signatures'])

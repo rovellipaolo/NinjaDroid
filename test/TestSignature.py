@@ -6,12 +6,9 @@
 
 import unittest
 
-from lib.Signature import Signature
+from lib.signatures.Signature import Signature
 
 
-##
-# UnitTest for Signature class.
-#
 class TestSignature(unittest.TestCase):
     valid_commands = [
         "apk",
@@ -40,35 +37,20 @@ class TestSignature(unittest.TestCase):
         '8Lcom/corner23/android/universalandroot/UniversalAndroot;': "8Lcom/corner23/android/universalandroot/UniversalAndroot;",
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
         cls.signature = Signature()
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the is_valid() method.
-    #
     def test_is_valid(self):
         for string in TestSignature.valid_commands:
             print("Testing '" + string + "'...")
@@ -79,9 +61,6 @@ class TestSignature(unittest.TestCase):
             self.assertFalse(self.signature.is_valid(string))
         pass
 
-    ##
-    # Test the get_matches_in_string() method.
-    #
     def test_get_matches_in_string(self):
         for string in TestSignature.strings_containing_commands:
             print("Testing '" + string + "'...")

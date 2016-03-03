@@ -8,13 +8,11 @@ from os import listdir
 from os.path import join
 import unittest
 
-from lib.APK import APK, ErrorAPKParsing
-from lib.File import ErrorFileParsing
+from lib.errors.APKParsingError import APKParsingError
+from lib.errors.ParsingError import ParsingError
+from lib.parsers.APK import APK
 
 
-##
-# UnitTest for APK class.
-#
 class TestAPK(unittest.TestCase):
     apks_properties = {
         "Example.apk": {
@@ -126,9 +124,6 @@ class TestAPK(unittest.TestCase):
         },
     }
 
-    ##
-    # Set up the test case.
-    #
     @classmethod
     def setUpClass(cls):
         cls.apks = {}
@@ -138,95 +133,59 @@ class TestAPK(unittest.TestCase):
                 cls.apks[filename] = APK(join('test', 'data', filename))
                 #print(cls.apks[filename].dump())
 
-    ##
-    # Clear the test case.
-    #
     @classmethod
     def tearDownClass(cls):
         pass
 
-    ##
-    # Set up the test fixture.
-    #
     def setUp(self):
         pass
 
-    ##
-    # Clear the test fixture.
-    #
     def tearDown(self):
         pass
 
-    ##
-    # Test the object initialisation.
-    #
     def test_init(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename] is not None)
             self.assertTrue(type(self.apks[filename]) is APK)
 
         # Test the class raise when a non-existing file is given:
-        with self.assertRaises(ErrorFileParsing):
+        with self.assertRaises(ParsingError):
             APK(join('test', 'data', 'aaa_this_is_a_non_existent_file_xxx'))
 
         # Test the class raise when a non-existing file is given:
-        with self.assertRaises(ErrorAPKParsing):
+        with self.assertRaises(APKParsingError):
             APK(join('test', 'data', 'AndroidManifest.xml'))
             APK(join('test', 'data', 'CERT.RSA'))
             APK(join('test', 'data', 'classes.dex'))
 
-    ##
-    # Test the get_raw_file() method.
-    #
     def test_get_raw_file(self):
         for filename in self.apks:
             self.assertTrue(len(self.apks[filename].get_raw_file()) > 0)
 
-    ##
-    # Test the get_file_name() method.
-    #
     def test_get_file_name(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_file_name() == self.apks_properties[filename]['name'])
 
-    ##
-    # Test the get_size() method.
-    #
     def test_get_size(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_size() == self.apks_properties[filename]['size'])
 
-    ##
-    # Test the get_md5() method.
-    #
     def test_get_md5(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_md5() == self.apks_properties[filename]['md5'])
 
-    ##
-    # Test the get_sha1() method.
-    #
     def test_get_sha1(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_sha1() == self.apks_properties[filename]['sha1'])
 
-    ##
-    # Test the get_sha256() method.
-    #
     def test_get_sha256(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_sha256() == self.apks_properties[filename]['sha256'])
 
-    ##
-    # Test the get_sha512() method.
-    #
     def test_get_sha512(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_sha512() == self.apks_properties[filename]['sha512'])
 
-    ##
-    # Test the get_file_list() method.
-    #
     def test_get_file_list(self):
         for filename in self.apks:
             file_list = self.apks[filename].get_file_list()
@@ -239,9 +198,6 @@ class TestAPK(unittest.TestCase):
                 self.assertTrue(file_list[i].get_sha256() == self.apks_properties[filename]['file_list'][i]["sha256"])
                 self.assertTrue(file_list[i].get_sha512() == self.apks_properties[filename]['file_list'][i]["sha512"])
 
-    ##
-    # Test the get_app_name() method.
-    #
     def test_get_app_name(self):
         for filename in self.apks:
             self.assertTrue(self.apks[filename].get_app_name() == self.apks_properties[filename]['app_name'])

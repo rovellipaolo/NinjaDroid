@@ -1,13 +1,12 @@
+from abc import ABCMeta, abstractmethod
+
+
 ##
 # Parser interface for AndroidManifest.xml file.
 #
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
 #
-
-from abc import ABCMeta, abstractmethod
-
-
 class AndroidManifestParserInterface(object):
     __metaclass__ = ABCMeta
 

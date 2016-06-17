@@ -1,9 +1,3 @@
-##
-# UnitTest for APK.py.
-#
-# RUN: python -m unittest -v test.TestAPK
-#
-
 from os import listdir
 from os.path import join
 import unittest
@@ -13,6 +7,11 @@ from lib.errors.ParsingError import ParsingError
 from lib.parsers.APK import APK
 
 
+##
+# UnitTest for APK.py.
+#
+# RUN: python -m unittest -v test.TestAPK
+#
 class TestAPK(unittest.TestCase):
     apks_properties = {
         "Example.apk": {

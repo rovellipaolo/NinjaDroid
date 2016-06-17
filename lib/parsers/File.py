@@ -1,10 +1,3 @@
-##
-# Parser implementation for a file.
-#
-# @author Paolo Rovelli
-# @copyright GNU Lesser General Public License v3.0 (https://www.gnu.org/licenses/lgpl.html).
-#
-
 from hashlib import md5, sha1, sha256, sha512
 from os import access, R_OK
 from os.path import getsize, isfile
@@ -13,6 +6,12 @@ from lib.errors.ParsingError import ParsingError
 from lib.parsers.FileParserInterface import FileParserInterface
 
 
+##
+# Parser implementation for a file.
+#
+# @author Paolo Rovelli
+# @copyright GNU Lesser General Public License v3.0 (https://www.gnu.org/licenses/lgpl.html).
+#
 class File(FileParserInterface):
     ##
     # Class constructor.

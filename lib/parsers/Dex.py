@@ -1,10 +1,3 @@
-##
-# Parser implementation for Android classes.dex file.
-#
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-
 import subprocess
 
 from lib.parsers.DexParserInterface import DexParserInterface
@@ -14,6 +7,12 @@ from lib.signatures.ShellCommandSignature import ShellCommandSignature
 from lib.signatures.Signature import Signature
 
 
+##
+# Parser implementation for Android classes.dex file.
+#
+# @author Paolo Rovelli
+# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
+#
 class Dex(File, DexParserInterface):
     __FILE_NAME_CLASSES_DEX = "classes.dex"
 

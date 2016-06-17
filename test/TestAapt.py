@@ -1,9 +1,3 @@
-##
-# UnitTest for Aapt.py.
-#
-# RUN: python -m unittest -v test.TestAapt
-#
-
 from os import listdir
 from os.path import join
 import unittest
@@ -11,6 +5,11 @@ import unittest
 from lib.Aapt import Aapt
 
 
+##
+# UnitTest for Aapt.py.
+#
+# RUN: python -m unittest -v test.TestAapt
+#
 class TestAapt(unittest.TestCase):
     files_properties = {
         "Example.apk": {

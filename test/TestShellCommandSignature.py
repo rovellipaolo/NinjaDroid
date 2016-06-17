@@ -1,14 +1,13 @@
-##
-# UnitTest for Shell.py.
-#
-# RUN: python -m unittest -v test.TestShell
-#
-
 import unittest
 
 from lib.signatures.ShellCommandSignature import ShellCommandSignature
 
 
+##
+# UnitTest for Shell.py.
+#
+# RUN: python -m unittest -v test.TestShell
+#
 class TestShellCommandSignature(unittest.TestCase):
     valid_commands = [
         "/bin",

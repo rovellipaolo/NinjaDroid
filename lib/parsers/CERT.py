@@ -1,10 +1,3 @@
-##
-# Parser implementation for Android CERT.RSA/DSA certificate file.
-#
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-
 from datetime import datetime
 from fnmatch import fnmatch
 import re
@@ -15,6 +8,12 @@ from lib.parsers.File import File
 from lib.errors.CERTParsingError import CERTParsingError
 
 
+##
+# Parser implementation for Android CERT.RSA/DSA certificate file.
+#
+# @author Paolo Rovelli
+# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
+#
 class CERT(File, CERTParserInterface):
     __FILE_NAME_CERT_RSA = "META-INF/CERT.RSA"
     __FILE_NAME_CERT_DSA = "META-INF/CERT.DSA"

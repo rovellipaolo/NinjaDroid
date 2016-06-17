@@ -1,14 +1,13 @@
+import subprocess
+import re
+
+
 ##
 # Parser for the Android Asset Packaging Tool (aapt).
 #
 # @author Paolo Rovelli
 # @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
 #
-
-import subprocess
-import re
-
-
 class Aapt:
     __AAPT_EXEC_PATH = "lib/aapt/aapt"
     __LABEL_APP_NAME = "application-label:"
@@ -112,8 +111,8 @@ class Aapt:
         # locales: '--_--'
         # densities: '120' '160' '240' '320'
         #
-        process = subprocess.Popen(Aapt.__AAPT_EXEC_PATH + " dump badging " + filepath, stdout=subprocess.PIPE, stderr=None, shell=True)
-        return process.communicate()[0].decode("utf-8")
+        command = Aapt.__AAPT_EXEC_PATH + " dump badging " + filepath
+        return Aapt._launch_shell_command_and_get_result(command)
 
 
     ##
@@ -132,8 +131,8 @@ class Aapt:
         # uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
         # uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
         #
-        process = subprocess.Popen(Aapt.__AAPT_EXEC_PATH + " dump permissions " + filepath, stdout=subprocess.PIPE, stderr=None, shell=True)
-        return process.communicate()[0].decode("utf-8")
+        command = Aapt.__AAPT_EXEC_PATH + " dump permissions " + filepath
+        return Aapt._launch_shell_command_and_get_result(command)
 
     ##
     # Dump the XML tree of the AndroidManifest.xml file of a given APK package.
@@ -241,7 +240,12 @@ class Aapt:
         #         A: android:enabled(0x0101000e)=(type 0x12)0x0
         #         A: android:exported(0x01010010)=(type 0x12)0xffffffff
         #
-        process = subprocess.Popen(Aapt.__AAPT_EXEC_PATH + " dump xmltree " + filepath + " AndroidManifest.xml", stdout=subprocess.PIPE, stderr=None, shell=True)
+        command = Aapt.__AAPT_EXEC_PATH + " dump xmltree " + filepath + " AndroidManifest.xml"
+        return Aapt._launch_shell_command_and_get_result(command)
+
+    @classmethod
+    def _launch_shell_command_and_get_result(cls, command):
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         return process.communicate()[0].decode("utf-8")
 
     ##
@@ -258,7 +262,7 @@ class Aapt:
     # Retrieve the APK info.
     #
     # @param filepath  The APK package file path.
-    # @return The APK info as a dictionary (i.e. {"package_name":"...", "version":{"code":1, "name":"1.0"}m "sdk":{"target": "...", max: "...", min: "..."}}).
+    # @return The APK info as a dictionary (i.e. {"package_name":"...", "version":{"code":1, "name":"1.0"}, "sdk":{"target": "...", max: "...", min: "..."}}).
     #
     @classmethod
     def get_apk_info(cls, filepath):
@@ -297,15 +301,15 @@ class Aapt:
     #
     @classmethod
     def get_manifest_info(cls, filepath):
+        activities = []
+        services = []
+        receivers = []
+
         xmltree = cls._dump_manifest_xmltree(filepath)
         # @TODO: Refactor this code...
         try:
             # Extract only from the <application> tag:
             xmltree = xmltree[xmltree.index("application"):-1]
-
-            activities = []
-            services = []
-            receivers = []
 
             for offs in cls._find_all(xmltree, "activity"):
                 activity = xmltree[offs:-1]
@@ -321,7 +325,8 @@ class Aapt:
                 receiver = xmltree[offs:-1]
                 idx = cls._find_between(receiver, "android:name(", ")=\"")
                 receivers.append({"name": cls._find_between(receiver, "android:name(" + idx + ")=\"", "\"")})
-        except ValueError:  # the <application> TAG has not been found...
+        except ValueError:
+            # The <application> TAG has not been found...
             pass
         
         return {

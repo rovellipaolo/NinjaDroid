@@ -1,9 +1,3 @@
-##
-# UnitTest for CERT.py.
-#
-# RUN: python -m unittest -v test.TestCERT
-#
-
 from os import listdir
 from os.path import join
 import unittest
@@ -13,6 +7,11 @@ from lib.errors.ParsingError import ParsingError
 from lib.parsers.CERT import CERT
 
 
+##
+# UnitTest for CERT.py.
+#
+# RUN: python -m unittest -v test.TestCERT
+#
 class TestCERT(unittest.TestCase):
     cert_properties = {
         "CERT.RSA": {

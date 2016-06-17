@@ -1,9 +1,3 @@
-##
-# UnitTest for AndroidManifest.py.
-#
-# RUN: python -m unittest -v test.TestAndroidManifest
-#
-
 from os.path import join
 import unittest
 
@@ -12,6 +6,11 @@ from lib.errors.ParsingError import ParsingError
 from lib.parsers.AndroidManifest import AndroidManifest
 
 
+##
+# UnitTest for AndroidManifest.py.
+#
+# RUN: python -m unittest -v test.TestAndroidManifest
+#
 class TestAndroidManifest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

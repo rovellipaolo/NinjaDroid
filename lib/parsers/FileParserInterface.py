@@ -1,13 +1,12 @@
+from abc import ABCMeta, abstractmethod
+
+
 ##
 # Parser interface for a file.
 #
 # @author Paolo Rovelli
 # @copyright GNU Lesser General Public License v3.0 (https://www.gnu.org/licenses/lgpl.html).
 #
-
-from abc import ABCMeta, abstractmethod
-
-
 class FileParserInterface(object):
     __metaclass__ = ABCMeta
 

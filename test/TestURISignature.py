@@ -1,14 +1,13 @@
-##
-# UnitTest for URI.py.
-#
-# RUN: python -m unittest -v test.TestURI
-#
-
 import unittest
 
 from lib.signatures.URISignature import URISignature
 
 
+##
+# UnitTest for URI.py.
+#
+# RUN: python -m unittest -v test.TestURI
+#
 class TestURISignature(unittest.TestCase):
     valid_urls = [
         "http://www.domain.com",

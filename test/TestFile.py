@@ -1,9 +1,3 @@
-##
-# UnitTest for File.py.
-#
-# RUN: python -m unittest -v test.TestFile
-#
-
 from os import listdir
 from os.path import join
 import unittest
@@ -12,6 +6,11 @@ from lib.errors.ParsingError import ParsingError
 from lib.parsers.File import File
 
 
+##
+# UnitTest for File.py.
+#
+# RUN: python -m unittest -v test.TestFile
+#
 class TestFile(unittest.TestCase):
     files_properties = {
         "Example.apk": {

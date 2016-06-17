@@ -1,12 +1,6 @@
 ##
-# @file Report.py
-# @brief Generate n HTML report of a specific app.
-# @version 2.0
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
+# HTML report of a specific app.
 #
-
-
 class Report(object):
     ##
     # Generate the analysis report in HTML format.

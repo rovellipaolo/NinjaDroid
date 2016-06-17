@@ -10,7 +10,7 @@ from xml.parsers.expat import ExpatError
 import json
 
 from lib.Aapt import Aapt
-from lib.AXMLParser import AXMLPrinter
+from lib.axmlparser.AXMLPrinter import AXMLPrinter
 from lib.parsers.AndroidManifestParserInterface import AndroidManifestParserInterface
 from lib.parsers.File import File
 from lib.errors.AndroidManifestParsingError import AndroidManifestParsingError
@@ -37,7 +37,7 @@ class AndroidManifest(File, AndroidManifestParserInterface):
         with open(filepath, 'rb') as fp:
             try:
                 if binary:
-                    self._raw = AXMLPrinter(fp.read()).getBuff()
+                    self._raw = AXMLPrinter(fp.read()).get_buff()
                     xml = minidom.parseString(self._raw)
                 else:
                     xml = minidom.parse(filepath)

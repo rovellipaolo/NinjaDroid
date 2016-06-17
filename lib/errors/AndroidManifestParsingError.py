@@ -1,13 +1,9 @@
-##
-# AndroidManifest.xml file parsing error.
-#
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-
 from lib.errors.ParsingError import ParsingError
 
 
+##
+# AndroidManifest.xml file parsing error.
+#
 class AndroidManifestParsingError(ParsingError):
     def __init__(self):
         ParsingError.__init__(self)

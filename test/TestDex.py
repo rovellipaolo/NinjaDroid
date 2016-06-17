@@ -1,9 +1,3 @@
-##
-# UnitTest for Dex.py.
-#
-# RUN: python -m unittest -v test.TestDex
-#
-
 from os import listdir
 from os.path import join
 import unittest
@@ -12,6 +6,11 @@ from lib.parsers.Dex import Dex
 from lib.errors.ParsingError import ParsingError
 
 
+##
+# UnitTest for Dex.py.
+#
+# RUN: python -m unittest -v test.TestDex
+#
 class TestDex(unittest.TestCase):
     dex_properties = {
         "classes.dex": {

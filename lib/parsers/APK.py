@@ -1,10 +1,3 @@
-##
-# Parser implementation for Android APK package.
-#
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-
 import os
 import shutil
 import tempfile
@@ -22,6 +15,12 @@ from lib.parsers.CERT import CERT
 from lib.parsers.File import File
 
 
+##
+# Parser implementation for Android APK package.
+#
+# @author Paolo Rovelli
+# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
+#
 class APK(File, APKParserInterface):
     _TEMPORARY_DIR = ".ninjadroid"
 

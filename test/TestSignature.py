@@ -1,14 +1,13 @@
-##
-# UnitTest for Signature.py.
-#
-# RUN: python -m unittest -v test.TestSignature
-#
-
 import unittest
 
 from lib.signatures.Signature import Signature
 
 
+##
+# UnitTest for Signature.py.
+#
+# RUN: python -m unittest -v test.TestSignature
+#
 class TestSignature(unittest.TestCase):
     valid_commands = [
         "apk",

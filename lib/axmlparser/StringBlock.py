@@ -82,7 +82,7 @@ class StringBlock:
 
     def get_short(self, array, offset):
         value = array[int(offset / 4)]
-        if ((offset % 4) / 2) == 0:
+        if (int(offset % 4) / 2) == 0:
             return value & 0xFFFF
         else:
             return value >> 16

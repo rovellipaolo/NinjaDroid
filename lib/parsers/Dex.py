@@ -38,7 +38,8 @@ class Dex(File, DexParserInterface):
     # Extract the strings from the classes.dex file and set the correspondent attributes. Empty strings will be removed.
     #
     def _extract_and_set_strings(self):
-        process = subprocess.Popen("strings " + self.get_file_path(), stdout=subprocess.PIPE, stderr=None, shell=True)
+        command = "strings " + self.get_file_path()
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         self._strings = process.communicate()[0].decode("utf-8").splitlines()
         self._strings.sort()
         while "" in self._strings:

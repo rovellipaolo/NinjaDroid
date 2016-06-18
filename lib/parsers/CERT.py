@@ -77,7 +77,8 @@ class CERT(File, CERTParserInterface):
     # @throw CERTParsingError  If there is a keytool error.
     #
     def _extract_decoded_cert_file(self):
-        process = subprocess.Popen("keytool -printcert -file " + self.get_file_path(), stdout=subprocess.PIPE, stderr=None, shell=True)
+        command = "keytool -printcert -file " + self.get_file_path()
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         raw = process.communicate()[0].decode("utf-8")
         if re.search("^keytool error", raw, re.IGNORECASE):
             raise CERTParsingError

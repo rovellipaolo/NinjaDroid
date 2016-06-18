@@ -1,7 +1,7 @@
 ##
 # HTML report of a specific app.
 #
-class Report(object):
+class HtmlReport(object):
     ##
     # Generate the analysis report in HTML format.
     #

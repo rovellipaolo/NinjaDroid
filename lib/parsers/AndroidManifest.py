@@ -9,7 +9,7 @@ from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import json
 
-from lib.Aapt import Aapt
+from lib.aapt.Aapt import Aapt
 from lib.axmlparser.AXMLPrinter import AXMLPrinter
 from lib.parsers.AndroidManifestParserInterface import AndroidManifestParserInterface
 from lib.parsers.File import File

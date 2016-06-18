@@ -3,7 +3,7 @@ import shutil
 import tempfile
 from zipfile import ZipFile, is_zipfile
 
-from lib.Aapt import Aapt
+from lib.aapt.Aapt import Aapt
 from lib.errors.APKParsingError import APKParsingError
 from lib.errors.AndroidManifestParsingError import AndroidManifestParsingError
 from lib.errors.CERTParsingError import CERTParsingError
@@ -116,21 +116,23 @@ class APK(File, APKParserInterface):
     ##
     # Extract the certificate file of the APK package (whether its name is CERT.RSA or CERT.DSA or PACKAGE.RSA...).
     #
-    # @param output_dir  The directory where to save the CERT.RSA/DSA file.
+    # @param output_directory  The directory where to save the CERT.RSA/DSA file.
     #
-    def extract_cert_file(self, output_dir):
+    def extract_cert_file(self, output_directory):
         with ZipFile(self._name) as apk:
             cert_file_name = self._cert.get_file_name()
-            with apk.open(cert_file_name) as cert, open(os.path.join(output_dir, os.path.basename(cert_file_name)), 'wb') as fp:
+            cert_abspath = os.path.join(output_directory, os.path.basename(cert_file_name))
+            with apk.open(cert_file_name) as cert, open(cert_abspath, 'wb') as fp:
                 shutil.copyfileobj(cert, fp)
 
     ##
     # Extract the classes.dex file of the APK package.
     #
-    # @param output_dir  The directory where to save the classes.dex file.
+    # @param output_directory  The directory where to save the classes.dex file.
     #
-    def extract_dex_file(self, output_dir):
+    def extract_dex_file(self, output_directory):
         with ZipFile(self._name) as apk:
             dex_file_name = self._dex.get_file_name()
-            with apk.open(dex_file_name) as dex, open(os.path.join(output_dir, dex_file_name), 'wb') as fp:
+            dex_abspath = os.path.join(output_directory, dex_file_name)
+            with apk.open(dex_file_name) as dex, open(dex_abspath, 'wb') as fp:
                 shutil.copyfileobj(dex, fp)

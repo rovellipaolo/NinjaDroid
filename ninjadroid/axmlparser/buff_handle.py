@@ -1,14 +1,11 @@
-##
-# BuffHandle
-#
-# @author Anthony Desnos <desnos at t0t0.fr>
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-# The original AXML parser code comes from Androguard (by Anthony Desnos).
-# Link: https://github.com/kzjeef/AxmlParserPY
-#
 class BuffHandle:
+    """
+    BuffHandle
+
+    The original AXML parser code comes from Androguard (by Anthony Desnos).
+    Link: https://github.com/kzjeef/AxmlParserPY
+    """
+
     def __init__(self, buff):
         self.__buff = buff
         self.__idx = 0

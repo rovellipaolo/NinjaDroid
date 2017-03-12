@@ -1,25 +1,17 @@
 from struct import pack, unpack
 
-from ninjadroid.axmlparser.AXMLConstants import *
-from ninjadroid.axmlparser.AXMLParser import AXMLParser
+from ninjadroid.axmlparser.axml_constants import *
+from ninjadroid.axmlparser.axml_parser import AXMLParser
 
 
-##
-# AXMLPrinter
-#
-# @author Anthony Desnos <desnos at t0t0.fr>
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-# The original AXML parser code comes from Androguard (by Anthony Desnos).
-# Link: https://github.com/kzjeef/AxmlParserPY
-#
 class AXMLPrinter:
-    ##
-    # Class constructor.
-    #
-    # @param raw  The raw buffer of an binary XML file.
-    #
+    """
+    AXMLPrinter
+
+    The original AXML parser code comes from Androguard (by Anthony Desnos).
+    Link: https://github.com/kzjeef/AxmlParserPY
+    """
+
     def __init__(self, raw):
         self.axml = AXMLParser(raw)
         self.xmlns = False
@@ -52,10 +44,12 @@ class AXMLPrinter:
             elif _type == END_DOCUMENT:
                 break
 
-    ##
-    # Return the entire XML encoded in UTF-8.
-    #
     def get_buff(self):
+        """
+        Return the entire XML encoded in UTF-8.
+
+        :return: The XML file content encoded in UTF-8.
+        """
         return self.buff.encode("utf-8")
 
     def __get_prefix(self, prefix):
@@ -68,7 +62,7 @@ class AXMLPrinter:
         _type = self.axml.get_attribute_value_type(index)
         _data = self.axml.get_attribute_value_data(index)
 
-        #print _type, _data
+        # print _type, _data
         if _type == TYPE_STRING:
             return self.axml.get_attribute_value(index)
         elif _type == TYPE_ATTRIBUTE:

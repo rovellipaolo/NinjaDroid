@@ -1,26 +1,18 @@
 from struct import unpack
 
-from ninjadroid.axmlparser.AXMLConstants import *
-from ninjadroid.axmlparser.BuffHandle import BuffHandle
-from ninjadroid.axmlparser.StringBlock import StringBlock
+from ninjadroid.axmlparser.axml_constants import *
+from ninjadroid.axmlparser.buff_handle import BuffHandle
+from ninjadroid.axmlparser.string_block import StringBlock
 
 
-##
-# AXMLParser
-#
-# @author Anthony Desnos <desnos at t0t0.fr>
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-# The original AXML parser code comes from Androguard (by Anthony Desnos).
-# Link: https://github.com/kzjeef/AxmlParserPY
-#
 class AXMLParser:
-    ##
-    # Class constructor.
-    #
-    # @param raw_buff  The raw buffer of an binary XML file.
-    #
+    """
+    AXMLParser
+
+    The original AXML parser code comes from Androguard (by Anthony Desnos).
+    Link: https://github.com/kzjeef/AxmlParserPY
+    """
+
     def __init__(self, raw_buff):
         self.reset()
         self.buff = BuffHandle(raw_buff)
@@ -236,5 +228,5 @@ class AXMLParser:
             return self.string_block.get_raw(value_string)
         # WIP
         return ""
-        #int value_data=_attributes[offset+ATTRIBUTE_IX_VALUE_DATA];
-        #return TypedValue.coerceToString(value_type,valueData);
+        # int value_data=_attributes[offset+ATTRIBUTE_IX_VALUE_DATA];
+        # return TypedValue.coerceToString(value_type,valueData);

@@ -10,7 +10,7 @@ from xml.parsers.expat import ExpatError
 import json
 
 from ninjadroid.aapt.aapt import Aapt
-from ninjadroid.axmlparser.AXMLPrinter import AXMLPrinter
+from ninjadroid.axmlparser.axml_printer import AXMLPrinter
 from ninjadroid.parsers.android_manifest_interface import AndroidManifestInterface
 from ninjadroid.parsers.file import File
 from ninjadroid.errors.android_manifest_parsing_error import AndroidManifestParsingError

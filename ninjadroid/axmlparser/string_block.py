@@ -1,19 +1,16 @@
 from struct import unpack
 
-from ninjadroid.axmlparser.AXMLConstants import *
+from ninjadroid.axmlparser.axml_constants import *
 
 
-##
-# StringBlock
-#
-# @author Anthony Desnos <desnos at t0t0.fr>
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-# The original AXML parser code comes from Androguard (by Anthony Desnos).
-# Link: https://github.com/kzjeef/AxmlParserPY
-#
 class StringBlock:
+    """
+    StringBlock
+
+    The original AXML parser code comes from Androguard (by Anthony Desnos).
+    Link: https://github.com/kzjeef/AxmlParserPY
+    """
+
     def __init__(self, buff):
         self.chunk_size = unpack(UNPACK_FORMAT_LITTLEENDIAN_LONG, buff.read(4))[0]
         self.string_count = unpack(UNPACK_FORMAT_LITTLEENDIAN_LONG, buff.read(4))[0]

@@ -7,7 +7,7 @@ class Signature:
     Parser for generic signature.
     """
 
-    _CONFIG_FILE = "etc/signatures.json"
+    _CONFIG_FILE = "ninjadroid/config/signatures.json"
     _SIGNATURE_KEYS_LIST = ["signatures"]
 
     def __init__(self):

@@ -18,7 +18,7 @@ from ninjadroid.errors.android_manifest_parsing_error import AndroidManifestPars
 
 class AndroidManifest(File, AndroidManifestInterface):
     __FILE_NAME_ANDROIDMANIFEST_XML = "AndroidManifest.xml"
-    __MANIFEST_CONFIG_FILE = "etc/manifest.json"
+    __MANIFEST_CONFIG_FILE = "ninjadroid/config/manifest.json"
 
     def __init__(self, filepath, binary=False, apk_path=""):
         super(AndroidManifest, self).__init__(filepath, "AndroidManifest.xml")

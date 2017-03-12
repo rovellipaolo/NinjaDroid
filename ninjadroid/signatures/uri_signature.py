@@ -8,7 +8,7 @@ class URISignature(Signature):
     Parser for URIs.
     """
 
-    _CONFIG_FILE = "etc/uri.json"
+    _CONFIG_FILE = "ninjadroid/config/uri.json"
     _SIGNATURE_KEYS_LIST = ["tlds"]
 
     def __init__(self):

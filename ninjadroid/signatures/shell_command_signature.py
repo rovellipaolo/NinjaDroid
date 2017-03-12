@@ -8,7 +8,7 @@ class ShellCommandSignature(Signature):
     Parser for shell commands.
     """
 
-    _CONFIG_FILE = "etc/shell.json"
+    _CONFIG_FILE = "ninjadroid/config/shell.json"
     _SIGNATURE_KEYS_LIST = ["commands", "dirs"]
 
     def __init__(self):

@@ -13,11 +13,12 @@ import os
 import re
 import sys
 
-from lib.GenerateApkReportsInteractor import GenerateApkReportsInteractor
-from lib.ExtractApkEntriesInteractor import ExtractApkEntriesInteractor
-from lib.errors.APKParsingError import APKParsingError
-from lib.errors.ParsingError import ParsingError
-from lib.parsers.APK import APK
+from ninjadroid.use_cases.generate_apk_html_report import GenerateApkHtmlReport
+from ninjadroid.use_cases.generate_apk_json_report import GenerateApkJsonReport
+from ninjadroid.use_cases.extract_apk_entries import ExtractApkEntries
+from ninjadroid.errors.apk_parsing_error import APKParsingError
+from ninjadroid.errors.parsing_error import ParsingError
+from ninjadroid.parsers.apk import APK
 
 
 VERSION = "2.5"
@@ -32,7 +33,7 @@ ch.setFormatter( logging.Formatter("  >> %(name)s: [%(levelname)s] %(message)s")
 logger.addHandler(ch)
 
 
-def main(argv=None):
+def main():
     args = retrieve_commandline_parameters()
     apk = read_target_file(args.target, args.no_string_processing)
     if apk is not None:
@@ -82,15 +83,15 @@ def get_apk_filename_without_extension(filepath):
     return filename
 
 
-##
-# Extract all the APK entries and info to a given directory.
-#
-# @param output_directory  The directory where to save the APK entries and info.
-# @param filepath  The target APK file path.
-# @param filename  The target APK file name.
-# @param apk  The APK class object.
-#
 def extract_apk_info_to_directory(apk, filepath, filename, output_directory):
+    """
+    Extract all the APK entries and info to a given directory.
+
+    :param apk: The APK class object.
+    :param filepath: The target APK file path.
+    :param filename: The target APK file name.
+    :param output_directory: The directory where to save the APK entries and info.
+    """
     if output_directory == "./":
         output_directory += filename
     logger.info("Target: " + filepath)
@@ -99,13 +100,12 @@ def extract_apk_info_to_directory(apk, filepath, filename, output_directory):
 
 
 def extract_apk_entries(apk, filepath, filename, output_directory):
-    extract_apk_entries_interactor = ExtractApkEntriesInteractor(apk, filepath, filename, output_directory, logger)
-    extract_apk_entries_interactor.execute()
+    ExtractApkEntries(apk, filepath, filename, output_directory, logger).execute()
 
 
 def generate_apk_reports(apk, filename, output_directory):
-    generate_apk_reports_interactor = GenerateApkReportsInteractor(apk, filename, output_directory, logger)
-    generate_apk_reports_interactor.execute()
+    GenerateApkHtmlReport(apk, filename, output_directory, logger).execute()
+    GenerateApkJsonReport(apk, filename, output_directory, logger).execute()
 
 
 def dumps_apk_info(apk):

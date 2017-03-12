@@ -7,7 +7,7 @@ class LaunchApkTool(UseCase):
     Apktool will extract the (decrypted) AndroidManifest.xml, the resources and generate the disassembled smali files.
     """
 
-    APKTOOL_PATH = "lib/apktool1.5.2/apktool.jar"
+    APKTOOL_PATH = "ninjadroid/apktool/apktool.jar"
 
     def __init__(self, input_filepath, output_directory, logger=None):
         self.input_filepath = input_filepath

@@ -7,7 +7,7 @@ class LaunchDex2Jar(UseCase):
     Dex2jar will generate a jar file from the classes.dex.
     """
 
-    DEX2JAR = "lib/dex2jar-0.0.9.15/d2j-dex2jar.sh"
+    DEX2JAR = "ninjadroid/dex2jar/d2j-dex2jar.sh"
 
     def __init__(self, input_filepath, input_filename, output_directory, logger=None):
         self.input_filepath = input_filepath

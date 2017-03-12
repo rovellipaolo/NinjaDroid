@@ -38,10 +38,12 @@ $ sudo chmod 755 lninjadroidib/dex2jar/d2j-dex2jar.sh
 
 If you have the Android SDK installed, instead of the included version of aapt, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
 
-MacOS:
+*MacOS:*
+
 No particular operation needed.
 
-Linux:
+*Linux:*
+
 If you use NinjaDroid on Linux, you will need to change the 'aapt' binary with the 'aapt_linux' one in ninjadroid/aapt/ (just change the aapt location in 'ninjadroid/aapt/Aapt.py', or simply rename 'aapt_linux' into 'aapt').
 Due to `aapt` dependencies, on Linux, you may need to install some additional libraries such as: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.
 For example, in Ubuntu:

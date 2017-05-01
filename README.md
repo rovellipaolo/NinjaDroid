@@ -26,8 +26,7 @@ Furthermore, NinjaDroid uses apktool (https://code.google.com/p/android-apktool/
 - JSON and HTML report files, which contains all the extracted APK metadata.
 
 
-Configuration:
-=============
+## Configuration:
 After cloning the NinjaDroid repository, or downloading the source code, make sure that `aapt`, `apktool` and `dex2jar` have execute permission.
 
 ```
@@ -45,15 +44,16 @@ No particular operation needed.
 *Linux:*
 
 If you use NinjaDroid on Linux, you will need to change the 'aapt' binary with the 'aapt_linux' one in ninjadroid/aapt/ (just change the aapt location in 'ninjadroid/aapt/Aapt.py', or simply rename 'aapt_linux' into 'aapt').
+
 Due to `aapt` dependencies, on Linux, you may need to install some additional libraries such as: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.
+
 For example, in Ubuntu:
 
 ```
 $ sudo apt-get install lib32z1 ib32z1-dev lib32stdc++6
 ```
 
-Use:
-=============
+## Run:
 To use NinjaDroid you just need to copy the APK package you want to analyse into the NinjaDroid directory. Then, launch the command:
 
 ```
@@ -87,6 +87,5 @@ $ python ninjadroid.py --no-string-process myPackage.apk
 NOTE: You can of course mix the use of `--no-string-process` and `--export`.
 
 
-Licence:
-========
+## Licence:
 NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu.org/licenses/gpl-3.0.html).

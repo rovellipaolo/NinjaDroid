@@ -65,7 +65,7 @@ def retrieve_commandline_parameters():
     return parser.parse_args()
 
 
-def read_target_file(filepath, no_string_processing):
+def read_target_file(filepath: str, no_string_processing: bool):
     apk = None
     try:
         apk = APK(filepath, no_string_processing)
@@ -76,14 +76,14 @@ def read_target_file(filepath, no_string_processing):
     return apk
 
 
-def get_apk_filename_without_extension(filepath):
+def get_apk_filename_without_extension(filepath: str) -> str:
     filename = os.path.basename(filepath)
     if re.search("\.apk", filepath, re.IGNORECASE):
         filename = str(filename[0:-4])
     return filename
 
 
-def extract_apk_info_to_directory(apk, filepath, filename, output_directory):
+def extract_apk_info_to_directory(apk: APK, filepath: str, filename: str, output_directory: str):
     """
     Extract all the APK entries and info to a given directory.
 
@@ -99,16 +99,16 @@ def extract_apk_info_to_directory(apk, filepath, filename, output_directory):
     generate_apk_reports(apk, filename, output_directory)
 
 
-def extract_apk_entries(apk, filepath, filename, output_directory):
+def extract_apk_entries(apk: APK, filepath: str, filename: str, output_directory: str):
     ExtractApkEntries(apk, filepath, filename, output_directory, logger).execute()
 
 
-def generate_apk_reports(apk, filename, output_directory):
+def generate_apk_reports(apk: APK, filename: str, output_directory: str):
     GenerateApkHtmlReport(apk, filename, output_directory, logger).execute()
     GenerateApkJsonReport(apk, filename, output_directory, logger).execute()
 
 
-def dumps_apk_info(apk):
+def dumps_apk_info(apk: APK):
     apk_info = json.dumps(apk.dump(), sort_keys=True, ensure_ascii=False, indent=4)
     print(apk_info)
 

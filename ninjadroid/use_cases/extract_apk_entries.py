@@ -1,6 +1,8 @@
+from concurrent.futures import Future
+from logging import Logger
 import os
-from time import sleep
 
+from ninjadroid.parsers.apk import APK
 from ninjadroid.use_cases.extract_certificate_file import ExtractCertificateFile
 from ninjadroid.use_cases.extract_dex_file import ExtractDexFile
 from ninjadroid.use_cases.launch_apk_tool import LaunchApkTool
@@ -13,7 +15,8 @@ class ExtractApkEntries(UseCase):
     Extract all the APK entries to a given output directory.
     """
 
-    def __init__(self, apk, input_filepath, input_filename,  output_directory, logger=None):
+    def __init__(self, apk: APK, input_filepath: str, input_filename: str,  output_directory: str,
+                 logger: Logger = None):
         self.apk = apk
         self.input_filepath = input_filepath
         self.input_filename = input_filename
@@ -33,35 +36,14 @@ class ExtractApkEntries(UseCase):
                 self.logger.info("Creating " + self.output_directory + "/...")
             os.makedirs(self.output_directory)
 
-    def launch_apktool(self):
-        launch_apk_tool_interactor = LaunchApkTool(
-            self.input_filepath,
-            self.output_directory,
-            self.logger)
-        launch_apk_tool_interactor.execute()
-        # Give apktool some time:
-        sleep(1)
+    def launch_apktool(self) -> Future:
+        return LaunchApkTool(self.input_filepath, self.output_directory, self.logger).execute()
 
-    def launch_dex2jar(self):
-        launch_dex2jar_interactor = LaunchDex2Jar(
-            self.input_filepath,
-            self.input_filename,
-            self.output_directory,
-            self.logger)
-        launch_dex2jar_interactor.execute()
-        # Give dex2jar some time:
-        sleep(5)
+    def launch_dex2jar(self) -> Future:
+        return LaunchDex2Jar(self.input_filepath, self.input_filename, self.output_directory, self.logger).execute()
 
-    def extract_certificate_file(self):
-        extract_certificate_file_interactor = ExtractCertificateFile(
-            self.apk,
-            self.output_directory,
-            self.logger)
-        extract_certificate_file_interactor.execute()
+    def extract_certificate_file(self) -> Future:
+        return ExtractCertificateFile(self.apk, self.output_directory, self.logger).execute()
 
-    def extract_dex_file(self):
-        extract_dex_file_interactor = ExtractDexFile(
-            self.apk,
-            self.output_directory,
-            self.logger)
-        extract_dex_file_interactor.execute()
+    def extract_dex_file(self) -> Future:
+        return ExtractDexFile(self.apk, self.output_directory, self.logger).execute()

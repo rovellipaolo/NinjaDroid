@@ -54,6 +54,8 @@ $ sudo apt-get install lib32z1 ib32z1-dev lib32stdc++6
 ```
 
 ## Run:
+To execute NinjaDroid, you need `Python 3.4` or higher.
+
 To use NinjaDroid you just need to copy the APK package you want to analyse into the NinjaDroid directory. Then, launch the command:
 
 ```

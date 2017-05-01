@@ -13,8 +13,8 @@ import os
 import re
 import sys
 
-from ninjadroid.use_cases.generate_apk_html_report import GenerateApkHtmlReport
-from ninjadroid.use_cases.generate_apk_json_report import GenerateApkJsonReport
+from ninjadroid.use_cases.get_apk_info_in_html import GenerateApkHtmlReport
+from ninjadroid.use_cases.get_apk_info_in_json import GenerateApkJsonReport
 from ninjadroid.use_cases.extract_apk_entries import ExtractApkEntries
 from ninjadroid.errors.apk_parsing_error import APKParsingError
 from ninjadroid.errors.parsing_error import ParsingError

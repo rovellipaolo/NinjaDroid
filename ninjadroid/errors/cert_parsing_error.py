@@ -1,7 +1,7 @@
 from ninjadroid.errors.parsing_error import ParsingError
 
 
-class CERTParsingError(ParsingError):
+class CertParsingError(ParsingError):
     """
     Android CERT.RSA/DSA certificate file parsing error.
     """

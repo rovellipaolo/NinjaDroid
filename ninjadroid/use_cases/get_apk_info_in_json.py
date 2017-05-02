@@ -8,7 +8,7 @@ from ninjadroid.parsers.apk import APK
 from ninjadroid.use_cases.use_case import UseCase
 
 
-class GenerateApkJsonReport(UseCase):
+class GetApkInfoInJson(UseCase):
     """
     Generate the JSON report file of a given APK file and save it to a given output directory.
     """
@@ -17,12 +17,12 @@ class GenerateApkJsonReport(UseCase):
 
     def __init__(self, apk: APK, input_filename: str,  output_directory: str, logger: Logger = None):
         self.apk = apk
-        report_filename = GenerateApkJsonReport.__REPORT_FILENAME_PREFIX + input_filename + ".json"
+        report_filename = GetApkInfoInJson.__REPORT_FILENAME_PREFIX + input_filename + ".json"
         self.filepath = os.path.join(output_directory, report_filename)
         self.logger = logger
         self.executor = JobExecutor()
 
-    def execute(self):
+    def execute(self) -> Future:
         if self.logger:
             self.logger.info("Creating " + self.filepath + "...")
         return self.executor.submit(self.job())

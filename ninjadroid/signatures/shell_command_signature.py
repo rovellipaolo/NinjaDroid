@@ -1,4 +1,5 @@
 import re
+from typing import Dict
 
 from ninjadroid.signatures.signature import Signature
 
@@ -15,7 +16,7 @@ class ShellCommandSignature(Signature):
         super(ShellCommandSignature, self).__init__()
 
     @classmethod
-    def _compile_regex(cls, signatures):
+    def _compile_regex(cls, signatures: Dict):
         regex = r'('
 
         # Shell command:

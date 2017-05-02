@@ -1,4 +1,5 @@
 import subprocess
+from typing import Dict, List
 
 from ninjadroid.parsers.dex_interface import DexInterface
 from ninjadroid.parsers.file import File
@@ -14,13 +15,13 @@ class Dex(File, DexInterface):
 
     __FILE_NAME_CLASSES_DEX = "classes.dex"
 
-    def __init__(self, filepath, string_processing=True):
+    def __init__(self, filepath: str, string_processing: bool = True):
         super(Dex, self).__init__(filepath, "classes.dex")
 
-        self._strings = []
-        self._urls = []
-        self._shell_commands = []
-        self._custom_signatures = []
+        self._strings = []  # type: List[str]
+        self._urls = []  # type: List[str]
+        self._shell_commands = []  # type: List[str]
+        self._custom_signatures = []  # type: List[str]
 
         self._extract_and_set_strings()
 
@@ -56,7 +57,7 @@ class Dex(File, DexInterface):
         self._shell_commands.sort()
         #self._custom_signatures.sort()
 
-    def _extract_and_set_urls_from(self, string):
+    def _extract_and_set_urls_from(self, string: str):
         """
         Extract eventual URLs from a string and set the correspondent attribute.
 
@@ -69,7 +70,7 @@ class Dex(File, DexInterface):
             if url != "" and url not in self._urls:
                 self._urls.append(url)
 
-    def _extract_and_set_shell_commands_from(self, string):
+    def _extract_and_set_shell_commands_from(self, string: str):
         """
         Extract eventual shell commands from a string and set the correspondent attribute.
 
@@ -81,7 +82,7 @@ class Dex(File, DexInterface):
         if command != "" and command not in self._shell_commands:
             self._shell_commands.append(command)
 
-    def _extract_and_set_signatures_from(self, string):
+    def _extract_and_set_signatures_from(self, string: str):
         """
         Extract eventual signatures from a string and set the correspondent attribute.
 
@@ -94,10 +95,10 @@ class Dex(File, DexInterface):
                 self._custom_signatures.append(match)
 
     @staticmethod
-    def looks_like_a_dex(filename):
+    def looks_like_a_dex(filename: str) -> bool:
         return filename == Dex.__FILE_NAME_CLASSES_DEX
 
-    def dump(self):
+    def dump(self) -> Dict:
         dump = super(Dex, self).dump()
         dump["urls"] = self._urls
         dump["shell_commands"] = self._shell_commands
@@ -105,14 +106,14 @@ class Dex(File, DexInterface):
         dump["strings"] = self._strings
         return dump
 
-    def get_strings(self):
+    def get_strings(self) -> List:
         return self._strings
 
-    def get_urls(self):
+    def get_urls(self) -> List:
         return self._urls
 
-    def get_shell_commands(self):
+    def get_shell_commands(self) -> List:
         return self._shell_commands
 
-    def get_custom_signatures(self):
+    def get_custom_signatures(self) -> List:
         return self._custom_signatures

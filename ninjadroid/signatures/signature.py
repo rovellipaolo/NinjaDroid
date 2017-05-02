@@ -1,5 +1,6 @@
 import re
 import json
+from typing import Dict
 
 
 class Signature:
@@ -32,7 +33,7 @@ class Signature:
 
 
     @classmethod
-    def _compile_regex(cls, signatures):
+    def _compile_regex(cls, signatures: Dict):
         """
         Compile the Shell commands signature regex.
 
@@ -53,7 +54,7 @@ class Signature:
         cls._is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
         cls._is_contained_regex = re.compile(regex, re.IGNORECASE)
 
-    def is_valid(self, signature):
+    def is_valid(self, signature: str) -> bool:
         """
         Validate a given signature.
 
@@ -65,7 +66,7 @@ class Signature:
 
         return self._is_regex.search(signature)
 
-    def get_matches_in_string(self, string):
+    def get_matches_in_string(self, string: str) -> str:
         """
         Search whether a string matches at least a signature.
 

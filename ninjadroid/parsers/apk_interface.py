@@ -1,4 +1,9 @@
 from abc import ABCMeta, abstractmethod
+from typing import Dict, List
+
+from ninjadroid.parsers.android_manifest import AndroidManifest
+from ninjadroid.parsers.cert import Cert
+from ninjadroid.parsers.dex import Dex
 
 
 class APKInterface(metaclass=ABCMeta):
@@ -8,7 +13,7 @@ class APKInterface(metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def looks_like_an_apk(filename):
+    def looks_like_an_apk(filename: str) -> bool:
         """
         Check whether a given file looks like an APK file.
 
@@ -18,7 +23,7 @@ class APKInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def dump(self):
+    def dump(self) -> Dict:
         """
         Dump the APK object into a Dictionary.
 
@@ -27,7 +32,7 @@ class APKInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_file_list(self):
+    def get_file_list(self) -> List:
         """
         Retrieve the list of entry files in the APK package.
 
@@ -36,7 +41,7 @@ class APKInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_manifest(self):
+    def get_manifest(self) -> AndroidManifest:
         """
         Retrieve the AndroidManifest object representing the AndroidManifest.xml file of the APK package.
 
@@ -45,25 +50,25 @@ class APKInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_cert(self):
+    def get_cert(self) -> Cert:
         """
-        Retrieve the CERT object representing the CERT.RSA/DSA certificate file of the APK package.
+        Retrieve the Cert object representing the CERT.RSA/DSA certificate file of the APK package.
 
-        :return: A CERT object.
+        :return: A Cert object.
         """
         pass
 
     @abstractmethod
-    def get_dex(self):
+    def get_dex(self) -> Dex:
         """
         Retrieve the Dex object representing the classes.dex file of the APK package.
 
-        :return: A File object.
+        :return: A Dex object.
         """
         pass
 
     @abstractmethod
-    def get_app_name(self):
+    def get_app_name(self) -> str:
         """
         Retrieve the app name.
 

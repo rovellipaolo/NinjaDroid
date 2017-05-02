@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from typing import Dict
 
 
 class FileInterface(metaclass=ABCMeta):
@@ -8,7 +9,7 @@ class FileInterface(metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def is_a_file(filepath):
+    def is_a_file(filepath: str) -> bool:
         """
         Check whether a given path is a file.
 
@@ -19,7 +20,7 @@ class FileInterface(metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def is_a_readable_file(filepath):
+    def is_a_readable_file(filepath: str) -> bool:
         """
         Check whether a given path is a readable file.
 
@@ -29,7 +30,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def dump(self):
+    def dump(self) -> Dict:
         """
         Dump the File object into a Dictionary.
 
@@ -38,7 +39,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_raw_file(self):
+    def get_raw_file(self) -> str:
         """
         Retrieve the raw file.
 
@@ -47,7 +48,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_file_name(self):
+    def get_file_name(self) -> str:
         """
         Retrieve the file name.
 
@@ -56,7 +57,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_file_path(self):
+    def get_file_path(self) -> str:
         """
         Retrieve the file path.
 
@@ -65,7 +66,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_size(self):
+    def get_size(self) -> int:
         """
         Retrieve the size (in Bytes) of the file.
 
@@ -74,7 +75,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_md5(self):
+    def get_md5(self) -> str:
         """
         Retrieve the MD5 checksum of the file.
 
@@ -83,7 +84,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_sha1(self):
+    def get_sha1(self) -> str:
         """
         Retrieve the SHA-1 checksum of the file.
 
@@ -92,7 +93,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_sha256(self):
+    def get_sha256(self) -> str:
         """
         Retrieve the SHA-256 checksum of the file.
 
@@ -101,7 +102,7 @@ class FileInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_sha512(self):
+    def get_sha512(self) -> str:
         """
         Retrieve the SHA-512 checksum of the file.
 

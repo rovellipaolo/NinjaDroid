@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from typing import Dict, List
 
 
 class DexInterface(metaclass=ABCMeta):
@@ -8,7 +9,7 @@ class DexInterface(metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def looks_like_a_dex(filename):
+    def looks_like_a_dex(filename: str) -> bool:
         """
         Check whether a given file looks like a classes.dex file.
 
@@ -18,7 +19,7 @@ class DexInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def dump(self):
+    def dump(self) -> Dict:
         """
         Dump the Dex object into a Dictionary.
 
@@ -27,7 +28,7 @@ class DexInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_strings(self):
+    def get_strings(self) -> List:
         """
         Retrieve the strings in the classes.dex file.
 
@@ -36,7 +37,7 @@ class DexInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_urls(self):
+    def get_urls(self) -> List:
         """
         Retrieve the URLs in the classes.dex file.
 
@@ -45,7 +46,7 @@ class DexInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_shell_commands(self):
+    def get_shell_commands(self) -> List:
         """
         Retrieve the shell commands in the classes.dex file.
 
@@ -53,7 +54,7 @@ class DexInterface(metaclass=ABCMeta):
         """
         pass
 
-    def get_custom_signatures(self):
+    def get_custom_signatures(self) -> List:
         """
         Retrieve the custom signatures in the classes.dex file.
 

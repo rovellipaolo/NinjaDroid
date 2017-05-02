@@ -8,7 +8,7 @@ from ninjadroid.reports.HtmlReport import HtmlReport
 from ninjadroid.use_cases.use_case import UseCase
 
 
-class GenerateApkHtmlReport(UseCase):
+class GetApkInfoInHtml(UseCase):
     """
     Generate the HTML report file of a given APK file and save it to a given output directory.
     """
@@ -17,7 +17,7 @@ class GenerateApkHtmlReport(UseCase):
 
     def __init__(self, apk: APK, input_filename: str,  output_directory: str, logger: Logger = None):
         self.apk = apk
-        report_filename = GenerateApkHtmlReport.__REPORT_FILENAME_PREFIX + input_filename + ".html"
+        report_filename = GetApkInfoInHtml.__REPORT_FILENAME_PREFIX + input_filename + ".html"
         self.filepath = os.path.join(output_directory, report_filename)
         self.logger = logger
         self.executor = JobExecutor()

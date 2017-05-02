@@ -1,14 +1,15 @@
 from abc import ABCMeta, abstractmethod
+from typing import Dict
 
 
-class CERTInterface(metaclass=ABCMeta):
+class CertInterface(metaclass=ABCMeta):
     """
     Parser interface for Android CERT.RSA/DSA certificate file.
     """
 
     @staticmethod
     @abstractmethod
-    def looks_like_a_cert(filename):
+    def looks_like_a_cert(filename: str) -> bool:
         """
         Check whether a given file looks like a CERT.RSA/DSA certificate file.
 
@@ -18,16 +19,16 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def dump(self):
+    def dump(self) -> Dict:
         """
-        Dump the CERT object into a Dictionary.
+        Dump the Cert object into a Dictionary.
 
-        :return: A Dictionary representing the CERT object.
+        :return: A Dictionary representing the Cert object.
         """
         pass
 
     @abstractmethod
-    def get_serial_number(self):
+    def get_serial_number(self) -> str:
         """
         Retrieve the serial number of the certificate.
 
@@ -41,11 +42,11 @@ class CERTInterface(metaclass=ABCMeta):
     # @return The certificate validity as a dictionary (i.e. {"from": "...", "until": "..."}).
     #
     @abstractmethod
-    def get_validity(self):
+    def get_validity(self) -> Dict:
         pass
 
     @abstractmethod
-    def get_fingerprint_md5(self):
+    def get_fingerprint_md5(self) -> str:
         """
         Retrieve the certificate fingerprint MD5 checksum.
 
@@ -54,7 +55,7 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_fingerprint_sha1(self):
+    def get_fingerprint_sha1(self) -> str:
         """
         Retrieve the certificate fingerprint SHA-1 checksum.
 
@@ -63,7 +64,7 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_fingerprint_sha256(self):
+    def get_fingerprint_sha256(self) -> str:
         """
         Retrieve the certificate fingerprint SHA-256 checksum.
 
@@ -72,7 +73,7 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_fingerprint_signature(self):
+    def get_fingerprint_signature(self) -> str:
         """
         Retrieve the certificate fingerprint signature algorithm name.
 
@@ -81,7 +82,7 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_fingerprint_version(self):
+    def get_fingerprint_version(self) -> str:
         """
         Retrieve the certificate fingerprint version.
 
@@ -90,7 +91,7 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_owner(self):
+    def get_owner(self) -> Dict:
         """
         Retrieve the certificate owner.
 
@@ -99,7 +100,7 @@ class CERTInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_issuer(self):
+    def get_issuer(self) -> Dict:
         """
         Retrieve the certificate issuer.
 

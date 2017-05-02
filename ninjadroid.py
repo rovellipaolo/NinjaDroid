@@ -13,8 +13,8 @@ import os
 import re
 import sys
 
-from ninjadroid.use_cases.get_apk_info_in_html import GenerateApkHtmlReport
-from ninjadroid.use_cases.get_apk_info_in_json import GenerateApkJsonReport
+from ninjadroid.use_cases.get_apk_info_in_html import GetApkInfoInHtml
+from ninjadroid.use_cases.get_apk_info_in_json import GetApkInfoInJson
 from ninjadroid.use_cases.extract_apk_entries import ExtractApkEntries
 from ninjadroid.errors.apk_parsing_error import APKParsingError
 from ninjadroid.errors.parsing_error import ParsingError
@@ -29,7 +29,7 @@ logger = logging.getLogger("NinjaDroid")
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
-ch.setFormatter( logging.Formatter("  >> %(name)s: [%(levelname)s] %(message)s") )
+ch.setFormatter(logging.Formatter("  >> %(name)s: [%(levelname)s] %(message)s"))
 logger.addHandler(ch)
 
 
@@ -96,16 +96,16 @@ def extract_apk_info_to_directory(apk: APK, filepath: str, filename: str, output
         output_directory += filename
     logger.info("Target: " + filepath)
     extract_apk_entries(apk, filepath, filename, output_directory)
-    generate_apk_reports(apk, filename, output_directory)
+    get_apk_info(apk, filename, output_directory)
 
 
 def extract_apk_entries(apk: APK, filepath: str, filename: str, output_directory: str):
     ExtractApkEntries(apk, filepath, filename, output_directory, logger).execute()
 
 
-def generate_apk_reports(apk: APK, filename: str, output_directory: str):
-    GenerateApkHtmlReport(apk, filename, output_directory, logger).execute()
-    GenerateApkJsonReport(apk, filename, output_directory, logger).execute()
+def get_apk_info(apk: APK, filename: str, output_directory: str):
+    GetApkInfoInHtml(apk, filename, output_directory, logger).execute()
+    GetApkInfoInJson(apk, filename, output_directory, logger).execute()
 
 
 def dumps_apk_info(apk: APK):

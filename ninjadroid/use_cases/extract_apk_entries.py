@@ -15,7 +15,11 @@ class ExtractApkEntries(UseCase):
     Extract all the APK entries to a given output directory.
     """
 
-    def __init__(self, apk: APK, input_filepath: str, input_filename: str,  output_directory: str,
+    def __init__(self,
+                 apk: APK,
+                 input_filepath: str,
+                 input_filename: str,
+                 output_directory: str,
                  logger: Logger = None):
         self.apk = apk
         self.input_filepath = input_filepath

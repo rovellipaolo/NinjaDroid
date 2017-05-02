@@ -2,12 +2,12 @@ from os import listdir
 from os.path import join
 import unittest
 
-from ninjadroid.errors.cert_parsing_error import CERTParsingError
+from ninjadroid.errors.cert_parsing_error import CertParsingError
 from ninjadroid.errors.parsing_error import ParsingError
-from ninjadroid.parsers.cert import CERT
+from ninjadroid.parsers.cert import Cert
 
 
-class TestCERT(unittest.TestCase):
+class TestCert(unittest.TestCase):
     """
     UnitTest for cert.py.
 
@@ -61,7 +61,7 @@ class TestCERT(unittest.TestCase):
 
         for filename in listdir(join("tests", "data")):
             if filename in cls.cert_properties:
-                cls.certs[filename] = CERT(join("tests", "data", filename), filename)
+                cls.certs[filename] = Cert(join("tests", "data", filename), filename)
                 # print(cls.certs[filename].dump())
 
     @classmethod
@@ -77,17 +77,17 @@ class TestCERT(unittest.TestCase):
     def test_init(self):
         for filename in self.certs:
             self.assertTrue(self.certs[filename] is not None)
-            self.assertTrue(type(self.certs[filename]) is CERT)
+            self.assertTrue(type(self.certs[filename]) is Cert)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
-            CERT(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
+            Cert(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
 
         # Test the class raise when a non-CERT.RSA file is given:
-        with self.assertRaises(CERTParsingError):
-            CERT(join("tests", "data", "Example.apk"))
-            CERT(join("tests", "data", "AndroidManifest.xml"))
-            CERT(join("tests", "data", "classes.dex"))
+        with self.assertRaises(CertParsingError):
+            Cert(join("tests", "data", "Example.apk"))
+            Cert(join("tests", "data", "AndroidManifest.xml"))
+            Cert(join("tests", "data", "classes.dex"))
 
     def test_get_raw_file(self):
         for filename in self.certs:

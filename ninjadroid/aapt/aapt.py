@@ -1,5 +1,6 @@
 import subprocess
 import re
+from typing import Dict, List
 
 
 class Aapt:
@@ -21,7 +22,7 @@ class Aapt:
         pass
 
     @staticmethod
-    def _extract_string_pattern(string, pattern):
+    def _extract_string_pattern(string: str, pattern: str) -> str:
         """
         Extract the value of a given pattern from a given string.
 
@@ -36,7 +37,7 @@ class Aapt:
             return ""
 
     @staticmethod
-    def _find_between(s, prefix, suffix):
+    def _find_between(s: str, prefix: str, suffix: str) -> str:
         """
         Find a substring in a string, starting after a specified prefix and ended before a specified suffix.
 
@@ -53,7 +54,7 @@ class Aapt:
             return ""
 
     @staticmethod
-    def _find_all(haystack, needle):
+    def _find_all(haystack: str, needle: str) -> str:
         """
         Find all the substring starting position in a string.
 
@@ -70,7 +71,7 @@ class Aapt:
                 yield offs
 
     @classmethod
-    def _dump_badging(cls, filepath):
+    def _dump_badging(cls, filepath: str) -> str:
         """
         Retrieve the aapt dump badging.
 
@@ -110,7 +111,7 @@ class Aapt:
         return Aapt._launch_shell_command_and_get_result(command)
 
     @classmethod
-    def _dump_permissions(cls, filepath):
+    def _dump_permissions(cls, filepath: str) -> str:
         """
         Retrieve the aapt dump permissions.
 
@@ -129,7 +130,7 @@ class Aapt:
         return Aapt._launch_shell_command_and_get_result(command)
 
     @classmethod
-    def _dump_manifest_xmltree(cls, filepath):
+    def _dump_manifest_xmltree(cls, filepath: str) -> str:
         """
         Dump the XML tree of the AndroidManifest.xml file of a given APK package.
 
@@ -203,12 +204,12 @@ class Aapt:
         return Aapt._launch_shell_command_and_get_result(command)
 
     @classmethod
-    def _launch_shell_command_and_get_result(cls, command):
+    def _launch_shell_command_and_get_result(cls, command: str) -> str:
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         return process.communicate()[0].decode("utf-8")
 
     @classmethod
-    def get_app_name(cls, filepath):
+    def get_app_name(cls, filepath: str) -> str:
         """
         Retrieve the app name of an APK package.
 
@@ -219,7 +220,7 @@ class Aapt:
         return Aapt._extract_string_pattern(cls._dump_badging(filepath), apk_app_pattern)
 
     @classmethod
-    def get_apk_info(cls, filepath):
+    def get_apk_info(cls, filepath: str) -> Dict:
         """
         Retrieve the APK info.
 
@@ -269,16 +270,16 @@ class Aapt:
         return apk
 
     @classmethod
-    def get_manifest_info(cls, filepath):
+    def get_manifest_info(cls, filepath: str) -> Dict:
         """
         Retrieve the AndroidManifest.xml info.
 
         :param filepath: The APK package file path.
         :return: The list of Activities, Services and BroadcastReceivers as a dictionary.
         """
-        activities = []
-        services = []
-        receivers = []
+        activities = []  # type: List[Dict[str, str]]
+        services = []  # type: List[Dict[str, str]]
+        receivers = []  # type: List[Dict[str, str]]
 
         xmltree = cls._dump_manifest_xmltree(filepath)
         # @TODO: Refactor this code...
@@ -290,7 +291,6 @@ class Aapt:
                 activity = xmltree[offs:-1]
                 idx = cls._find_between(activity, "android:name(", ")=\"")
                 activities.append({"name": cls._find_between(activity, "android:name(" + idx + ")=\"", "\"")})
-
 
             for offs in cls._find_all(xmltree, "service"):
                 service = xmltree[offs:-1]
@@ -312,7 +312,7 @@ class Aapt:
         }
 
     @classmethod
-    def get_app_permissions(cls, filepath):
+    def get_app_permissions(cls, filepath: str) -> List:
         """
         Retrieve the permissions from the AndroidManifest.xml file of a given APK package.
 

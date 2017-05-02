@@ -1,13 +1,7 @@
-##
-# Parser for AndroidManifest.xml file.
-#
-# @author Paolo Rovelli
-# @copyright GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.html).
-#
-
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import json
+from typing import Any, Dict, List
 
 from ninjadroid.aapt.aapt import Aapt
 from ninjadroid.axmlparser.axml_printer import AXMLPrinter
@@ -20,7 +14,7 @@ class AndroidManifest(File, AndroidManifestInterface):
     __FILE_NAME_ANDROIDMANIFEST_XML = "AndroidManifest.xml"
     __MANIFEST_CONFIG_FILE = "ninjadroid/config/manifest.json"
 
-    def __init__(self, filepath, binary=False, apk_path=""):
+    def __init__(self, filepath: str, binary: bool = False, apk_path: str = ""):
         super(AndroidManifest, self).__init__(filepath, "AndroidManifest.xml")
 
         # Load the AndroidManifest.xml structure:
@@ -87,11 +81,11 @@ class AndroidManifest(File, AndroidManifestInterface):
                                                                                  "receiver")
 
     @staticmethod
-    def looks_like_a_manifest(filename):
+    def looks_like_a_manifest(filename: str) -> bool:
         return filename == AndroidManifest.__FILE_NAME_ANDROIDMANIFEST_XML
 
     @staticmethod
-    def _parse_element_to_simple_list(root, tag, attribute):
+    def _parse_element_to_simple_list(root: minidom.Element, tag: str, attribute: str) -> List[Any]:
         """
         Parse the simple application elements (i.e. only the "android:name").
 
@@ -111,7 +105,7 @@ class AndroidManifest(File, AndroidManifestInterface):
         return res
 
     @staticmethod
-    def _parse_element_to_list_of_dict(root, component, tag):
+    def _parse_element_to_list_of_dict(root: minidom.Element, component: Dict[str, Any], tag: str) -> List[Any]:
         """
         Parse the complex application elements (i.e. parse also the "meta-data" and "intent-filter" information).
 
@@ -143,7 +137,7 @@ class AndroidManifest(File, AndroidManifestInterface):
 
         return res
 
-    def dump(self):
+    def dump(self) -> Dict:
         dump = super(AndroidManifest, self).dump()
         dump["package_name"] = self._package_name
         dump["version"] = self._version
@@ -154,35 +148,35 @@ class AndroidManifest(File, AndroidManifestInterface):
         dump["receivers"] = self._receivers
         return dump
 
-    def get_package_name(self):
+    def get_package_name(self) -> str:
         return self._package_name
 
-    def get_version(self):
+    def get_version(self) -> Dict:
         return self._version
 
-    def get_sdk_version(self):
+    def get_sdk_version(self) -> Dict:
         return self._sdk
 
-    def get_permissions(self):
+    def get_permissions(self) -> List:
         return self._permissions
 
-    def get_number_of_permissions(self):
+    def get_number_of_permissions(self) -> int:
         return len(self._permissions)
 
-    def get_activities(self):
+    def get_activities(self) -> List:
         return self._activities
 
-    def get_number_of_activities(self):
+    def get_number_of_activities(self) -> int:
         return len(self._activities)
 
-    def get_services(self):
+    def get_services(self) -> List:
         return self._services
 
-    def get_number_of_services(self):
+    def get_number_of_services(self) -> int:
         return len(self._services)
 
-    def get_broadcast_receivers(self):
+    def get_broadcast_receivers(self) -> List:
         return self._receivers
 
-    def get_number_of_broadcast_receivers(self):
+    def get_number_of_broadcast_receivers(self) -> int:
         return len(self._receivers)

@@ -1,4 +1,5 @@
 import re
+from typing import Dict
 
 from ninjadroid.signatures.signature import Signature
 
@@ -15,7 +16,7 @@ class URISignature(Signature):
         super(URISignature, self).__init__()
 
     @classmethod
-    def _compile_regex(cls, signatures):
+    def _compile_regex(cls, signatures: Dict):
         regex = r'('
 
         # Scheme (HTTP, HTTPS, FTP and SFTP):

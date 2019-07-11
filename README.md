@@ -32,7 +32,7 @@ After cloning the NinjaDroid repository, or downloading the source code, make su
 ```
 $ sudo chmod 755 ninjadroid/aapt/aapt
 $ sudo chmod 755 ninjadroid/apktool/apktool.jar
-$ sudo chmod 755 lninjadroidib/dex2jar/d2j-dex2jar.sh
+$ sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
 ```
 
 If you have the Android SDK installed, instead of the included version of aapt, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").

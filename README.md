@@ -89,5 +89,11 @@ $ python ninjadroid.py --no-string-process myPackage.apk
 NOTE: You can of course mix the use of `--no-string-process` and `--export`.
 
 
+## Run Tests:
+To run tests, launch the command:
+```
+$ python -m unittest -v tests.test
+```
+
 ## Licence:
 NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu.org/licenses/gpl-3.0.html).

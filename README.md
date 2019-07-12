@@ -50,7 +50,7 @@ Due to `aapt` dependencies, on Linux, you may need to install some additional li
 For example, in Ubuntu:
 
 ```
-$ sudo apt-get install lib32z1 ib32z1-dev lib32stdc++6
+$ sudo apt-get install lib32z1 lib32z1-dev lib32stdc++6
 ```
 
 ## Run:

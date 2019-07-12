@@ -15,7 +15,7 @@ NinjaDroid uses a modified version of the Androguard `AXMLParser` (by Anthony De
 - CERT.RSA/DSA file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
 - List of file entries (i.e. file name, file size, MD5, SHA-1, SHA-256 and SHA-512) in the APK package.
 
-Furthermore, NinjaDroid uses apktool (https://code.google.com/p/android-apktool/) and dex2jar (https://code.google.com/p/dex2jar/), together with other Python scripts in order to extract from an APK package:
+Furthermore, NinjaDroid uses apktool (https://github.com/iBotPeaches/Apktool) and dex2jar (https://github.com/pxb1988/dex2jar), together with other Python scripts in order to extract from an APK package:
 
 - classes.dex file;
 - translated .jar file (thanks to `dex2jar`);

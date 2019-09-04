@@ -22,7 +22,7 @@ class TestDex(unittest.TestCase):
             "sha256": "3f543c68c4c059548cec619a68f329010d797e5e4c00aa46cd34c0d19cabe056",
             "sha512": "0725f961bc1bac47eb8dd045c2f0a0cf5475fd77089af7ddc3098e341a95d8b5624969b6fa47606a05d5a6adf9d74d0c52562ea41a376bd3d7d0aa3695ca2e22",
             "strings": [
-                " Lcom/example/app/ExampleService;",
+                "Lcom/example/app/ExampleService;",
                 "!Lcom/example/app/ExampleService2;",
                 "!Lcom/example/app/ExampleService3;",
                 "#Landroid/content/BroadcastReceiver;",
@@ -106,7 +106,9 @@ class TestDex(unittest.TestCase):
 
     def test_get_strings(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_strings(), self.dex_properties[filename]["strings"])
+            self.assertEqual(
+                set(self.dexes[filename].get_strings()),
+                set(self.dex_properties[filename]["strings"]))
 
     def test_get_urls(self):
         for filename in self.dexes:

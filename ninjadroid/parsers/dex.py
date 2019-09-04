@@ -39,6 +39,7 @@ class Dex(File, DexInterface):
         self._strings.sort()
         while "" in self._strings:
             self._strings.remove("")
+        self._strings = [s.strip() for s in self._strings]
 
     def _extract_and_set_substring_from(self):
         """

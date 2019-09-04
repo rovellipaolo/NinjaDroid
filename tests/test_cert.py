@@ -24,8 +24,8 @@ class TestCert(unittest.TestCase):
             "sha512": "e16ce3b471f10043be642472dc4f0156dccb434331c0c1ca19470b7dc0d025d4bb512fc5e77e78011e704b69fe0872e6fd7dee648e87401062f59149695f36f5",
             "serial_number": "558e7595",
             "validity": {
-                "from": "2015-06-27 12:06:13",  # "Sat Jun 27 12:06:13 CEST 2015"
-                "until": "2515-02-26 11:06:13",  # "Tue Feb 26 11:06:13 CET 2515"
+                "from": "2015-06-27 10:06:13Z",
+                "until": "2515-02-26 10:06:13Z",
             },
             "fingerprint_md5": "90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45",
             "fingerprint_sha1": "5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6",

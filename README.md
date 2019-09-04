@@ -120,6 +120,37 @@ To run tests, launch the command:
 $ python -m unittest -v tests.test
 ```
 
+The Docker image can also be used for testing:
+
+```
+$ make build
+Sending build context to Docker daemon  84.12MB
+Step 1/24 : FROM openjdk:8u212-jre-slim-stretch
+[...]
+Successfully built 0993636e7d79
+
+$ make docker-test
+test_get_app_name (tests.test_apk.TestAPK) ... ok
+test_get_file_list (tests.test_apk.TestAPK) ... ok
+[...]
+
+----------------------------------------------------------------------
+Ran 75 tests in 4.372s
+
+OK
+```
+
+To test changes to the code (or test files) without rebuilding the docker image:
+
+```
+$ docker run -w /opt/NinjaDroid/ -v $(pwd)/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers -v $(pwd)/tests:/opt/NinjaDroid/tests --rm -it ninjadroid:latest python3 -m unittest tests.test
+...........................................................................
+----------------------------------------------------------------------
+Ran 75 tests in 4.325s
+
+OK
+```
+
 ## Licence:
 
 NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu.org/licenses/gpl-3.0.html).

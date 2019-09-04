@@ -27,7 +27,9 @@ class LaunchApkTool(UseCase):
             self.logger.info("Creating " + self.output_directory + "/res/...")
             self.logger.info("Creating " + self.output_directory + "/assets/...")
 
-        command = "java -jar " + LaunchApkTool.APKTOOL_PATH + \
-                  " -q d -f " + self.input_filepath + " " + self.output_directory
+        command = "java -jar {} -q decode -f {} -o {}".format(
+            LaunchApkTool.APKTOOL_PATH,
+            self.input_filepath,
+            self.output_directory)
 
         return self.executor.submit(os.system(command))

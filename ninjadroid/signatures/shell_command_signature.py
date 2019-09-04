@@ -1,3 +1,4 @@
+import os.path
 import re
 from typing import Dict
 
@@ -9,7 +10,7 @@ class ShellCommandSignature(Signature):
     Parser for shell commands.
     """
 
-    _CONFIG_FILE = "ninjadroid/config/shell.json"
+    _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "shell.json")
     _SIGNATURE_KEYS_LIST = ["commands", "dirs"]
 
     def __init__(self):

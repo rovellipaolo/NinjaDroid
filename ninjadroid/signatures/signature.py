@@ -1,5 +1,6 @@
-import re
+import os.path
 import json
+import re
 from typing import Dict
 
 
@@ -8,7 +9,7 @@ class Signature:
     Parser for generic signature.
     """
 
-    _CONFIG_FILE = "ninjadroid/config/signatures.json"
+    _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
     _SIGNATURE_KEYS_LIST = ["signatures"]
 
     def __init__(self):

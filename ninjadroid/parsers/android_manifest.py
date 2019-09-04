@@ -1,6 +1,7 @@
 from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import json
+import os.path
 from typing import Any, Dict, List
 
 from ninjadroid.aapt.aapt import Aapt
@@ -12,7 +13,7 @@ from ninjadroid.errors.android_manifest_parsing_error import AndroidManifestPars
 
 class AndroidManifest(File, AndroidManifestInterface):
     __FILE_NAME_ANDROIDMANIFEST_XML = "AndroidManifest.xml"
-    __MANIFEST_CONFIG_FILE = "ninjadroid/config/manifest.json"
+    __MANIFEST_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "manifest.json")
 
     def __init__(self, filepath: str, binary: bool = False, apk_path: str = ""):
         super(AndroidManifest, self).__init__(filepath, "AndroidManifest.xml")

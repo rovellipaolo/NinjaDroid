@@ -1,3 +1,4 @@
+import os.path
 import subprocess
 import re
 from typing import Dict, List
@@ -8,7 +9,7 @@ class Aapt:
     Parser for the Android Asset Packaging Tool (aapt).
     """
 
-    __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt"
+    __AAPT_EXEC_PATH = os.path.join(os.path.dirname(__file__), "aapt")
     __LABEL_APP_NAME = "^application: .*label='([^']*)' .*"
     __LABEL_LAUNCHABLE_ACTIVITY = "^launchable-activity: .*label='([^']*)'.*"
     __LABEL_PACKAGE_NAME = "package:(?:.*) name="

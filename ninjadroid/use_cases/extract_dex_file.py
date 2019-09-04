@@ -1,4 +1,5 @@
 from concurrent.futures import Future
+import logging
 from logging import Logger
 import os
 import shutil
@@ -8,21 +9,22 @@ from ninjadroid.concurrent.job_executor import JobExecutor
 from ninjadroid.parsers.apk import APK
 from ninjadroid.use_cases.use_case import UseCase
 
+logger = logging.getLogger(__name__)
+
 
 class ExtractDexFile(UseCase):
     """
     Extract classes.dex file to a given output directory.
     """
 
-    def __init__(self, apk: APK, output_directory: str, logger: Logger = None):
+    def __init__(self, apk: APK, output_directory: str, logger: Logger = logger):
         self.apk = apk
         self.output_directory = output_directory
         self.logger = logger
         self.executor = JobExecutor()
 
     def execute(self) -> Future:
-        if self.logger:
-            self.logger.info("Extracting DEX files to %s", self.output_directory)
+        self.logger.info("Extracting DEX files to %s", self.output_directory)
         return self.executor.submit(self.job(self.output_directory))
 
     def job(self, output_directory: str):
@@ -37,6 +39,5 @@ class ExtractDexFile(UseCase):
                 dex_abspath = os.path.join(output_directory, dex_name)
                 with package.open(dex_name) as dex:
                     with open(dex_abspath, 'wb') as fp:
-                        if self.logger:
-                            self.logger.info("Extracting DEX %s", dex_name)
+                        self.logger.info("Extracting DEX %s", dex_name)
                         shutil.copyfileobj(dex, fp)

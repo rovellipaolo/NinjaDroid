@@ -1,7 +1,10 @@
+import logging
 import os.path
 import subprocess
 import re
 from typing import Dict, List
+
+logger = logging.getLogger(__name__)
 
 
 class Aapt:
@@ -20,7 +23,9 @@ class Aapt:
     __LABEL_SDK_TARGET_VERSION = "targetSdkVersion:"
     __LABEL_PERMISSION_NAME = "uses-permission: name="
 
-    def __init__(self):
+    def __init__(self, logger=logger):
+        self.logger = logger
+        self.logger.debug("aapt exec path: %s", self.__AAPT_EXEC_PATH)
         pass
 
     @staticmethod

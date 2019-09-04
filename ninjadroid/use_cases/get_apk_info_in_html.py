@@ -1,4 +1,5 @@
 from concurrent.futures import Future
+import logging
 from logging import Logger
 import os
 
@@ -6,6 +7,8 @@ from ninjadroid.concurrent.job_executor import JobExecutor
 from ninjadroid.parsers.apk import APK
 from ninjadroid.reports.HtmlReport import HtmlReport
 from ninjadroid.use_cases.use_case import UseCase
+
+logger = logging.getLogger(__name__)
 
 
 class GetApkInfoInHtml(UseCase):
@@ -15,7 +18,7 @@ class GetApkInfoInHtml(UseCase):
 
     __REPORT_FILENAME_PREFIX = "report-"
 
-    def __init__(self, apk: APK, input_filename: str,  output_directory: str, logger: Logger = None):
+    def __init__(self, apk: APK, input_filename: str,  output_directory: str, logger: Logger = logger):
         self.apk = apk
         report_filename = GetApkInfoInHtml.__REPORT_FILENAME_PREFIX + input_filename + ".html"
         self.filepath = os.path.join(output_directory, report_filename)
@@ -23,8 +26,7 @@ class GetApkInfoInHtml(UseCase):
         self.executor = JobExecutor()
 
     def execute(self) -> Future:
-        if self.logger:
-            self.logger.info("Creating " + self.filepath + "...")
+        self.logger.info("Creating " + self.filepath + "...")
         return self.executor.submit(self.job())
 
     def job(self):

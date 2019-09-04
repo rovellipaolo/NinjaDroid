@@ -1,3 +1,4 @@
+import logging
 import os.path
 import re
 import subprocess
@@ -7,7 +8,9 @@ from ninjadroid.parsers.dex_interface import DexInterface
 from ninjadroid.parsers.file import File
 from ninjadroid.signatures.uri_signature import URISignature
 from ninjadroid.signatures.shell_command_signature import ShellCommandSignature
-from ninjadroid.signatures.signature import Signature
+# from ninjadroid.signatures.signature import Signature
+
+logger = logging.getLogger(__name__)
 
 
 class Dex(File, DexInterface):
@@ -17,13 +20,17 @@ class Dex(File, DexInterface):
 
     __DEX_FILE_REGEX = ".*\\.dex$"
 
-    def __init__(self, filepath: str, string_processing: bool = True):
+    def __init__(self, filepath: str, string_processing: bool = True, logger=logger):
         super(Dex, self).__init__(filepath, os.path.split(filepath)[1])
+
+        logger.debug("Init Dex on %s, string_processing=%s", filepath, string_processing)
 
         self._strings = []  # type: List[str]
         self._urls = []  # type: List[str]
         self._shell_commands = []  # type: List[str]
         self._custom_signatures = []  # type: List[str]
+
+        self.logger = logger
 
         self._extract_and_set_strings()
 
@@ -35,26 +42,33 @@ class Dex(File, DexInterface):
         Extract the strings from the DEX file and set the corresponding attributes.
         Empty strings will be removed.
         """
+        self.logger.debug("Extracting strings...")
         command = "strings " + self.get_file_path()
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         strings = filter(lambda s: s != "",
                          (s.strip() for s in process.communicate()[0].decode("utf-8").splitlines()))
         self._strings = sorted(strings)
+        self.logger.debug("%d strings extracted", len(self._strings))
 
     def _extract_and_set_substring_from(self):
         """
         Extract the strings from the DEX file and set the corresponding attributes.
         Empty strings will be removed.
         """
+        self.logger.debug("Extracting URLs from strings...")
         urls = (url
                 for s in self._strings
                 for url in self._extract_urls_from(s))
         self._urls = sorted(urls)
+        self.logger.debug("%s URLs extracted from strings", len(self._urls))
 
+        self.logger.debug("Extracting shell commands from strings...")
         shell_commands = (command
                           for s in self._strings
                           for command in self._extract_shell_commands_from(s))
+
         self._shell_commands = sorted(shell_commands)
+        self.logger.debug("%s shell commands extracted from strings", len(self._shell_commands))
         # self._custom_signatures.sort()
 
     def _extract_urls_from(self, string: str) -> Sequence[str]:

@@ -67,6 +67,7 @@ def retrieve_commandline_parameters():
 
 def read_target_file(filepath: str, no_string_processing: bool):
     apk = None
+    logger.info("Reading target apk...")
     try:
         apk = APK(filepath, no_string_processing)
     except APKParsingError:

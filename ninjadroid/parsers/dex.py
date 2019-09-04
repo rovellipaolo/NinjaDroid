@@ -103,8 +103,8 @@ class Dex(File, DexInterface):
         dump = super(Dex, self).dump()
         dump["urls"] = self._urls
         dump["shell_commands"] = self._shell_commands
-        #dump["custom_signatures"] = self._custom_signatures
-        dump["strings"] = self._strings
+        # dump["custom_signatures"] = self._custom_signatures
+        dump["strings"] = self.get_strings()
         return dump
 
     def get_strings(self) -> List:

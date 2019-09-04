@@ -10,6 +10,7 @@ class Aapt:
 
     __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt"
     __LABEL_APP_NAME = "^application: .*label='([^']*)' .*"
+    __LABEL_LAUNCHABLE_ACTIVITY = "^launchable-activity: .*label='([^']*)'.*"
     __LABEL_PACKAGE_NAME = "package:(?:.*) name="
     __LABEL_PACKAGE_VERSION_CODE = "package:(?:.*) versionCode="
     __LABEL_PACKAGE_VERSION_NAME = "package:(?:.*) versionName="
@@ -213,11 +214,16 @@ class Aapt:
         """
         Retrieve the app name of an APK package.
 
+        Falls back to the launchable-activity label if the application label is empty.
+
         :param filepath: The APK package file path.
         :return: The app name.
         """
-        apk_app_pattern = Aapt.__LABEL_APP_NAME
-        return Aapt._extract_string_pattern(cls._dump_badging(filepath), apk_app_pattern)
+        badging = cls._dump_badging(filepath)
+        return (
+            Aapt._extract_string_pattern(badging, Aapt.__LABEL_APP_NAME)
+            or Aapt._extract_string_pattern(badging, Aapt.__LABEL_LAUNCHABLE_ACTIVITY)
+        )
 
     @classmethod
     def get_apk_info(cls, filepath: str) -> Dict:

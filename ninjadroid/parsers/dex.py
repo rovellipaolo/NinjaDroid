@@ -1,3 +1,5 @@
+import os.path
+import re
 import subprocess
 from typing import Dict, List, Sequence
 
@@ -10,13 +12,13 @@ from ninjadroid.signatures.signature import Signature
 
 class Dex(File, DexInterface):
     """
-    Parser implementation for Android classes.dex file.
+    Parser implementation for Android DEX file.
     """
 
-    __FILE_NAME_CLASSES_DEX = "classes.dex"
+    __DEX_FILE_REGEX = ".*\\.dex$"
 
     def __init__(self, filepath: str, string_processing: bool = True):
-        super(Dex, self).__init__(filepath, "classes.dex")
+        super(Dex, self).__init__(filepath, os.path.split(filepath)[1])
 
         self._strings = []  # type: List[str]
         self._urls = []  # type: List[str]
@@ -30,7 +32,7 @@ class Dex(File, DexInterface):
 
     def _extract_and_set_strings(self):
         """
-        Extract the strings from the classes.dex file and set the correspondent attributes.
+        Extract the strings from the DEX file and set the corresponding attributes.
         Empty strings will be removed.
         """
         command = "strings " + self.get_file_path()
@@ -41,7 +43,7 @@ class Dex(File, DexInterface):
 
     def _extract_and_set_substring_from(self):
         """
-        Extract the strings from the classes.dex file and set the correspondent attributes.
+        Extract the strings from the DEX file and set the corresponding attributes.
         Empty strings will be removed.
         """
         urls = (url
@@ -88,8 +90,8 @@ class Dex(File, DexInterface):
 
     # def _extract_and_set_signatures_from(self, string: str):
     #     """
-    #     Extract eventual signatures from a string and set the correspondent attribute.
-
+    #     Extract eventual signatures from a string and set the corresponding attribute.
+    #
     #     :param string: The string from which extracting the eventual signatures.
     #     """
     #     if not hasattr(self, "_shell"):
@@ -100,7 +102,7 @@ class Dex(File, DexInterface):
 
     @staticmethod
     def looks_like_a_dex(filename: str) -> bool:
-        return filename == Dex.__FILE_NAME_CLASSES_DEX
+        return bool(re.search(Dex.__DEX_FILE_REGEX, filename))
 
     def dump(self) -> Dict:
         dump = super(Dex, self).dump()

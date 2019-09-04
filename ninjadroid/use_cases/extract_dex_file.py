@@ -22,17 +22,21 @@ class ExtractDexFile(UseCase):
 
     def execute(self) -> Future:
         if self.logger:
-            self.logger.info("Creating " + self.output_directory + "/classes.dex...")
+            self.logger.info("Extracting DEX files to %s", self.output_directory)
         return self.executor.submit(self.job(self.output_directory))
 
     def job(self, output_directory: str):
         """
-        Extract the classes.dex file of the APK package.
+        Extract the DEX files from the APK package.
 
-        :param output_directory: The directory where to save the classes.dex file.
+        :param output_directory: The directory where to save the DEX files.
         """
         with ZipFile(self.apk.get_file_name()) as package:
-            dex = self.apk.get_dex().get_file_name()
-            dex_abspath = os.path.join(output_directory, dex)
-            with package.open(dex) as dex, open(dex_abspath, 'wb') as fp:
-                shutil.copyfileobj(dex, fp)
+            for dex_file in self.apk.get_dex_files():
+                dex_name = dex_file.get_file_name()
+                dex_abspath = os.path.join(output_directory, dex_name)
+                with package.open(dex_name) as dex:
+                    with open(dex_abspath, 'wb') as fp:
+                        if self.logger:
+                            self.logger.info("Extracting DEX %s", dex_name)
+                        shutil.copyfileobj(dex, fp)

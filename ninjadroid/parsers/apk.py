@@ -1,7 +1,7 @@
 import os
 import shutil
 import tempfile
-from typing import Dict, List
+from typing import Dict, List, Sequence
 from zipfile import ZipFile, is_zipfile
 
 from ninjadroid.aapt.aapt import Aapt
@@ -30,6 +30,7 @@ class APK(File, APKInterface):
             raise APKParsingError
 
         self._files = []  # type: List
+        self._dex_files = []  # type: List[Dex]
         self._extract_and_set_entries(string_processing)
 
         if len(self._files) == 0 or self._cert is None:
@@ -85,7 +86,7 @@ class APK(File, APKInterface):
         dump["app_name"] = self._app_name
         dump["cert"] = self._cert.dump() if self._cert is not None else None
         dump["manifest"] = self._manifest.dump() if self._manifest is not None else None
-        dump["dex"] = self._dex.dump() if self._dex is not None else None
+        dump["dex_files"] = [dex.dump() for dex in self._dex_files]
         dump["other_files"] = []
         for file in self._files:
             dump["other_files"].append(file.dump())
@@ -100,8 +101,8 @@ class APK(File, APKInterface):
     def get_cert(self) -> Cert:
         return self._cert
 
-    def get_dex(self) -> Dex:
-        return self._dex
+    def get_dex_files(self) -> Sequence[Dex]:
+        return self._dex_files
 
     def get_app_name(self) -> str:
         return self._app_name

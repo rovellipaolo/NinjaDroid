@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Dict, List
+from typing import Dict, List, Sequence
 
 from ninjadroid.parsers.android_manifest import AndroidManifest
 from ninjadroid.parsers.cert import Cert
@@ -59,7 +59,7 @@ class APKInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_dex(self) -> Dex:
+    def get_dex_files(self) -> Sequence[Dex]:
         """
         Retrieve the Dex object representing the classes.dex file of the APK package.
 

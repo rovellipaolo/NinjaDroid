@@ -27,8 +27,8 @@ class Cert(File, CertInterface):
     __LABEL_FINGERPRINT_MD5 = "\t MD5: "
     __LABEL_FINGERPRINT_SHA1 = "\t SHA1: "
     __LABEL_FINGERPRINT_SHA256 = "\t SHA256: "
-    __LABEL_FINGERPRINT_SIGNATURE = "\t Signature algorithm name: "
-    __LABEL_FINGERPRINT_VERSION = "\t Version: "
+    __LABEL_FINGERPRINT_SIGNATURE = "Signature algorithm name: "
+    __LABEL_FINGERPRINT_VERSION = "Version: "
     __LABEL_OWNER = {
         "label": "Owner: ",
         "name": "CN=",

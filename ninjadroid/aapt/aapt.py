@@ -9,7 +9,7 @@ class Aapt:
     """
 
     __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt"
-    __LABEL_APP_NAME = "application-label:"
+    __LABEL_APP_NAME = "^application: .*label='([^']*)' .*"
     __LABEL_PACKAGE_NAME = "package:(?:.*) name="
     __LABEL_PACKAGE_VERSION_CODE = "package:(?:.*) versionCode="
     __LABEL_PACKAGE_VERSION_NAME = "package:(?:.*) versionName="
@@ -216,7 +216,7 @@ class Aapt:
         :param filepath: The APK package file path.
         :return: The app name.
         """
-        apk_app_pattern = "^" + Aapt.__LABEL_APP_NAME + "'(.+)'$"
+        apk_app_pattern = Aapt.__LABEL_APP_NAME
         return Aapt._extract_string_pattern(cls._dump_badging(filepath), apk_app_pattern)
 
     @classmethod
@@ -304,7 +304,7 @@ class Aapt:
         except ValueError:
             # The <application> TAG has not been found...
             pass
-        
+
         return {
             "activities": activities,
             "services": services,

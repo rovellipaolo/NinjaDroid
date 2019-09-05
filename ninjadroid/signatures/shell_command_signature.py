@@ -16,8 +16,8 @@ class ShellCommandSignature(Signature):
     def __init__(self):
         super(ShellCommandSignature, self).__init__()
 
-    @classmethod
-    def _compile_regex(cls, signatures: Dict):
+    @staticmethod
+    def _compile_regex(signatures: Dict):
         regex = r'('
 
         # Shell command:
@@ -38,5 +38,7 @@ class ShellCommandSignature(Signature):
 
         regex += r')'
 
-        cls._is_regex = re.compile(regex, re.IGNORECASE)
-        cls._is_contained_regex = re.compile(regex, re.IGNORECASE)
+        _is_regex = re.compile(regex, re.IGNORECASE)
+        _is_contained_regex = re.compile(regex, re.IGNORECASE)
+
+        return (_is_regex, _is_contained_regex)

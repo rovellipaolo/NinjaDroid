@@ -1,3 +1,4 @@
+import functools
 import os.path
 import json
 import re
@@ -8,7 +9,6 @@ class Signature:
     """
     Parser for generic signature.
     """
-
     _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
     _SIGNATURE_KEYS_LIST = ["signatures"]
 
@@ -16,12 +16,14 @@ class Signature:
         signatures_regex = self._get_signature_regex_from_config()
         self._compile_regex(signatures_regex)
 
-    def _get_signature_regex_from_config(self):
+    @classmethod
+    @functools.lru_cache(maxsize=5)
+    def _get_signature_regex_from_config(cls):
         signatures_regex = {}
-        with open(self._CONFIG_FILE, "r") as config_file:
+        with open(cls._CONFIG_FILE, "r") as config_file:
             config = json.load(config_file)
 
-            for signature_name in self._SIGNATURE_KEYS_LIST:
+            for signature_name in cls._SIGNATURE_KEYS_LIST:
                 signatures_list = config[signature_name]
                 signatures_list.reverse()
 
@@ -32,13 +34,14 @@ class Signature:
                 signatures_regex[signature_name] = signatures_regex[signature_name][:-1]
         return signatures_regex
 
-
     @classmethod
+    @functools.lru_cache(maxsize=5)
     def _compile_regex(cls, signatures: Dict):
         """
         Compile the Shell commands signature regex.
 
-        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in _SIGNATURE_KEYS_LIST.
+        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in
+          _SIGNATURE_KEYS_LIST.
         """
         regex = r'('
 

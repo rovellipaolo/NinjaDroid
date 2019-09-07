@@ -46,11 +46,7 @@ class ExtractApkEntries(UseCase):
         return LaunchApkTool(self.input_filepath, self.output_directory).execute()
 
     def launch_dex2jar(self) -> Future:
-        return LaunchDex2Jar(
-            self.input_filepath,
-            self.input_filename,
-            self.output_directory
-        ).execute()
+        return LaunchDex2Jar(self.input_filepath, self.input_filename, self.output_directory).execute()
 
     def extract_certificate_file(self) -> Future:
         return ExtractCertificateFile(self.apk, self.output_directory).execute()

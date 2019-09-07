@@ -108,7 +108,8 @@ class TestDex(unittest.TestCase):
         for filename in self.dexes:
             self.assertEqual(
                 set(self.dexes[filename].get_strings()),
-                set(self.dex_properties[filename]["strings"]))
+                set(self.dex_properties[filename]["strings"])
+            )
 
     def test_get_urls(self):
         for filename in self.dexes:

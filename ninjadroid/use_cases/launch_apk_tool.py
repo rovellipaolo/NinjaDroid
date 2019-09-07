@@ -34,7 +34,8 @@ class LaunchApkTool(UseCase):
         command = "java -jar {} -q decode -f {} -o {}".format(
             LaunchApkTool.APKTOOL_PATH,
             self.input_filepath,
-            self.output_directory)
+            self.output_directory
+        )
         self.logger.debug("apktool command: `%s`", command)
 
         return self.executor.submit(os.system(command))

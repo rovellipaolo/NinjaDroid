@@ -24,7 +24,7 @@ class Dex(File, DexInterface):
         super(Dex, self).__init__(filepath, os.path.split(filepath)[1])
 
         self.logger = logger
-        logger.debug("Init Dex on %s, string_processing=%s", filepath, string_processing)
+        self.logger.debug("Init Dex on %s, string_processing=%s", filepath, string_processing)
 
         self._strings = []  # type: List[str]
         self._urls = []  # type: List[str]

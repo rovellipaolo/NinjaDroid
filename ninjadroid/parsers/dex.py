@@ -35,66 +35,55 @@ class Dex(File, DexInterface):
         self._extract_and_set_strings()
 
         if string_processing:
-            self._extract_and_set_substring_from()
+            self._extract_and_set_urls()
+            self._extract_and_set_shell_commands()
+            #self. _extract_and_set_signatures()
 
     def _extract_and_set_strings(self):
-        """
-        Extract the strings from the DEX file and set the corresponding attributes.
-        Empty strings will be removed.
-        """
         self.logger.debug("Extracting strings...")
         command = "strings " + self.get_file_path()
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
-        strings = filter(lambda s: s != "",
-                         (s.strip() for s in process.communicate()[0].decode("utf-8").splitlines()))
+        strings = filter(
+            lambda string: string != "",
+            (string.strip() for string in process.communicate()[0].decode("utf-8").splitlines())
+        )
         self._strings = sorted(strings)
         self.logger.debug("%d strings extracted", len(self._strings))
 
-    def _extract_and_set_substring_from(self):
-        """
-        Extract the strings from the DEX file and set the corresponding attributes.
-        Empty strings will be removed.
-        """
+    def _extract_and_set_urls(self):
         self.logger.debug("Extracting URLs from strings...")
         urls = (url
-                for s in self._strings
-                for url in self._extract_urls_from(s))
+                for string in self._strings
+                for url in self._extract_urls_from(string))
         self._urls = sorted(urls)
         self.logger.debug("%s URLs extracted from strings", len(self._urls))
 
+    def _extract_and_set_shell_commands(self):
         self.logger.debug("Extracting shell commands from strings...")
         shell_commands = (command
-                          for s in self._strings
-                          for command in self._extract_shell_commands_from(s))
-
+                          for string in self._strings
+                          for command in self._extract_shell_commands_from(string))
         self._shell_commands = sorted(shell_commands)
         self.logger.debug("%s shell commands extracted from strings", len(self._shell_commands))
-        # self._custom_signatures.sort()
+
+    def _extract_and_set_signatures(self):
+        self.logger.debug("Extracting signatures from strings...")
+        custom_signatures = (signature
+                             for string in self._strings
+                             for signature in self._extract_custom_signature_from(string))
+        self._custom_signatures = sorted(custom_signatures)
+        self.logger.debug("%s signatures extracted from strings", len(self._custom_signatures))
 
     def _extract_urls_from(self, string: str) -> Sequence[str]:
-        """
-        Extract URLs from a string.
-
-        Currently at most one URL is extracted from a string. This may change.
-
-        :param string: The string from which to extract the URLs.
-        """
         if not hasattr(self, "_uri"):
             self._uri_signature = URISignature()
         if len(string) > 6:
-            match = self._uri_signature.get_matches_in_string(string)
-            if match != "":
-                return [match]
+            uri = self._uri_signature.get_matches_in_string(string)
+            if uri != "":
+                return [uri]
         return []
 
     def _extract_shell_commands_from(self, string: str) -> Sequence[str]:
-        """
-        Extract shell commands from a string.
-
-        Currently at most one shell command is extracted from a string. This may change.
-
-        :param string: The string from which to extract the shell commands.
-        """
         if not hasattr(self, "_shell"):
             self._shell_signature = ShellCommandSignature()
         command = self._shell_signature.get_matches_in_string(string)
@@ -102,17 +91,13 @@ class Dex(File, DexInterface):
             return [command]
         return []
 
-    # def _extract_and_set_signatures_from(self, string: str):
-    #     """
-    #     Extract eventual signatures from a string and set the corresponding attribute.
-    #
-    #     :param string: The string from which extracting the eventual signatures.
-    #     """
-    #     if not hasattr(self, "_shell"):
-    #         self._generic_signature = Signature()
-    #         match = self._generic_signature.get_matches_in_string(string)
-    #         if match != "" and match not in self._custom_signatures:
-    #             self._custom_signatures.append(match)
+    def _extract_custom_signature_from(self, string: str) -> Sequence[str]:
+        if not hasattr(self, "_signatures"):
+            self._generic_signature = Signature()
+        signature = self._generic_signature.get_matches_in_string(string)
+        if signature != "":
+            return [signature]
+        return []
 
     @staticmethod
     def looks_like_a_dex(filename: str) -> bool:
@@ -122,7 +107,7 @@ class Dex(File, DexInterface):
         dump = super(Dex, self).dump()
         dump["urls"] = self._urls
         dump["shell_commands"] = self._shell_commands
-        # dump["custom_signatures"] = self._custom_signatures
+        #dump["custom_signatures"] = self._custom_signatures
         dump["strings"] = self.get_strings()
         return dump
 

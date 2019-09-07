@@ -8,6 +8,7 @@ class Signature:
     """
     Parser for generic signature.
     """
+
     _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
     _SIGNATURE_KEYS_LIST = ["signatures"]
 

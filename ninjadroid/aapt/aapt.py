@@ -30,13 +30,6 @@ class Aapt:
 
     @staticmethod
     def _extract_string_pattern(string: str, pattern: str) -> str:
-        """
-        Extract the value of a given pattern from a given string.
-
-        :param string: The string to be searched.
-        :param pattern: The pattern to extract.
-        :return: The extracted pattern if any is found, an empty string otherwise.
-        """
         match = re.search(pattern, string, re.MULTILINE | re.IGNORECASE)
         if match and match.group(1):
             return match.group(1).strip()
@@ -47,11 +40,6 @@ class Aapt:
     def _find_between(s: str, prefix: str, suffix: str) -> str:
         """
         Find a substring in a string, starting after a specified prefix and ended before a specified suffix.
-
-        :param s: The string.
-        :param prefix: The prefix of the file name to be deleted.
-        :param suffix: The suffix of the file name to be deleted.
-        :return: The substring starting after prefix and ended before suffix.
         """
         try:
             start = s.index(prefix) + len(prefix)
@@ -64,10 +52,6 @@ class Aapt:
     def _find_all(haystack: str, needle: str) -> str:
         """
         Find all the substring starting position in a string.
-
-        :param haystack: The string.
-        :param needle: The substring to be found.
-        :return: The substring starting after prefix and ended before suffix.
         """
         offs = -1
         while True:
@@ -110,9 +94,6 @@ class Aapt:
             supports-any-density: 'true'
             locales: '--_--'
             densities: '120' '160' '240' '320'
-
-        :param filepath: The APK package file path.
-        :return: The APK dump badging.
         """
         command = Aapt.__AAPT_EXEC_PATH + " dump badging " + filepath
         return Aapt._launch_shell_command_and_get_result(command)
@@ -129,9 +110,6 @@ class Aapt:
             uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
             uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
             uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
-
-        :param filepath: The APK package file path.
-        :return: The APK dump badging.
         """
         command = Aapt.__AAPT_EXEC_PATH + " dump permissions " + filepath
         return Aapt._launch_shell_command_and_get_result(command)
@@ -203,9 +181,6 @@ class Aapt:
                   E: receiver (line=28)
                     A: android:name(0x01010003)="com.example.app.ExampleBrodcastReceiver" (Raw: "...")
                   ...
-
-        :param filepath: The APK package file path.
-        :return: The XML tree.
         """
         command = Aapt.__AAPT_EXEC_PATH + " dump xmltree " + filepath + " AndroidManifest.xml"
         return Aapt._launch_shell_command_and_get_result(command)
@@ -217,14 +192,6 @@ class Aapt:
 
     @classmethod
     def get_app_name(cls, filepath: str) -> str:
-        """
-        Retrieve the app name of an APK package.
-
-        Falls back to the launchable-activity label if the application label is empty.
-
-        :param filepath: The APK package file path.
-        :return: The app name.
-        """
         badging = cls._dump_badging(filepath)
         return (
             Aapt._extract_string_pattern(badging, Aapt.__LABEL_APP_NAME)
@@ -233,17 +200,6 @@ class Aapt:
 
     @classmethod
     def get_apk_info(cls, filepath: str) -> Dict:
-        """
-        Retrieve the APK info.
-
-        :param filepath: The APK package file path.
-        :return: The APK info as a dictionary (i.e.
-                 {
-                    "package_name": "...",
-                    "version": {"code":1, "name":"1.0"},
-                    "sdk": {"target": "...", max: "...", min: "..."}
-                }).
-        """
         info = cls._dump_badging(filepath)
 
         apk_package_name_pattern = "^" + cls.__LABEL_PACKAGE_NAME + "'([a-zA-Z0-9\-\.]+)'"
@@ -283,12 +239,6 @@ class Aapt:
 
     @classmethod
     def get_manifest_info(cls, filepath: str) -> Dict:
-        """
-        Retrieve the AndroidManifest.xml info.
-
-        :param filepath: The APK package file path.
-        :return: The list of Activities, Services and BroadcastReceivers as a dictionary.
-        """
         activities = []  # type: List[Dict[str, str]]
         services = []  # type: List[Dict[str, str]]
         receivers = []  # type: List[Dict[str, str]]
@@ -325,12 +275,6 @@ class Aapt:
 
     @classmethod
     def get_app_permissions(cls, filepath: str) -> List:
-        """
-        Retrieve the permissions from the AndroidManifest.xml file of a given APK package.
-
-        :param filepath: The APK package file path.
-        :return: The list of required permissions.
-        """
         dump = cls._dump_permissions(filepath).splitlines()
 
         permissions = []

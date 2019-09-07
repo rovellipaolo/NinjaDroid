@@ -68,8 +68,8 @@ class TestSignature(unittest.TestCase):
     def test_get_matches_in_string(self):
         for string in TestSignature.strings_containing_commands:
             self.assertEqual(
-                self.signature.get_matches_in_string(string),
-                TestSignature.strings_containing_commands[string]
+                TestSignature.strings_containing_commands[string],
+                self.signature.get_matches_in_string(string)
             )
 
 

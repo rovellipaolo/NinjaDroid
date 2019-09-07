@@ -23,14 +23,13 @@ class Dex(File, DexInterface):
     def __init__(self, filepath: str, string_processing: bool = True, logger=logger):
         super(Dex, self).__init__(filepath, os.path.split(filepath)[1])
 
+        self.logger = logger
         logger.debug("Init Dex on %s, string_processing=%s", filepath, string_processing)
 
         self._strings = []  # type: List[str]
         self._urls = []  # type: List[str]
         self._shell_commands = []  # type: List[str]
         self._custom_signatures = []  # type: List[str]
-
-        self.logger = logger
 
         self._extract_and_set_strings()
 

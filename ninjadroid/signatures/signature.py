@@ -1,4 +1,3 @@
-import functools
 import os.path
 import json
 import re
@@ -16,14 +15,12 @@ class Signature:
         signatures_regex = self._get_signature_regex_from_config()
         self._compile_regex(signatures_regex)
 
-    @classmethod
-    @functools.lru_cache(maxsize=5)
-    def _get_signature_regex_from_config(cls):
+    def _get_signature_regex_from_config(self):
         signatures_regex = {}
-        with open(cls._CONFIG_FILE, "r") as config_file:
+        with open(self._CONFIG_FILE, "r") as config_file:
             config = json.load(config_file)
 
-            for signature_name in cls._SIGNATURE_KEYS_LIST:
+            for signature_name in self._SIGNATURE_KEYS_LIST:
                 signatures_list = config[signature_name]
                 signatures_list.reverse()
 
@@ -35,13 +32,11 @@ class Signature:
         return signatures_regex
 
     @classmethod
-    @functools.lru_cache(maxsize=5)
     def _compile_regex(cls, signatures: Dict):
         """
         Compile the Shell commands signature regex.
 
-        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in
-          _SIGNATURE_KEYS_LIST.
+        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in _SIGNATURE_KEYS_LIST.
         """
         regex = r'('
 
@@ -59,24 +54,12 @@ class Signature:
         cls._is_contained_regex = re.compile(regex, re.IGNORECASE)
 
     def is_valid(self, signature: str) -> bool:
-        """
-        Validate a given signature.
-
-        :param signature: The signature to be validated.
-        :return: True if it is a valid signature, False otherwise.
-        """
         if signature is None or signature == "":
             return False
 
         return self._is_regex.search(signature)
 
     def get_matches_in_string(self, string: str) -> str:
-        """
-        Search whether a string matches at least a signature.
-
-        :param string: The string to be searched.
-        :return: The matched signature, if the string contains a signature, an empty string otherwise.
-        """
         if string is None or string == "":
             return ""
 

@@ -58,64 +58,75 @@ class TestAndroidManifest(unittest.TestCase):
         self.assertTrue(len(self.manifests["binary"].get_raw_file()) > 0)
 
     def test_get_file_name(self):
-        self.assertEqual(self.manifests["clean"].get_file_name(), "AndroidManifest.xml")
-        self.assertEqual(self.manifests["binary"].get_file_name(), "AndroidManifest.xml")
+        self.assertEqual("AndroidManifest.xml", self.manifests["clean"].get_file_name())
+        self.assertEqual("AndroidManifest.xml", self.manifests["binary"].get_file_name())
 
     def test_get_size(self):
-        self.assertEqual(self.manifests["clean"].get_size(), 3358)
-        self.assertEqual(self.manifests["binary"].get_size(), 6544)
+        self.assertEqual(3358, self.manifests["clean"].get_size())
+        self.assertEqual(6544, self.manifests["binary"].get_size())
 
     def test_get_md5(self):
-        self.assertEqual(self.manifests["clean"].get_md5(), "c098fdd0a5dcf615118dad5457a2d016")
-        self.assertEqual(self.manifests["binary"].get_md5(), "1f97f7e7ca62f39f8f81d79b1b540c37")
+        self.assertEqual("c098fdd0a5dcf615118dad5457a2d016", self.manifests["clean"].get_md5())
+        self.assertEqual("1f97f7e7ca62f39f8f81d79b1b540c37", self.manifests["binary"].get_md5())
 
     def test_get_sha1(self):
-        self.assertEqual(self.manifests["clean"].get_sha1(), "d69bbde630c8a5623b72a16d46b579432f2c944d")
-        self.assertEqual(self.manifests["binary"].get_sha1(), "011316a011e5b8738c12c662cb0b0a6ffe04ca74")
+        self.assertEqual("d69bbde630c8a5623b72a16d46b579432f2c944d", self.manifests["clean"].get_sha1())
+        self.assertEqual("011316a011e5b8738c12c662cb0b0a6ffe04ca74", self.manifests["binary"].get_sha1())
 
     def test_get_sha256(self):
-        self.assertEqual(self.manifests["clean"].get_sha256(),
-                         "a042569824ff2e268fdde5b8e00981293b27fe8a2a1dc72aa791e579f80bd720")
-        self.assertEqual(self.manifests["binary"].get_sha256(),
-                         "7c8011a46191ecb368bf2e0104049abeb98bae8a7b1fa3328ff050aed85b1347")
+        self.assertEqual(
+            "a042569824ff2e268fdde5b8e00981293b27fe8a2a1dc72aa791e579f80bd720",
+            self.manifests["clean"].get_sha256()
+        )
+        self.assertEqual(
+            "7c8011a46191ecb368bf2e0104049abeb98bae8a7b1fa3328ff050aed85b1347",
+            self.manifests["binary"].get_sha256()
+        )
 
     def test_get_sha512(self):
-        self.assertEqual(self.manifests["clean"].get_sha512(),
-                         "8875e2d19725c824c93e9f4e45b9ebcd599bffafde1af4b98975a2d6e497fde76870e5129eef289a25328562f4f21d9ff214db95dcd3ddb3b58f358ec362d78a")
-        self.assertEqual(self.manifests["binary"].get_sha512(),
-                         "8c7c1ede610f9c6613418b46a52a196ad6d5e8cc067c2f26b931738ad8087f998d9ea95e80ec4352c95fbdbb93a4f29c646973535068a3a3d584da95480ab45f")
+        self.assertEqual(
+            "8875e2d19725c824c93e9f4e45b9ebcd599bffafde1af4b98975a2d6e497fde76870e5129eef289a25328562f4f21d9ff214db95dcd3ddb3b58f358ec362d78a",
+            self.manifests["clean"].get_sha512()
+        )
+        self.assertEqual(
+            "8c7c1ede610f9c6613418b46a52a196ad6d5e8cc067c2f26b931738ad8087f998d9ea95e80ec4352c95fbdbb93a4f29c646973535068a3a3d584da95480ab45f",
+            self.manifests["binary"].get_sha512()
+        )
 
     def test_get_package_name(self):
         for man in self.manifests:
-            self.assertEqual(self.manifests[man].get_package_name(), "com.example.app")
+            package_name = self.manifests[man].get_package_name()
+            self.assertEqual("com.example.app", package_name)
 
     def test_get_version(self):
         for man in self.manifests:
             version = self.manifests[man].get_version()
-            self.assertEqual(version["code"], 1)
-            self.assertEqual(version["name"], "1.0")
+            self.assertEqual(1, version["code"])
+            self.assertEqual("1.0", version["name"])
 
     def test_get_sdk_version(self):
         for man in self.manifests:
             sdk = self.manifests[man].get_sdk_version()
-            self.assertEqual(sdk["target"], "20")
-            self.assertEqual(sdk["min"], "10")
-            self.assertEqual(sdk["max"], "20")
+            self.assertEqual("20", sdk["target"])
+            self.assertEqual("10", sdk["min"])
+            self.assertEqual("20", sdk["max"])
 
     def test_get_permissions(self):
-        permissions = [
+        expected_permissions = [
             "android.permission.INTERNET",
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.RECEIVE_BOOT_COMPLETED",
             "android.permission.WRITE_EXTERNAL_STORAGE"]
-        permissions.sort()
+        expected_permissions.sort()
 
         for man in self.manifests:
-            self.assertEqual(self.manifests[man].get_permissions(), permissions)
+            permissions = self.manifests[man].get_permissions()
+            self.assertEqual(expected_permissions, permissions)
 
     def test_get_number_of_permissions(self):
         for man in self.manifests:
-            self.assertEqual(self.manifests[man].get_number_of_permissions(), 4)
+            permissions_count = self.manifests[man].get_number_of_permissions()
+            self.assertEqual(4, permissions_count)
 
     def test_get_activities(self):
         for man in self.manifests:
@@ -123,7 +134,7 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 1st Activity:
             self.assertTrue("name" in activities[0])
-            self.assertEqual(activities[0]["name"], "com.example.app.HomeActivity")
+            self.assertEqual("com.example.app.HomeActivity", activities[0]["name"])
             self.assertTrue("allowEmbedded" not in activities[0])
             self.assertTrue("allowTaskReparenting" not in activities[0])
             self.assertTrue("alwaysRetainTaskState" not in activities[0])
@@ -166,18 +177,18 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue("priority" not in activities[0]["intent-filter"][0])
             # action
             self.assertTrue("action" in activities[0]["intent-filter"][0])
-            self.assertEqual(len(activities[0]["intent-filter"][0]["action"]), 1)
+            self.assertEqual(1, len(activities[0]["intent-filter"][0]["action"]))
             self.assertEqual(activities[0]["intent-filter"][0]["action"][0], "android.intent.action.MAIN")
             # category
             self.assertTrue("category" in activities[0]["intent-filter"][0])
-            self.assertEqual(len(activities[0]["intent-filter"][0]["category"]), 1)
-            self.assertEqual(activities[0]["intent-filter"][0]["category"][0], "android.intent.category.LAUNCHER")
+            self.assertEqual(1, len(activities[0]["intent-filter"][0]["category"]))
+            self.assertEqual("android.intent.category.LAUNCHER", activities[0]["intent-filter"][0]["category"][0])
             # data
             self.assertTrue("data" not in activities[0]["intent-filter"][0])
 
             # Test 2nd Activity:
             self.assertTrue("name" in activities[1])
-            self.assertEqual(activities[1]["name"], "com.example.app.OtherActivity")
+            self.assertEqual("com.example.app.OtherActivity", activities[1]["name"])
             self.assertTrue("allowEmbedded" not in activities[1])
             self.assertTrue("allowTaskReparenting" not in activities[1])
             self.assertTrue("alwaysRetainTaskState" not in activities[1])
@@ -201,7 +212,7 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue("noHistory" in activities[1])
             self.assertTrue(activities[1]["noHistory"] == "true")
             self.assertTrue("parentActivityName" in activities[1])
-            self.assertEqual(activities[1]["parentActivityName"], "com.example.app.HomeActivity")
+            self.assertEqual("com.example.app.HomeActivity", activities[1]["parentActivityName"])
             self.assertTrue("permission" not in activities[1])
             self.assertTrue("process" not in activities[1])
             self.assertTrue("relinquishTaskIdentity" not in activities[1])
@@ -213,39 +224,42 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue("windowSoftInputMode" not in activities[1])
             # Test meta-data parsing:
             self.assertTrue("meta-data" in activities[1])
-            self.assertEqual(len(activities[1]["meta-data"]), 1)
+            self.assertEqual(1, len(activities[1]["meta-data"]))
             self.assertTrue("name" in activities[1]["meta-data"][0])
-            self.assertEqual(activities[1]["meta-data"][0]["name"], "android.support.PARENT_ACTIVITY")
+            self.assertEqual("android.support.PARENT_ACTIVITY", activities[1]["meta-data"][0]["name"])
             self.assertTrue("value" in activities[1]["meta-data"][0])
-            self.assertEqual(activities[1]["meta-data"][0]["value"], "com.example.app.HomeActivity")
+            self.assertEqual("com.example.app.HomeActivity", activities[1]["meta-data"][0]["value"])
             self.assertTrue("resource" not in activities[1]["meta-data"][0])
             # Test intent-filter parsing:
             self.assertTrue("intent-filter" in activities[1])
-            self.assertEqual(len(activities[1]["intent-filter"]), 1)
+            self.assertEqual(1, len(activities[1]["intent-filter"]))
             # priority
             self.assertTrue("priority" not in activities[1]["intent-filter"][0])
             # action
             self.assertTrue("action" in activities[1]["intent-filter"][0])
-            self.assertEqual(len(activities[1]["intent-filter"][0]["action"]), 1)
-            self.assertEqual(activities[1]["intent-filter"][0]["action"][0], "android.intent.action.VIEW")
+            self.assertEqual(1, len(activities[1]["intent-filter"][0]["action"]))
+            self.assertEqual("android.intent.action.VIEW", activities[1]["intent-filter"][0]["action"][0])
             # category
             self.assertTrue("category" in activities[1]["intent-filter"][0])
-            self.assertEqual(len(activities[1]["intent-filter"][0]["category"]), 1)
-            self.assertEqual(activities[1]["intent-filter"][0]["category"][0], "android.intent.category.DEFAULT")
+            self.assertEqual(1, len(activities[1]["intent-filter"][0]["category"]))
+            self.assertEqual("android.intent.category.DEFAULT", activities[1]["intent-filter"][0]["category"][0])
             # data
             self.assertTrue("data" in activities[1]["intent-filter"][0])
-            self.assertEqual(len(activities[1]["intent-filter"][0]["data"]), 3)
+            self.assertEqual(3, len(activities[1]["intent-filter"][0]["data"]))
             self.assertTrue("scheme" in activities[1]["intent-filter"][0]["data"][0])
-            self.assertEqual(activities[1]["intent-filter"][0]["data"][0]["scheme"], "content")
+            self.assertEqual("content", activities[1]["intent-filter"][0]["data"][0]["scheme"])
             self.assertTrue("scheme" in activities[1]["intent-filter"][0]["data"][1])
-            self.assertEqual(activities[1]["intent-filter"][0]["data"][1]["scheme"], "file")
+            self.assertEqual("file", activities[1]["intent-filter"][0]["data"][1]["scheme"])
             self.assertTrue("mimeType" in activities[1]["intent-filter"][0]["data"][2])
-            self.assertEqual(activities[1]["intent-filter"][0]["data"][2]["mimeType"],
-                             "application/vnd.android.package-archive")
+            self.assertEqual(
+                "application/vnd.android.package-archive",
+                activities[1]["intent-filter"][0]["data"][2]["mimeType"]
+            )
 
     def test_get_number_of_activities(self):
         for man in self.manifests:
-            self.assertEqual(self.manifests[man].get_number_of_activities(), 2)
+            activities_count = self.manifests[man].get_number_of_activities()
+            self.assertEqual(2, activities_count)
 
     def test_get_services(self):
         for man in self.manifests:
@@ -253,7 +267,7 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 1st Service:
             self.assertTrue("name" in services[0])
-            self.assertEqual(services[0]["name"], "com.example.app.ExampleService")
+            self.assertEqual("com.example.app.ExampleService", services[0]["name"])
             self.assertTrue("enabled" not in services[0])
             self.assertTrue("exported" not in services[0])
             self.assertTrue("icon" not in services[0])
@@ -268,14 +282,14 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 2nd Service:
             self.assertTrue("name" in services[1])
-            self.assertEqual(services[1]["name"], "com.example.app.ExampleService2")
+            self.assertEqual("com.example.app.ExampleService2", services[1]["name"])
             self.assertTrue("enabled" in services[1])
-            self.assertEqual(services[1]["enabled"], "false")
+            self.assertEqual("false", services[1]["enabled"])
             self.assertTrue("exported" in services[1])
-            self.assertEqual(services[1]["exported"], "true")
+            self.assertEqual("true", services[1]["exported"])
             self.assertTrue("icon" not in services[1])
             self.assertTrue("isolatedProcess" in services[1])
-            self.assertEqual(services[1]["isolatedProcess"], "true")
+            self.assertEqual("true", services[1]["isolatedProcess"])
             self.assertTrue("label" not in services[1])
             self.assertTrue("permission" not in services[1])
             self.assertTrue("process" not in services[1])
@@ -286,14 +300,14 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 3rd Service:
             self.assertTrue("name" in services[2])
-            self.assertEqual(services[2]["name"], "com.example.app.ExampleService3")
+            self.assertEqual("com.example.app.ExampleService3", services[2]["name"])
             self.assertTrue("enabled" in services[2])
-            self.assertEqual(services[2]["enabled"], "true")
+            self.assertEqual( "true", services[2]["enabled"])
             self.assertTrue("exported" in services[2])
-            self.assertEqual(services[2]["exported"], "false")
+            self.assertEqual("false", services[2]["exported"])
             self.assertTrue("icon" not in services[2])
             self.assertTrue("isolatedProcess" in services[2])
-            self.assertEqual(services[2]["isolatedProcess"], "false")
+            self.assertEqual("false", services[2]["isolatedProcess"])
             self.assertTrue("label" not in services[2])
             self.assertTrue("permission" not in services[2])
             self.assertTrue("process" not in services[2])
@@ -304,7 +318,8 @@ class TestAndroidManifest(unittest.TestCase):
 
     def test_get_number_of_services(self):
         for man in self.manifests:
-            self.assertTrue(self.manifests[man].get_number_of_services() == 3)
+            services_count = self.manifests[man].get_number_of_services()
+            self.assertEqual(3, services_count)
 
     def test_get_broadcast_receivers(self):
         for man in self.manifests:
@@ -312,7 +327,7 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 1st BroadcastReceiver:
             self.assertTrue("name" in receivers[0])
-            self.assertEqual(receivers[0]["name"], "com.example.app.ExampleBrodcastReceiver")
+            self.assertEqual("com.example.app.ExampleBrodcastReceiver", receivers[0]["name"])
             self.assertTrue("enabled" not in receivers[0])
             self.assertTrue("exported" not in receivers[0])
             self.assertTrue("icon" not in receivers[0])
@@ -326,10 +341,10 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 2nd BroadcastReceiver:
             self.assertTrue("name" in receivers[1])
-            self.assertEqual(receivers[1]["name"], "com.example.app.ExampleBrodcastReceiver2")
+            self.assertEqual("com.example.app.ExampleBrodcastReceiver2", receivers[1]["name"])
             self.assertTrue("enabled" not in receivers[1])
             self.assertTrue("exported" in receivers[1])
-            self.assertEqual(receivers[1]["exported"], "false")
+            self.assertEqual("false", receivers[1]["exported"])
             self.assertTrue("icon" not in receivers[1])
             self.assertTrue("label" not in receivers[1])
             self.assertTrue("permission" not in receivers[1])
@@ -338,15 +353,15 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue("meta-data" not in receivers[1])
             # Test intent-filter parsing:
             self.assertTrue("intent-filter" in receivers[1])
-            self.assertEqual(len(receivers[1]["intent-filter"]), 1)
+            self.assertEqual(1, len(receivers[1]["intent-filter"]))
             # priority
             self.assertTrue("priority" in receivers[1]["intent-filter"][0])
-            self.assertEqual(receivers[1]["intent-filter"][0]["priority"], "1000")
+            self.assertEqual("1000", receivers[1]["intent-filter"][0]["priority"])
             # action
             self.assertTrue("action" in receivers[1]["intent-filter"][0])
-            self.assertEqual(len(receivers[1]["intent-filter"][0]["action"]), 2)
-            self.assertEqual(receivers[1]["intent-filter"][0]["action"][0], "android.intent.action.BOOT_COMPLETED")
-            self.assertEqual(receivers[1]["intent-filter"][0]["action"][1], "android.intent.action.MY_PACKAGE_REPLACED")
+            self.assertEqual(2, len(receivers[1]["intent-filter"][0]["action"]))
+            self.assertEqual("android.intent.action.BOOT_COMPLETED", receivers[1]["intent-filter"][0]["action"][0])
+            self.assertEqual("android.intent.action.MY_PACKAGE_REPLACED", receivers[1]["intent-filter"][0]["action"][1])
             # category
             self.assertTrue("category" not in receivers[1]["intent-filter"][0])
             # data
@@ -354,11 +369,11 @@ class TestAndroidManifest(unittest.TestCase):
 
             # Test 3rd BroadcastReceiver:
             self.assertTrue("name" in receivers[2])
-            self.assertEqual(receivers[2]["name"], "com.example.app.ExampleBrodcastReceiver3")
+            self.assertEqual("com.example.app.ExampleBrodcastReceiver3", receivers[2]["name"])
             self.assertTrue("enabled" in receivers[2])
-            self.assertEqual(receivers[2]["enabled"], "true")
+            self.assertEqual("true", receivers[2]["enabled"])
             self.assertTrue("exported" in receivers[2])
-            self.assertEqual(receivers[2]["exported"], "false")
+            self.assertEqual("false", receivers[2]["exported"])
             self.assertTrue("icon" not in receivers[2])
             self.assertTrue("label" not in receivers[2])
             self.assertTrue("permission" not in receivers[2])
@@ -367,32 +382,34 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertTrue("meta-data" not in receivers[2])
             # Test intent-filter parsing:
             self.assertTrue("intent-filter" in receivers[2])
-            self.assertEqual(len(receivers[2]["intent-filter"]), 1)
+            self.assertEqual(1, len(receivers[2]["intent-filter"]))
             # priority
             self.assertTrue("priority" in receivers[2]["intent-filter"][0])
-            self.assertEqual(receivers[2]["intent-filter"][0]["priority"], "800")
+            self.assertEqual("800", receivers[2]["intent-filter"][0]["priority"])
             # action
             self.assertTrue("action" in receivers[2]["intent-filter"][0])
-            self.assertEqual(len(receivers[2]["intent-filter"][0]["action"]), 3)
-            self.assertEqual(receivers[2]["intent-filter"][0]["action"][0],
-                             "android.intent.action.BROADCAST_PACKAGE_REMOVED")
-            self.assertEqual(receivers[2]["intent-filter"][0]["action"][1], "android.intent.action.PACKAGE_ADDED")
-            self.assertEqual(receivers[2]["intent-filter"][0]["action"][2], "android.intent.action.PACKAGE_REPLACED")
+            self.assertEqual(3, len(receivers[2]["intent-filter"][0]["action"]))
+            self.assertEqual(
+                "android.intent.action.BROADCAST_PACKAGE_REMOVED",
+                receivers[2]["intent-filter"][0]["action"][0]
+            )
+            self.assertEqual("android.intent.action.PACKAGE_ADDED", receivers[2]["intent-filter"][0]["action"][1])
+            self.assertEqual("android.intent.action.PACKAGE_REPLACED", receivers[2]["intent-filter"][0]["action"][2])
             # category
             self.assertTrue("category" not in receivers[2]["intent-filter"][0])
             # data
             self.assertTrue("data" in receivers[2]["intent-filter"][0])
-            self.assertEqual(len(receivers[2]["intent-filter"][0]["data"]), 1)
+            self.assertEqual(1, len(receivers[2]["intent-filter"][0]["data"]))
             self.assertTrue("scheme" in receivers[2]["intent-filter"][0]["data"][0])
-            self.assertEqual(receivers[2]["intent-filter"][0]["data"][0]["scheme"], "package")
+            self.assertEqual("package", receivers[2]["intent-filter"][0]["data"][0]["scheme"])
 
             # Test 4th BroadcastReceiver:
             self.assertTrue("name" in receivers[3])
-            self.assertEqual(receivers[3]["name"], "com.example.app.ExampleBrodcastReceiver4")
+            self.assertEqual("com.example.app.ExampleBrodcastReceiver4", receivers[3]["name"])
             self.assertTrue("enabled" in receivers[3])
-            self.assertEqual(receivers[3]["enabled"], "false")
+            self.assertEqual("false", receivers[3]["enabled"])
             self.assertTrue("exported" in receivers[3])
-            self.assertEqual(receivers[3]["exported"], "true")
+            self.assertEqual("true", receivers[3]["exported"])
             self.assertTrue("icon" not in receivers[3])
             self.assertTrue("label" not in receivers[3])
             self.assertTrue("permission" not in receivers[3])
@@ -404,7 +421,8 @@ class TestAndroidManifest(unittest.TestCase):
 
     def test_get_number_of_broadcast_receivers(self):
         for man in self.manifests:
-            self.assertEqual(self.manifests[man].get_number_of_broadcast_receivers(), 4)
+            receivers_count = self.manifests[man].get_number_of_broadcast_receivers()
+            self.assertEqual(4, receivers_count)
 
 
 if __name__ == "__main__":

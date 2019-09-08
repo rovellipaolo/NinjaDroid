@@ -136,8 +136,12 @@ class TestAPK(unittest.TestCase):
 
     def test_init(self):
         for filename in self.apks:
-            self.assertTrue(self.apks[filename] is not None)
-            self.assertTrue(type(self.apks[filename]) is APK)
+            # When:
+            apk = self.apks[filename]
+
+            # Then:
+            self.assertTrue(apk is not None)
+            self.assertTrue(type(apk) is APK)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
@@ -151,50 +155,82 @@ class TestAPK(unittest.TestCase):
 
     def test_get_raw_file(self):
         for filename in self.apks:
-            self.assertTrue(len(self.apks[filename].get_raw_file()) > 0)
+            # When:
+            raw_files = self.apks[filename].get_raw_file()
+
+            # Then:
+            self.assertTrue(len(raw_files) > 0)
 
     def test_get_file_name(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_file_name(), self.apks_properties[filename]["name"])
+            # When:
+            name = self.apks[filename].get_file_name()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["name"], name)
 
     def test_get_size(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_size(), self.apks_properties[filename]["size"])
+            # When:
+            size = self.apks[filename].get_size()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["size"], size)
 
     def test_get_md5(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_md5(), self.apks_properties[filename]["md5"])
+            # When:
+            md5 = self.apks[filename].get_md5()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["md5"], md5)
 
     def test_get_sha1(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_sha1(), self.apks_properties[filename]["sha1"])
+            # When:
+            sha1 = self.apks[filename].get_sha1()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["sha1"], sha1)
 
     def test_get_sha256(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_sha256(), self.apks_properties[filename]["sha256"])
+            # When:
+            sha256 = self.apks[filename].get_sha256()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["sha256"], sha256)
 
     def test_get_sha512(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_sha512(), self.apks_properties[filename]["sha512"])
+            # When:
+            sha512 = self.apks[filename].get_sha512()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["sha512"], sha512)
 
     def test_get_file_list(self):
         for filename in self.apks:
+            # When:
             file_list = self.apks[filename].get_file_list()
-            self.assertEqual(len(file_list), len(self.apks_properties[filename]["file_list"]))
+
+            # Then:
+            self.assertEqual(len(self.apks_properties[filename]["file_list"]), len(file_list))
             for i in range(len(file_list)):
-                self.assertEqual(file_list[i].get_file_name(), self.apks_properties[filename]["file_list"][i]["name"])
-                self.assertEqual(file_list[i].get_size(), self.apks_properties[filename]["file_list"][i]["size"])
-                self.assertEqual(file_list[i].get_md5(), self.apks_properties[filename]["file_list"][i]["md5"])
-                self.assertEqual(file_list[i].get_sha1(), self.apks_properties[filename]["file_list"][i]["sha1"])
-                self.assertEqual(file_list[i].get_sha256(), self.apks_properties[filename]["file_list"][i]["sha256"])
-                self.assertEqual(file_list[i].get_sha512(), self.apks_properties[filename]["file_list"][i]["sha512"])
+                self.assertEqual(self.apks_properties[filename]["file_list"][i]["name"], file_list[i].get_file_name())
+                self.assertEqual(self.apks_properties[filename]["file_list"][i]["size"], file_list[i].get_size())
+                self.assertEqual(self.apks_properties[filename]["file_list"][i]["md5"], file_list[i].get_md5())
+                self.assertEqual(self.apks_properties[filename]["file_list"][i]["sha1"], file_list[i].get_sha1())
+                self.assertEqual(self.apks_properties[filename]["file_list"][i]["sha256"], file_list[i].get_sha256())
+                self.assertEqual(self.apks_properties[filename]["file_list"][i]["sha512"], file_list[i].get_sha512())
 
     def test_get_app_name(self):
         for filename in self.apks:
-            self.assertEqual(
-                self.apks_properties[filename]["app_name"],
-                self.apks[filename].get_app_name()
-            )
+            # When:
+            name = self.apks[filename].get_app_name()
+
+            # Then:
+            self.assertEqual(self.apks_properties[filename]["app_name"], name)
 
 
 if __name__ == "__main__":

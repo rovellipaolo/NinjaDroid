@@ -147,7 +147,7 @@ Once you've configured it (see the _"Configuration"_ section), you can also run 
 ### Local run:
 To run NinjaDroid tests in your local machine, launch the following command:
 ```
-$ python -m unittest -v tests.test
+$ make test
 ```
 
 ### Docker run:

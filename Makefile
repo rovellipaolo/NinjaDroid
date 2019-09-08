@@ -3,9 +3,15 @@ IMAGE := ninjadroid
 .PHONY: default
 default: build-docker
 
+
 .PHONY: build-docker
 build-docker:
 	docker build -t ${IMAGE}:latest .
+
+
+.PHONY: test
+test:
+	python -m unittest -v tests.test
 
 .PHONY: test-docker
 test-docker:

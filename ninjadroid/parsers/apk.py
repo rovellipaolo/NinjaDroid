@@ -48,7 +48,7 @@ class APK(File, APKInterface):
     def _extract_and_set_entries(self, string_processing: bool):
         """
         Extract the APK package entries (e.g. AndroidManifest.xml, CERT.RSA, classes.dex, ...) and
-        set the correspondent attributes.
+        set the corresponding attributes.
 
         :param string_processing: If True (default), the URLs and shell commands in the classes.dex will be extracted.
         :return: If one of the APK entries is invalid.
@@ -73,7 +73,7 @@ class APK(File, APKInterface):
                         self._cert = Cert(entry_filepath, filename)
                     elif Dex.looks_like_a_dex(filename):
                         self.logger.debug("%s looks like a DEX", filename)
-                        self._dex_files.append(Dex(entry_filepath, string_processing))
+                        self._dex_files.append(Dex(entry_filepath, filename, string_processing))
                     else:
                         self.logger.debug("%s looks like a general resource", filename)
                         if not os.path.isdir(entry_filepath):

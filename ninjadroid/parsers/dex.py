@@ -20,11 +20,18 @@ class Dex(File, DexInterface):
 
     __DEX_FILE_REGEX = ".*\\.dex$"
 
-    def __init__(self, filepath: str, string_processing: bool = True, logger=logger):
-        super(Dex, self).__init__(filepath, os.path.split(filepath)[1])
+    def __init__(self, filepath: str, filename: str, string_processing: bool = True, logger=logger):
+        super(Dex, self).__init__(filepath, filename)
 
         self.logger = logger
-        self.logger.debug("Init Dex on %s, string_processing=%s", filepath, string_processing)
+        self.logger.debug(
+            "Init Dex on %s, filename=%s, string_processing=%s",
+            filepath,
+            filename,
+            string_processing
+        )
+
+        self._filename = filename
 
         self._strings = []  # type: List[str]
         self._urls = []  # type: List[str]

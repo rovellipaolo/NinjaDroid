@@ -22,10 +22,13 @@ RUN mkdir -p /opt/android-sdk && cd /opt \
 
 # Copy and configure NinjaDroid
 RUN mkdir -p ${NINJADROID_DIR}
-COPY . ${NINJADROID_DIR}
+COPY requirements.txt ${NINJADROID_DIR}
+RUN pip3 install -r ${NINJADROID_DIR}/requirements.txt
 
-RUN pip3 install -r ${NINJADROID_DIR}/requirements.txt \
-    && rm ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
+COPY ninjadroid.py ${NINJADROID_DIR}
+COPY ninjadroid/ ${NINJADROID_DIR}/ninjadroid/
+
+RUN rm ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     # && mv ${NINJADROID_DIR}/ninjadroid/aapt/aapt_linux ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     && ln -s ${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/aapt ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
@@ -35,6 +38,8 @@ RUN pip3 install -r ${NINJADROID_DIR}/requirements.txt \
 RUN mkdir -p /var/log/ninjadroid \
     && chgrp -R ninjadroid /var/log/ninjadroid \
     && chmod -R g+w /var/log/ninjadroid
+
+COPY entrypoint.sh ${NINJADROID_DIR}
 
 USER ninjadroid
 WORKDIR /home/ninjadroid

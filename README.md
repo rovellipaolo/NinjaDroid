@@ -28,31 +28,19 @@ Furthermore, NinjaDroid uses apktool (https://github.com/iBotPeaches/Apktool) an
 - JSON and HTML report files, which contains all the extracted APK metadata.
 
 
-## Docker:
+## Installation:
+The first step is cloning the NinjaDroid repository, or downloading its source code.
 
-There's a dockerfile to package up all the requisite things. To use it:
-
-Have an APK to analyze, and move it to `./apks`.
-
-Print out the JSON analysis:
-
-```sh
-docker build -t ninjadroid:latest .
-docker run -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/my-app.apk
+```
+$ git clone https://github.com/rovellipaolo/NinjaDroid
+$ cd NinjaDroid
 ```
 
+NinjaDroid has two ways to be executed, in local environment or in Docker.
 
-**To create all output files:**
-
-```sh
-docker run --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/my-app.apk
-```
-
-Open up the `./output` folder and find your JSON and HTML analyses.
-
-
-## Configuration:
-After cloning the NinjaDroid repository, or downloading the source code, make sure that `aapt`, `apktool` and `dex2jar` have execute permission.
+### Local installation:
+To execute NinjaDroid in your local machine, you need `Python 3.5` or higher installed.
+Make sure that `aapt`, `apktool` and `dex2jar` have execute permission.
 
 ```
 $ sudo chmod 755 ninjadroid/aapt/aapt
@@ -62,15 +50,20 @@ $ sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
 
 If you have the Android SDK installed, instead of the included version of aapt, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
 
-*MacOS:*
+#### MacOS:
 
-No particular operation needed.
+No additional operation is needed.
 
-*Linux:*
+#### Linux:
 
-If you use NinjaDroid on Linux, you will need to change the 'aapt' binary with the 'aapt_linux' one in ninjadroid/aapt/ (just change the aapt location in 'ninjadroid/aapt/Aapt.py', or simply rename 'aapt_linux' into 'aapt').
+If you use NinjaDroid on Linux, you will need to change the `aapt` binary with the `aapt_linux` one in the _ninjadroid/aapt/_ directory (just change the aapt location in 'ninjadroid/aapt/Aapt.py', or simply rename 'aapt_linux' into 'aapt').
 
-Due to `aapt` dependencies, on Linux, you may need to install some additional libraries such as: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.
+```
+$ rm ninjadroid/aapt/aapt
+$ mv ninjadroid/aapt/aapt_linux ninjadroid/aapt/aapt
+```
+
+Due to `aapt` dependencies, on Linux, you may also need to install some additional libraries such as: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.
 
 For example, in Ubuntu:
 
@@ -78,13 +71,23 @@ For example, in Ubuntu:
 $ sudo apt-get install lib32z1 lib32z1-dev lib32stdc++6
 ```
 
-## Run:
-To execute NinjaDroid, you need `Python 3.5` or higher.
-
-To use NinjaDroid you just need to copy the APK package you want to analyse into the NinjaDroid directory. Then, launch the command:
+### Docker installation:
+To execute NinjaDroid in Docker, you need `Docker` installed.
+To build the Docker image, launch the following command:
 
 ```
-$ python ninjadroid.py myPackage.apk
+$ make build-docker
+```
+
+
+## Run:
+Once you've configured it (see the _"Configuration"_ section), you can run NinjaDroid as follows.
+
+### Local run:
+To execute NinjaDroid in your local machine, launch the following command:
+
+```
+$ python ninjadroid.py /path/to/your/package.apk
 ```
 
 This will produce as output a JSON containing all the extracted APK metadata.
@@ -92,63 +95,72 @@ This will produce as output a JSON containing all the extracted APK metadata.
 If you want to store the extracted files and info, use the "--extract" option:
 
 ```
-$ python ninjadroid.py myPackage.apk --extract
+$ python ninjadroid.py /path/to/your/package.apk --extract
 ```
 
-A folder named as the APK package (e.g. 'myPackage/') will be created inside the current working directory (e.g. the NinjaDroid folder). Inside this folder you will find the JSON and HTML report files (e.g. report-myPackage.json and report-myPackage.html), the .jar file (e.g. myPackage.jar) and all the rest of the APK content.
+A folder named as the APK package (e.g. 'package/') will be created inside the current working directory (e.g. the NinjaDroid folder). Inside this folder you will find the JSON and HTML report files (e.g. report-package.json and report-package.html), the _.jar_ file (e.g. package.jar) and all the rest of the APK content.
 
-NOTE: The information contained in the HTML report file are a subset of the ones contained in the JSON report file.
+**NOTE:** The information contained in the HTML report file is a subset of the one contained in the JSON report file.
 
-It is also possible to launch NinjaDroid on an APK package which is not in the NinjaDroid directory, as well as storing the information in another directory, as follow:
+It is also possible to store the information in another directory, by specifying it explicitly:
 
 ```
-$ python ninjadroid.py /path/to/MyPackage.apk --extract /dir/where/to/extract/
+$ python ninjadroid.py /path/to/your/package.apk --extract /output/path/
 ```
 
 Some APKs which contains many strings may require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
 
 ```
-$ python ninjadroid.py --no-string-process myPackage.apk
+$ python ninjadroid.py --no-string-process /path/to/your/package.apk
 ```
 
-NOTE: You can of course mix the use of `--no-string-process` and `--export`.
+**NOTE:** You can of course mix the usage of `--no-string-process` and `--export`.
+
+
+### Docker run:
+To execute NinjaDroid in Docker, move the APK package to analyze to the _ninjadroid/apks/_ directory.
+
+```
+$ mkdir apks
+$ cp /path/to/your/package.apk apks/package.apk
+```
+
+Then launch the following command:
+
+```
+$ docker run -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/package.apk
+```
+
+
+If you want to store the extracted files and info, then launch the following command:
+```
+$ mkdir output
+$ docker run --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/package.apk
+```
+
+The result will be stored into the _ninjadroid/output_ directory.
 
 
 ## Run Tests:
-To run tests, launch the command:
+Once you've configured it (see the _"Configuration"_ section), you can also run NinjaDroid tests as follows.
+
+### Local run:
+To run NinjaDroid tests in your local machine, launch the following command:
 ```
 $ python -m unittest -v tests.test
 ```
 
-The Docker image can also be used for testing:
-
+### Docker run:
+To run NinjaDroid tests in Docker, launch the following command:
 ```
-$ make build
-Sending build context to Docker daemon  84.12MB
-Step 1/24 : FROM openjdk:8u212-jre-slim-stretch
-[...]
-Successfully built 0993636e7d79
-
-$ make docker-test
-test_get_app_name (tests.test_apk.TestAPK) ... ok
-test_get_file_list (tests.test_apk.TestAPK) ... ok
-[...]
-
-----------------------------------------------------------------------
-Ran 75 tests in 4.372s
-
-OK
+$ make build-docker
+$ make test-docker
 ```
 
-To test changes to the code (or test files) without rebuilding the docker image:
+If you want to test changes to the code without rebuilding the Docker image, use the following command:
 
 ```
 $ docker run -w /opt/NinjaDroid/ -v $(pwd)/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers -v $(pwd)/tests:/opt/NinjaDroid/tests --rm -it ninjadroid:latest python3 -m unittest tests.test
-...........................................................................
-----------------------------------------------------------------------
-Ran 75 tests in 4.325s
-
-OK
 ```
 
 ## Licence:
@@ -158,234 +170,331 @@ NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu
 
 ## Sample JSON output
 
-I truncated some of the massively repeated sections, but here's what the structure of the output looks like:
-
+The following is the output of NinjaDroid run against the sample APK package:
+```
+$ python ninjadroid.py tests/data/Example.apk
+```
 ```json
 {
-    "app_name": "Fun Checkers",
+    "app_name": "Example",
     "cert": {
-        "file": "META-INF/GOOGPLAY.RSA",
+        "file": "META-INF/CERT.RSA",
         "fingerprint": {
-            "md5": "12:7B:5F:F4:18:B3:B6:27:2D:87:09:A2:18:11:89:37",
-            "sha1": "7A:8C:D8:D2:18:35:0A:83:9E:FE:90:BF:A7:9B:6C:9E:FE:98:7B:22",
-            "sha256": "CF:A8:82:8B:31:AD:E2:7C:0E:2C:01:D4:B3:B2:98:51:35:4A:90:95:63:B6:B7:BD:2B:DF:D2:9F:9B:EA:F3:39",
-            "signature": "SHA256withRSA",
+            "md5": "90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45",
+            "sha1": "5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6",
+            "sha256": "E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77",
+            "signature": "SHA1withRSA",
             "version": "3"
         },
         "issuer": {
-            "city": "Mountain View",
-            "country": "US",
+            "city": "City",
+            "country": "XX",
             "domain": "",
             "email": "",
             "label": "",
-            "name": "Android",
-            "organization": "Google Inc.",
-            "state": "California",
-            "unit": "Android"
+            "name": "Name",
+            "organization": "Organization",
+            "state": "State",
+            "unit": "Unit"
         },
-        "md5": "b9113e21310c36a310290c776c7b4981",
+        "md5": "860e19fa47d37d9510f1245c511a8578",
         "owner": {
-            "city": "Mountain View",
-            "country": "US",
+            "city": "City",
+            "country": "XX",
             "domain": "",
             "email": "",
             "label": "",
-            "name": "Android",
-            "organization": "Google Inc.",
-            "state": "California",
-            "unit": "Android"
+            "name": "Name",
+            "organization": "Organization",
+            "state": "State",
+            "unit": "Unit"
         },
-        "serial_number": "8d7eb2379feba7eead0385e0283fdd884660382d",
-        "sha1": "605bf5f0c6ee0902d71d4a01417aef04a4f4678c",
-        "sha256": "688720c8812cc079373a9c998400e1e5b5b100cc275057428a65c8f492fd18d2",
-        "sha512": "01a1da0bb9462a435a2a0b6af8e10724d94ecc7d96102b6c0e89f1f20d1a516e13ce7772c0c2eb97907083f34174b17941a672325731bf06f81b38c76e9321c6",
-        "size": 2172,
+        "serial_number": "558e7595",
+        "sha1": "59a04084c0d5ef23fd05f0f429dab6267ccb3d0b",
+        "sha256": "0efa622919417adfa6eb77770fd33d3bcd93265ac7343695e246dab1a7b6bfee",
+        "sha512": "2a5befcc0bcb14e44d7b7cb4322a76933ad3e90e5e1ffbb87ba31ee7cc0172725dcc98e9d414fb3a207bc107b2a7ca7563b5f954cac6bd41d77e4726c70a95a3",
+        "size": 906,
         "validity": {
-            "from": "2018-12-06 09:50:27Z",
-            "until": "2048-12-06 09:50:27Z"
+            "from": "2015-06-27 10:06:13Z",
+            "until": "2515-02-26 10:06:13Z"
         }
     },
-    "dex": {
-        "file": "classes.dex",
-        "md5": "1ddd9fbafb57c87bb8c0a015e9868c88",
-        "sha1": "59bc17a9c64c9b362cf4c73b2a7faf76bd6a4bda",
-        "sha256": "098f32d4ad99e8a6862db6c231dba39e82d95c347157518d002a8b4beb1fb3a4",
-        "sha512": "24141708c62ece196060003f3dd2b4cb3e749aedfb3f05f8b77e37ff39681aa1b095e70bc4871c863d8143773b34e08d2b7df1df82e764ea59b1e8e791db73f0",
-        "shell_commands": [
-            "\"Landroid/database/ContentObserver;",
-            "\"Landroid/database/DataSetObserver;",
-            "#SH",
-            "#Sh",
-            "(Landroid/arch/persistence/room/Database;",
-            "(Landroid/database/sqlite/SQLiteDatabase;",
-            // <snip>
-            "tc",
-            "toP",
-            "top",
-            "top must be nonnegative",
-            "uptime",
-            "vDC"
-        ],
-        "size": 4225184,
-        "strings": [
-            "3?",
-            "mState=",
-            "(extras=",
-            "header:",
-            // <snip>
-            "~The Google Play services resources were not found. Check your project configuration to ensure that the resources are included.",
-            "~Y\\\\\\D3A",
-            "~Y|jK",
-            "~_n0"
-        ],
-        "urls": [
-            "0android.bluetooth.device.action.AC",
-            "0android.support.customtabs.extra.SH",
-            "0android.support.v4.media.session.ac",
-            "0com.facebook.platform.action.request.LI",
-            "1.2.2.142",
-            // <snip>
-            "https://www.googleapis.com/auth/plus.login",
-            "https://www.googleapis.com/auth/plus.me",
-            "icon.pn",
-            "id.li",
-            "vnd.crashlytics.android.events",
-            "window.AF",
-            "www.google.com"
-        ]
-    },
-    "file": "/apks/0040344becfad6fbada8aea0a628c0883f9aaa29db2c2ed632452cf6a8a2d8b1.apk",
+    "dex_files": [
+        {
+            "file": "classes.dex",
+            "md5": "7bc52ece5249ccd2d72c4360f9be2ca5",
+            "sha1": "89476799bf92798047ca026c922a5bc33983b008",
+            "sha256": "3f543c68c4c059548cec619a68f329010d797e5e4c00aa46cd34c0d19cabe056",
+            "sha512": "0725f961bc1bac47eb8dd045c2f0a0cf5475fd77089af7ddc3098e341a95d8b5624969b6fa47606a05d5a6adf9d74d0c52562ea41a376bd3d7d0aa3695ca2e22",
+            "shell_commands": [
+                "set"
+            ],
+            "size": 2132,
+            "strings": [
+                "!Lcom/example/app/ExampleService2;",
+                "!Lcom/example/app/ExampleService3;",
+                "#Landroid/content/BroadcastReceiver;",
+                ")Lcom/example/app/ExampleBrodcastReceiver;",
+                "*Lcom/example/app/ExampleBrodcastReceiver2;",
+                "*Lcom/example/app/ExampleBrodcastReceiver3;",
+                "*Lcom/example/app/ExampleBrodcastReceiver4;",
+                "<init>",
+                "Landroid/app/Activity;",
+                "Landroid/app/Service;",
+                "Landroid/content/Context;",
+                "Landroid/content/Intent;",
+                "Landroid/os/Bundle;",
+                "Landroid/os/IBinder;",
+                "Lcom/example/app/ExampleService;",
+                "Lcom/example/app/HomeActivity;",
+                "Lcom/example/app/OtherActivity;",
+                "onBind",
+                "onCreate",
+                "onReceive",
+                "setContentView"
+            ],
+            "urls": []
+        }
+    ],
+    "file": "tests/data/Example.apk",
     "manifest": {
         "activities": [
             {
-                "configChanges": "0x00000FB0",
-                "name": "com.google.android.gms.ads.AdActivity",
-                "theme": "@android:0103000F"
-            },
-            {
-                "name": "com.tmgames.checkers.statistics.StatisticsActivity"
-            },
-            {
-                "name": "com.google.android.gms.ads.purchase.InAppPurchaseActivity",
-                "theme": "@7F0C014B"
-            },
-            {
-                "exported": "true",
+                "configChanges": "0x00000480",
                 "intent-filter": [
                     {
                         "action": [
-                            "com.google.android.gms.appinvite.ACTION_PREVIEW"
+                            "android.intent.action.MAIN"
+                        ],
+                        "category": [
+                            "android.intent.category.LAUNCHER"
+                        ]
+                    }
+                ],
+                "label": "@7F040000",
+                "launchMode": "1",
+                "name": "com.example.app.HomeActivity"
+            },
+            {
+                "intent-filter": [
+                    {
+                        "action": [
+                            "android.intent.action.VIEW"
                         ],
                         "category": [
                             "android.intent.category.DEFAULT"
+                        ],
+                        "data": [
+                            {
+                                "scheme": "content"
+                            },
+                            {
+                                "scheme": "file"
+                            },
+                            {
+                                "mimeType": "application/vnd.android.package-archive"
+                            }
                         ]
                     }
                 ],
-                "name": "com.google.android.gms.appinvite.PreviewActivity",
-                "theme": "@7F0C0143"
-            },
-            // <snip>
+                "label": "@7F040001",
+                "launchMode": "1",
+                "meta-data": [
+                    {
+                        "name": "android.support.PARENT_ACTIVITY",
+                        "value": "com.example.app.HomeActivity"
+                    }
+                ],
+                "name": "com.example.app.OtherActivity",
+                "noHistory": "true",
+                "parentActivityName": "com.example.app.HomeActivity"
+            }
         ],
         "file": "AndroidManifest.xml",
-        "md5": "d9889e18d5ca404608a9258848cd3287",
-        "package_name": "com.shuangq0929.fun.checkers",
+        "md5": "1f97f7e7ca62f39f8f81d79b1b540c37",
+        "package_name": "com.example.app",
         "permissions": [
-            "android.permission.ACCESS_COARSE_LOCATION",
-            "android.permission.ACCESS_COARSE_LOCATION",
-            "android.permission.ACCESS_FINE_LOCATION",
-            "android.permission.ACCESS_NETWORK_STATE",
-            // <snip>
-            "com.sec.android.provider.badge.permission.WRITE",
-            "com.shuangq0929.fun.checkers.permission.C2D_MESSAGE",
-            "com.sonyericsson.home.permission.BROADCAST_BADGE"
+            "android.permission.INTERNET",
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.RECEIVE_BOOT_COMPLETED",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
         ],
         "receivers": [
             {
-                "exported": "false",
-                "name": "com.google.firebase.iid.FirebaseInstanceIdInternalReceiver"
-            },
-            {
-                "name": "com.tushu.outlibrary.receive.RefreashConfigReceiver"
+                "name": "com.example.app.ExampleBrodcastReceiver"
             },
             {
                 "exported": "false",
                 "intent-filter": [
                     {
                         "action": [
-                            "com.facebook.sdk.ACTION_CURRENT_ACCESS_TOKEN_CHANGED"
-                        ]
+                            "android.intent.action.BOOT_COMPLETED",
+                            "android.intent.action.MY_PACKAGE_REPLACED"
+                        ],
+                        "priority": "1000"
                     }
                 ],
-                "name": "com.facebook.CurrentAccessTokenExpirationBroadcastReceiver"
+                "name": "com.example.app.ExampleBrodcastReceiver2"
             },
             {
-                "name": "com.tushu.outlibrary.receive.LockScreenReceiver"
+                "enabled": "true",
+                "exported": "false",
+                "intent-filter": [
+                    {
+                        "action": [
+                            "android.intent.action.BROADCAST_PACKAGE_REMOVED",
+                            "android.intent.action.PACKAGE_ADDED",
+                            "android.intent.action.PACKAGE_REPLACED"
+                        ],
+                        "data": [
+                            {
+                                "scheme": "package"
+                            }
+                        ],
+                        "priority": "800"
+                    }
+                ],
+                "name": "com.example.app.ExampleBrodcastReceiver3"
             },
-            // <snip>
+            {
+                "enabled": "false",
+                "exported": "true",
+                "name": "com.example.app.ExampleBrodcastReceiver4"
+            }
         ],
         "sdk": {
-            "min": "15",
-            "target": "26"
+            "max": "20",
+            "min": "10",
+            "target": "20"
         },
         "services": [
             {
-                "exported": "true",
-                "intent-filter": [
-                    {
-                        "action": [
-                            "com.google.firebase.INSTANCE_ID_EVENT"
-                        ],
-                        "priority": "-500"
-                    }
-                ],
-                "name": "com.google.firebase.iid.FirebaseInstanceIdService"
+                "name": "com.example.app.ExampleService"
             },
             {
-                "exported": "false",
-                "name": "com.facebook.ads.internal.ipc.AdsProcessPriorityService"
+                "enabled": "false",
+                "exported": "true",
+                "isolatedProcess": "true",
+                "name": "com.example.app.ExampleService2"
             },
-            // <snip>
+            {
+                "enabled": "true",
+                "exported": "false",
+                "isolatedProcess": "false",
+                "name": "com.example.app.ExampleService3"
+            }
         ],
-        "sha1": "8072fb9a357dc3fef4b00c7e21a058558ced66a1",
-        "sha256": "30b861a0202d4e5b7a6d0654aee81ce6e20f62166fc98592d101a35a294a66ca",
-        "sha512": "c8178f3dade78da49a6d70dd1b76f648b0cd9ec71c97fe5d87236b566b78d901c173a0cfba8c00c2c60c891b87c703c292b3627671a677112fc5674e17abfaca",
-        "size": 28640,
+        "sha1": "011316a011e5b8738c12c662cb0b0a6ffe04ca74",
+        "sha256": "7c8011a46191ecb368bf2e0104049abeb98bae8a7b1fa3328ff050aed85b1347",
+        "sha512": "8c7c1ede610f9c6613418b46a52a196ad6d5e8cc067c2f26b931738ad8087f998d9ea95e80ec4352c95fbdbb93a4f29c646973535068a3a3d584da95480ab45f",
+        "size": 6544,
         "version": {
-            "code": 17,
-            "name": "1.1.6"
+            "code": 1,
+            "name": "1.0"
         }
     },
-    "md5": "52554bdf442da46e3c037ba40475beb7",
+    "md5": "c9504f487c8b51412ba4980bfe3cc15d",
     "other_files": [
         {
-            "file": "androidsupportmultidexversion.txt",
-            "md5": "0b13c8b4e813c60e0fdaf75f8d82e1fc",
-            "sha1": "d5ef2133c35386a565f5e14140b508f7abbbb895",
-            "sha256": "822dca0ed97b7639d81c9c5704a5172403e70ce03149ed586d84325b9a438e43",
-            "sha512": "d9ebe674d203fb0926e7d661223c64e2c564ada6a4f4020977f7213e435b1ed8b5627b028fcda48a1575f6eaf6a4ac064bb3f662ca4db71e7340280378ad479e",
-            "size": 53
+            "file": "res/drawable-hdpi-v4/ic_launcher.png",
+            "md5": "e74dbf28ebab4e1b7442a9c78067d1c2",
+            "sha1": "450d3d44325fdf259810a60e6afa36103e186b3d",
+            "sha256": "9b2639dbfdd60e0dab70e572f39660c8dfabd19b7987a7619d770824db342925",
+            "sha512": "44050c4db6d5275b70856050c0d58d3d9892ba09bd8cf1a8343a3c6d4f2e2af6eae1f8b687efb59b7f8122e5bea1a63e08546fee35124cc0faab40ef6274ab4f",
+            "size": 9193
         },
         {
-            "file": "assets/com.shuangq0929.fun.checkers_v42.json",
-            "md5": "cf4c937a749e7cd8461ac82e21c27bdd",
-            "sha1": "8e6bed86ca74d64a6116dbf6f7a1372aedb36362",
-            "sha256": "104d52eb5fd6af04dcdee1d15190f5e9f6f179f1c560dfcd2724fdc20c6550c7",
-            "sha512": "bd28ab89eb01f603236341f6414f69b8df409e2243ba0c4e70f513c220eb22fe1c16383cdda27e6151efdadc549f3c903932b48803f86f9a1ab8d62323e5c0a3",
-            "size": 4664
+            "file": "res/drawable-hdpi-v4/ic_launcher_logo.png",
+            "md5": "e74dbf28ebab4e1b7442a9c78067d1c2",
+            "sha1": "450d3d44325fdf259810a60e6afa36103e186b3d",
+            "sha256": "9b2639dbfdd60e0dab70e572f39660c8dfabd19b7987a7619d770824db342925",
+            "sha512": "44050c4db6d5275b70856050c0d58d3d9892ba09bd8cf1a8343a3c6d4f2e2af6eae1f8b687efb59b7f8122e5bea1a63e08546fee35124cc0faab40ef6274ab4f",
+            "size": 9193
         },
-        // <snip>
+        {
+            "file": "res/drawable-ldpi-v4/ic_launcher.png",
+            "md5": "58b9a42eeb99fad5321208fe02f24375",
+            "sha1": "09ea65885b4080e515ef7064e816c77991c0757b",
+            "sha256": "c4f061b2c758185371f39afcb166ba039e955d3be2619ab5469a1b873f952d0d",
+            "sha512": "415ed16de6fd335b24bd985d9152323d04fc02287acd3f26fa98722832cfecf89cf2c77ad8ae3f5588acc5cac401129ac3b3d714abbf8dcc492ab2fd98f106e5",
+            "size": 2658
+        },
+        {
+            "file": "res/drawable-ldpi-v4/ic_launcher_logo.png",
+            "md5": "58b9a42eeb99fad5321208fe02f24375",
+            "sha1": "09ea65885b4080e515ef7064e816c77991c0757b",
+            "sha256": "c4f061b2c758185371f39afcb166ba039e955d3be2619ab5469a1b873f952d0d",
+            "sha512": "415ed16de6fd335b24bd985d9152323d04fc02287acd3f26fa98722832cfecf89cf2c77ad8ae3f5588acc5cac401129ac3b3d714abbf8dcc492ab2fd98f106e5",
+            "size": 2658
+        },
+        {
+            "file": "res/drawable-mdpi-v4/ic_launcher.png",
+            "md5": "acefc1f320111a8d71bcdb8b4aa0656c",
+            "sha1": "23730fd0d5e720d1f719be1afc8c48fa7305da6c",
+            "sha256": "05346d62d4096537906928af523ef9d5997663707a1d48e08f20992584e1424d",
+            "sha512": "59896fc52679e86898dc09b56fb53270d4297c53adee26f864657c5ef4aff9e5f5922dfa9370c3d1748068aa7b1270e0fa8a1323ce3b69c7548a50ca221befc1",
+            "size": 5057
+        },
+        {
+            "file": "res/drawable-mdpi-v4/ic_launcher_logo.png",
+            "md5": "acefc1f320111a8d71bcdb8b4aa0656c",
+            "sha1": "23730fd0d5e720d1f719be1afc8c48fa7305da6c",
+            "sha256": "05346d62d4096537906928af523ef9d5997663707a1d48e08f20992584e1424d",
+            "sha512": "59896fc52679e86898dc09b56fb53270d4297c53adee26f864657c5ef4aff9e5f5922dfa9370c3d1748068aa7b1270e0fa8a1323ce3b69c7548a50ca221befc1",
+            "size": 5057
+        },
+        {
+            "file": "res/drawable-xhdpi-v4/ic_launcher.png",
+            "md5": "94f5591633218c0b469b65947fd8943b",
+            "sha1": "502cd84fa444f26d7ecfdf4a355064867977f236",
+            "sha256": "29d15992424b40757135f47fc8ddd15e30c7774646b37755608f7cfec1df7d8a",
+            "sha512": "d5b48e065a614c5a2400b6565dc36777d9923d8d5154487113dd1f46b05d36d1db3f28fb72f61a68fcbd225c93495541579574e6611f650fe2857767412c3b1f",
+            "size": 14068
+        },
+        {
+            "file": "res/drawable-xhdpi-v4/ic_launcher_logo.png",
+            "md5": "94f5591633218c0b469b65947fd8943b",
+            "sha1": "502cd84fa444f26d7ecfdf4a355064867977f236",
+            "sha256": "29d15992424b40757135f47fc8ddd15e30c7774646b37755608f7cfec1df7d8a",
+            "sha512": "d5b48e065a614c5a2400b6565dc36777d9923d8d5154487113dd1f46b05d36d1db3f28fb72f61a68fcbd225c93495541579574e6611f650fe2857767412c3b1f",
+            "size": 14068
+        },
+        {
+            "file": "res/layout/main.xml",
+            "md5": "8cdec0105448937475e45e22c80fd611",
+            "sha1": "51ebf14ed21238f7d147a6744cae18c0f55fcbe6",
+            "sha256": "e74db1ac37395ca9fd25b93261d3ab76ed7dfc9b355ea63d856afc7453313738",
+            "sha512": "2d2147365b8b00f2db7498b7f0ed8a360fc15bd43dfd3704b4b1cb912619d9ff1bc35837eb1e601ea6d1aa3a8c0d555f2105d6ed37de919fa128568527765d63",
+            "size": 552
+        },
+        {
+            "file": "resources.arsc",
+            "md5": "2886f2825eef3b5c4478852935c68640",
+            "sha1": "1eff126288b4bea6fa78eb79832d6a7fa098695e",
+            "sha256": "ac46f54fa12dc20e94619465482186047505fb9f27508861220063c93f0c6c4e",
+            "sha512": "da8c41d0c27839ed89cb06a2f89f6993bd88f5179e97f3291f0e17348868b3e9c106e96f482ecd86f11808170937773e7599ccd338900908359e870ea5446169",
+            "size": 1640
+        },
         {
             "file": "META-INF/MANIFEST.MF",
-            "md5": "36ee06eaeb4501c09cf2cd3068604883",
-            "sha1": "aa83af7e52d0e81965b49f9895d4de542c355600",
-            "sha256": "51d3480d828d04ee54f708635d9c0ccdf449db7fdd5b771e8b91fabd8fdf57e8",
-            "sha512": "9223faaa1b0d27efa98fa9cfc60193b4abd69907232cb2bb78b9743b7a740e0af1bbfb14fd4be4307084c4c5b244a66699101e7b13c180c16a2c7282127af25c",
-            "size": 88954
+            "md5": "6098a6409625f1c0d97cd33c13ad300c",
+            "sha1": "ccfe31190feb259a4a56599ad1403a956f6944b5",
+            "sha256": "8a18f285481346919f4df55f576ee504bf5abecb068a2d642fdef17f3b5cd631",
+            "sha512": "17a68bf605aff149aa31e1b0b81af3d3f74f939e1cb7a10f3eddf84775f901b09ba9722efad1265b0057cdfcd12c6fac701067993081620b00bbfcc4efff3599",
+            "size": 1061
+        },
+        {
+            "file": "META-INF/CERT.SF",
+            "md5": "fb02917b68510e413a06e52873802bcd",
+            "sha1": "dfb7bbb487010b980152610fe7d669c1b4f626be",
+            "sha256": "e2fa373f8b065ef7c78387ab9242e98dd19bdeb2b768295506295f7beb0bfe3f",
+            "sha512": "3aa74603588ca5c563b6586d1216dc6cea3b8d2a1a47eb189197e8f20cd7508d3e652c7ff849261e95cff52451476b2993caadf051fdf66cc01f5e6e16b180fc",
+            "size": 1114
         }
     ],
-    "sha1": "c0682c62a3c8c116691fe5a8093cab39e2abaca1",
-    "sha256": "0040344becfad6fbada8aea0a628c0883f9aaa29db2c2ed632452cf6a8a2d8b1",
-    "sha512": "a222ffd7e8fde71c0b231db7356e17f576a80accaf2dab99475cc989baab2df1bccfc46679ce97f610d186c058b0434adac29cd63cffd525a433ff5a35b4d537",
-    "size": 7631744
+    "sha1": "482a28812495b996a92191fbb3be1376193ca59b",
+    "sha256": "8773441a656b60c5e18481fd5ba9c1bf350d98789b975987cb3b2b57ee44ee51",
+    "sha512": "559eab9840ff2f8507842605e60bb0730442ddf9ee7ca4ab4f386f715c1a4707766065d6f0b977816886692bf88b400643979e2fd13e6999358a21cabdfb3071",
+    "size": 70058
 }
 ```

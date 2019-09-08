@@ -16,7 +16,7 @@ case "$1" in
         format=$1
         apk_file=$2
         output_dir=$(mktemp -d)
-        log_path=/var/log/ninjadroid/ninjadroid_output
+        log_path=/var/log/ninjadroid/output
         python3 $NINJADROID_DIR/ninjadroid.py -e $output_dir $apk_file >$log_path 2>&1
         output_file=$(ls $output_dir | grep "report-.*\.$format$" | head -1)
         if [[ ! -z $output_file ]] ; then

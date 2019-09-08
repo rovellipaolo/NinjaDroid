@@ -1,17 +1,14 @@
 IMAGE := ninjadroid
 
 .PHONY: default
-default: build
+default: build-docker
 
-.PHONY: build
-build:
-	@docker build \
-		--pull \
-		--tag ${IMAGE}:latest \
-		.
+.PHONY: build-docker
+build-docker:
+	docker build -t ${IMAGE}:latest .
 
-.PHONY: docker-test
-docker-test:
+.PHONY: test-docker
+test-docker:
 	@docker run --rm \
 		-w /opt/NinjaDroid \
 		-v $$(pwd)/tests:/opt/NinjaDroid/tests \

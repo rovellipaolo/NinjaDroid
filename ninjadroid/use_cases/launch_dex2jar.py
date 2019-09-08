@@ -26,7 +26,12 @@ class LaunchDex2Jar(UseCase):
 
     def execute(self) -> Future:
         jarfile = self.input_filename + ".jar"
-        self.logger.info("Running dex2jar, creating %s/%s...", self.output_directory, jarfile)
+        self.logger.info(
+            "Running dex2jar on %s, creating %s/%s...",
+            self.input_filepath,
+            self.output_directory,
+            jarfile
+        )
 
         command = LaunchDex2Jar.DEX2JAR + " -f " + self.input_filepath + \
                   " -o " + self.output_directory + "/" + jarfile

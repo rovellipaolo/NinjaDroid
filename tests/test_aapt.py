@@ -42,27 +42,22 @@ class TestAapt(unittest.TestCase):
         },
     }
 
-    @classmethod
-    def setUpClass(cls):
-        cls.files = {}
+    def setUp(self):
+        self.files = {}
 
         for filename in listdir(join("tests", "data")):
-            if filename in cls.files_properties:
-                cls.files[filename] = join("tests", "data", filename)
-
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        pass
+            if filename in self.files_properties:
+                self.files[filename] = join("tests", "data", filename)
 
     def tearDown(self):
         pass
 
     def test_get_app_name(self):
         for filename in self.files:
-            self.assertTrue(Aapt.get_app_name(self.files[filename]) == self.files_properties[filename]["app_name"])
+            self.assertEqual(
+                self.files_properties[filename]["app_name"],
+                Aapt.get_app_name(self.files[filename])
+            )
 
     def test_get_apk_info(self):
         for filename in self.files:
@@ -80,8 +75,10 @@ class TestAapt(unittest.TestCase):
 
     def test_get_app_permissions(self):
         for filename in self.files:
-            self.assertEqual(Aapt.get_app_permissions(self.files[filename]),
-                             self.files_properties[filename]["permissions"])
+            self.assertEqual(
+                self.files_properties[filename]["permissions"],
+                Aapt.get_app_permissions(self.files[filename])
+            )
 
 
 if __name__ == "__main__":

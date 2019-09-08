@@ -1,8 +1,10 @@
 from datetime import datetime
+from dateutil.tz import tzutc
 from fnmatch import fnmatch
 import re
 import subprocess
 from typing import Dict
+import tzlocal
 
 from ninjadroid.parsers.cert_interface import CertInterface
 from ninjadroid.parsers.file import File
@@ -90,14 +92,22 @@ class Cert(File, CertInterface):
             cert_validity_until_pattern = Cert.__LABEL_VALIDITY["until"] + "(.*)$"
             self._validity["until"] = self._extract_string_pattern(validity, cert_validity_until_pattern)
 
+            tz = tzlocal.get_localzone()
+
             try:
                 dt_from = datetime.strptime(self._validity["from"], "%a %b %d %H:%M:%S %Z %Y")
+                local_dt_from = tz.localize(dt_from)
+                utc_dt_from = local_dt_from.astimezone(tzutc())
+
                 dt_until = datetime.strptime(self._validity["until"], "%a %b %d %H:%M:%S %Z %Y")
+                local_dt_until = tz.localize(dt_until)
+                utc_dt_until = local_dt_until.astimezone(tzutc())
+
             except ValueError:
                 pass
             else:
-                self._validity["from"] = dt_from.strftime("%Y-%m-%d %H:%M:%S")
-                self._validity["until"] = dt_until.strftime("%Y-%m-%d %H:%M:%S")
+                self._validity["from"] = utc_dt_from.strftime("%Y-%m-%d %H:%M:%SZ")
+                self._validity["until"] = utc_dt_until.strftime("%Y-%m-%d %H:%M:%SZ")
 
     def _extract_and_set_fingerprint(self):
         """

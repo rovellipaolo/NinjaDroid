@@ -67,12 +67,13 @@ def retrieve_commandline_parameters():
 
 def read_target_file(filepath: str, no_string_processing: bool):
     apk = None
+    logger.info("Reading target apk...")
     try:
         apk = APK(filepath, no_string_processing)
     except APKParsingError:
-        logger.error("The target file (i.e. '" + filepath + "') must be an APK package!")
+        logger.error("The target file (i.e. '%s') must be an APK package!", filepath)
     except ParsingError:
-        logger.error("The target file (i.e. '" + filepath + "') must be an existing, readable file!")
+        logger.error("The target file (i.e. '%s') must be an existing, readable file!", filepath)
     return apk
 
 

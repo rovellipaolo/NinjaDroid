@@ -124,21 +124,12 @@ class TestAPK(unittest.TestCase):
         },
     }
 
-    @classmethod
-    def setUpClass(cls):
-        cls.apks = {}
-
-        for filename in listdir(join("tests", "data")):
-            if filename in cls.apks_properties:
-                cls.apks[filename] = APK(join("tests", "data", filename))
-                # print(cls.apks[filename].dump())
-
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
     def setUp(self):
-        pass
+        self.apks = {}
+        for filename in listdir(join("tests", "data")):
+            if filename in self.apks_properties:
+                self.apks[filename] = APK(join("tests", "data", filename))
+                # print(self.apks[filename].dump())
 
     def tearDown(self):
         pass
@@ -200,7 +191,10 @@ class TestAPK(unittest.TestCase):
 
     def test_get_app_name(self):
         for filename in self.apks:
-            self.assertEqual(self.apks[filename].get_app_name(), self.apks_properties[filename]["app_name"])
+            self.assertEqual(
+                self.apks_properties[filename]["app_name"],
+                self.apks[filename].get_app_name()
+            )
 
 
 if __name__ == "__main__":

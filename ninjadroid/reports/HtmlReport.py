@@ -13,7 +13,7 @@ class HtmlReport(object):
     def generate_html_report(apk):
         man = apk.get_manifest()
         cert = apk.get_cert()
-        dex = apk.get_dex()
+        dex_files = apk.get_dex_files()
 
         # Header:
         report = "<html>" + "\n"
@@ -268,62 +268,64 @@ class HtmlReport(object):
             report += "\t\t\t<td style=\"font-weight: bold;\">" + man.get_sha512() + "</td>" + "\n"
             report += "\t\t</tr>" + "\n"
 
-        # Classes.dex info:
-        report += "\t\t<tr style='font-size: 120%; font-weight: bold;'>" + "\n"
-        report += "\t\t\t<td colspan=\"2\" style=\"background: #2F2F2F; color: #FFFFFF; text-align: center;\">CLASSES.DEX INFO</td>" + "\n"
-        report += "\t\t</tr>" + "\n"
-        if dex is not None:
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td>File:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_file_name() + "</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td>File size:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + str(dex.get_size()) + " Bytes</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td>File MD5:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_md5() + "</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td>File SHA-1:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_sha1() + "</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td>File SHA-256:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_sha256() + "</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td>File SHA-512:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_sha512() + "</td>" + "\n"
+        for dex in dex_files:
+            # dex info:
+            report += "\t\t<tr style='font-size: 120%; font-weight: bold;'>" + "\n"
+            report += "\t\t\t<td colspan=\"2\" style=\"background: #2F2F2F; color: #FFFFFF; text-align: center;\">" + dex.get_file_name().upper() + " INFO</td>" + "\n"
             report += "\t\t</tr>" + "\n"
 
-            # URLs:
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td style=\"vertical-align: top;\">URLs:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">\n"
-            for url in dex.get_urls():
-                report += "\t\t\t\t" + url + "<br />\n"
-            report += "\t\t\t</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
+            if dex is not None:
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td>File:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_file_name() + "</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td>File size:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">" + str(dex.get_size()) + " Bytes</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td>File MD5:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_md5() + "</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td>File SHA-1:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_sha1() + "</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td>File SHA-256:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_sha256() + "</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td>File SHA-512:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">" + dex.get_sha512() + "</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
 
-            # Shell commands:
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td style=\"vertical-align: top;\">Shell Commands:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">\n"
-            for command in dex.get_shell_commands():
-                report += "\t\t\t\t" + command + "<br />\n"
-            report += "\t\t\t</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
+                # URLs:
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td style=\"vertical-align: top;\">URLs:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+                for url in dex.get_urls():
+                    report += "\t\t\t\t" + url + "<br />\n"
+                report += "\t\t\t</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
 
-            # Strings:
-            report += "\t\t<tr>" + "\n"
-            report += "\t\t\t<td style=\"vertical-align: top;\">Strings:</td>" + "\n"
-            report += "\t\t\t<td style=\"font-weight: bold;\">\n"
-            for string in dex.get_strings():
-                report += "\t\t\t\t" + str(string) + "<br />\n"
-            report += "\t\t\t</td>" + "\n"
-            report += "\t\t</tr>" + "\n"
+                # Shell commands:
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td style=\"vertical-align: top;\">Shell Commands:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+                for command in dex.get_shell_commands():
+                    report += "\t\t\t\t" + command + "<br />\n"
+                report += "\t\t\t</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
+
+                # Strings:
+                report += "\t\t<tr>" + "\n"
+                report += "\t\t\t<td style=\"vertical-align: top;\">Strings:</td>" + "\n"
+                report += "\t\t\t<td style=\"font-weight: bold;\">\n"
+                for string in dex.get_strings():
+                    report += "\t\t\t\t" + str(string) + "<br />\n"
+                report += "\t\t\t</td>" + "\n"
+                report += "\t\t</tr>" + "\n"
 
         # List of files:
         report += "\t\t<tr style='font-size: 120%; font-weight: bold;'>" + "\n"

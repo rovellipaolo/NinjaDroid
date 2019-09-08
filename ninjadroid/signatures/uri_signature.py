@@ -1,3 +1,4 @@
+import os.path
 import re
 from typing import Dict
 
@@ -9,7 +10,7 @@ class URISignature(Signature):
     Parser for URIs.
     """
 
-    _CONFIG_FILE = "ninjadroid/config/uri.json"
+    _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "uri.json")
     _SIGNATURE_KEYS_LIST = ["tlds"]
 
     def __init__(self):

@@ -80,19 +80,24 @@ class TestShellCommandSignature(unittest.TestCase):
 
     def test_is_valid(self):
         for command in TestShellCommandSignature.valid_commands:
-            print("Testing '" + command + "'...")
-            self.assertTrue(self.shell.is_valid(command))
+            self.assertTrue(
+                self.shell.is_valid(command),
+                "Command " + command + " should be valid"
+            )
 
         for command in TestShellCommandSignature.invalid_commands:
-            print("Testing '" + command + "'...")
-            self.assertFalse(self.shell.is_valid(command))
+            self.assertFalse(
+                self.shell.is_valid(command),
+                "Command " + command + " should not be valid"
+            )
         pass
 
     def test_get_matches_in_string(self):
         for string in TestShellCommandSignature.strings_containing_commands:
-            print("Testing '" + string + "'...")
-            self.assertTrue(self.shell.get_matches_in_string(string) ==
-                            TestShellCommandSignature.strings_containing_commands[string])
+            self.assertEqual(
+                TestShellCommandSignature.strings_containing_commands[string],
+                self.shell.get_matches_in_string(string)
+            )
 
 
 if __name__ == '__main__':

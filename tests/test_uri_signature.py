@@ -88,18 +88,24 @@ class TestURISignature(unittest.TestCase):
 
     def test_is_valid(self):
         for url in TestURISignature.valid_urls:
-            print("Testing '" + url + "'...")
-            self.assertTrue(self.uri.is_valid(url))
+            self.assertTrue(
+                self.uri.is_valid(url),
+                "URI " + url + " should be valid"
+            )
 
         for url in TestURISignature.invalid_urls:
-            print("Testing '" + url + "'...")
-            self.assertFalse(self.uri.is_valid(url))
+            self.assertFalse(
+                self.uri.is_valid(url),
+                "URI " + url + " should not be valid"
+            )
         pass
 
     def test_get_matches_in_string(self):
         for string in TestURISignature.strings_containing_urls:
-            print("Testing '" + string + "'...")
-            self.assertEqual(self.uri.get_matches_in_string(string), TestURISignature.strings_containing_urls[string])
+            self.assertEqual(
+                self.uri.get_matches_in_string(string),
+                TestURISignature.strings_containing_urls[string]
+            )
 
 
 if __name__ == '__main__':

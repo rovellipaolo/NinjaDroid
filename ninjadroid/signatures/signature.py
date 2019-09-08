@@ -1,5 +1,6 @@
-import re
+import os.path
 import json
+import re
 from typing import Dict
 
 
@@ -8,7 +9,7 @@ class Signature:
     Parser for generic signature.
     """
 
-    _CONFIG_FILE = "ninjadroid/config/signatures.json"
+    _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
     _SIGNATURE_KEYS_LIST = ["signatures"]
 
     def __init__(self):
@@ -30,7 +31,6 @@ class Signature:
                     signatures_regex[signature_name] += r'' + signature + r'|'
                 signatures_regex[signature_name] = signatures_regex[signature_name][:-1]
         return signatures_regex
-
 
     @classmethod
     def _compile_regex(cls, signatures: Dict):
@@ -55,24 +55,12 @@ class Signature:
         cls._is_contained_regex = re.compile(regex, re.IGNORECASE)
 
     def is_valid(self, signature: str) -> bool:
-        """
-        Validate a given signature.
-
-        :param signature: The signature to be validated.
-        :return: True if it is a valid signature, False otherwise.
-        """
         if signature is None or signature == "":
             return False
 
         return self._is_regex.search(signature)
 
     def get_matches_in_string(self, string: str) -> str:
-        """
-        Search whether a string matches at least a signature.
-
-        :param string: The string to be searched.
-        :return: The matched signature, if the string contains a signature, an empty string otherwise.
-        """
         if string is None or string == "":
             return ""
 

@@ -1,6 +1,6 @@
-
 *.pyc
-
+__pycache__
 .DS_Store
-
 .idea/*
+output/*
+apks/*

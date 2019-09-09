@@ -21,7 +21,7 @@ from ninjadroid.errors.parsing_error import ParsingError
 from ninjadroid.parsers.apk import APK
 
 
-VERSION = "2.5"
+VERSION = "3.0"
 
 
 # Initialise the logger:

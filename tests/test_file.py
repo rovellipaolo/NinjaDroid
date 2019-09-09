@@ -77,8 +77,12 @@ class TestFile(unittest.TestCase):
 
     def test_init(self):
         for filename in self.files:
-            self.assertTrue(self.files[filename] is not None)
-            self.assertTrue(type(self.files[filename]) is File)
+            # When:
+            files = self.files[filename]
+
+            # Then:
+            self.assertTrue(files is not None)
+            self.assertTrue(type(files) is File)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
@@ -86,31 +90,59 @@ class TestFile(unittest.TestCase):
 
     def test_get_raw_file(self):
         for filename in self.files:
-            self.assertTrue(len(self.files[filename].get_raw_file()) > 0)
+            # When:
+            raw_file = self.files[filename].get_raw_file()
+
+            # Then:
+            self.assertTrue(len(raw_file) > 0)
 
     def test_get_file_name(self):
         for filename in self.files:
-            self.assertEqual(self.files[filename].get_file_name(), self.files_properties[filename]["name"])
+            # When:
+            name = self.files[filename].get_file_name()
+
+            # Then:
+            self.assertEqual(self.files_properties[filename]["name"], name)
 
     def test_get_size(self):
         for filename in self.files:
-            self.assertEqual(self.files[filename].get_size(), self.files_properties[filename]["size"])
+            # When:
+            size = self.files[filename].get_size()
+
+            # Then:
+            self.assertEqual(self.files_properties[filename]["size"], size)
 
     def test_get_md5(self):
         for filename in self.files:
-            self.assertEqual(self.files[filename].get_md5(), self.files_properties[filename]["md5"])
+            # When:
+            md5 = self.files[filename].get_md5()
+
+            # Then:
+            self.assertEqual(self.files_properties[filename]["md5"], md5)
 
     def test_get_sha1(self):
         for filename in self.files:
-            self.assertEqual(self.files[filename].get_sha1(), self.files_properties[filename]["sha1"])
+            # When:
+            sha1 = self.files[filename].get_sha1()
+
+            # Then:
+            self.assertEqual(self.files_properties[filename]["sha1"], sha1)
 
     def test_get_sha256(self):
         for filename in self.files:
-            self.assertEqual(self.files[filename].get_sha256(), self.files_properties[filename]["sha256"])
+            # When:
+            sha256 = self.files[filename].get_sha256()
+
+            # Then:
+            self.assertEqual(self.files_properties[filename]["sha256"], sha256)
 
     def test_get_sha512(self):
         for filename in self.files:
-            self.assertEqual(self.files[filename].get_sha512(), self.files_properties[filename]["sha512"])
+            # When:
+            sha512 = self.files[filename].get_sha512()
+
+            # Then:
+            self.assertEqual(self.files_properties[filename]["sha512"], sha512)
 
 
 if __name__ == "__main__":

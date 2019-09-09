@@ -76,8 +76,12 @@ class TestCert(unittest.TestCase):
 
     def test_init(self):
         for filename in self.certs:
-            self.assertTrue(self.certs[filename] is not None)
-            self.assertTrue(type(self.certs[filename]) is Cert)
+            # When:
+            cert = self.certs[filename]
+
+            # Then:
+            self.assertTrue(cert is not None)
+            self.assertTrue(type(cert) is Cert)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
@@ -91,88 +95,145 @@ class TestCert(unittest.TestCase):
 
     def test_get_raw_file(self):
         for filename in self.certs:
-            self.assertTrue(len(self.certs[filename].get_raw_file()) > 0)
+            # When:
+            raw_file = self.certs[filename].get_raw_file()
+
+            # Then:
+            self.assertTrue(len(raw_file) > 0)
 
     def test_get_file_name(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_file_name(), self.cert_properties[filename]["name"])
+            # When:
+            name = self.certs[filename].get_file_name()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["name"], name)
 
     def test_get_size(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_size(), self.cert_properties[filename]["size"])
+            # When:
+            size = self.certs[filename].get_size()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["size"], size)
 
     def test_get_md5(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_md5(), self.cert_properties[filename]["md5"])
+            # When:
+            md5 = self.certs[filename].get_md5()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["md5"], md5)
 
     def test_get_sha1(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_sha1(), self.cert_properties[filename]["sha1"])
+            # When:
+            sha1 = self.certs[filename].get_sha1()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["sha1"], sha1)
 
     def test_get_sha256(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_sha256(), self.cert_properties[filename]["sha256"])
+            # When:
+            sha256 = self.certs[filename].get_sha256()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["sha256"], sha256)
 
     def test_get_sha512(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_sha512(), self.cert_properties[filename]["sha512"])
+            # When:
+            sha512 = self.certs[filename].get_sha512()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["sha512"], sha512)
 
     def test_get_serial_number(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_serial_number(), self.cert_properties[filename]["serial_number"])
+            # When:
+            serial_number = self.certs[filename].get_serial_number()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["serial_number"], serial_number)
 
     def test_get_validity(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_validity(), self.cert_properties[filename]["validity"])
+            # When:
+            validity = self.certs[filename].get_validity()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["validity"], validity)
 
     def test_get_fingerprint_md5(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_fingerprint_md5(),
-                             self.cert_properties[filename]["fingerprint_md5"])
+            # When:
+            md5 = self.certs[filename].get_fingerprint_md5()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["fingerprint_md5"], md5)
 
     def test_get_fingerprint_sha1(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_fingerprint_sha1(),
-                             self.cert_properties[filename]["fingerprint_sha1"])
+            # When:
+            sha1 = self.certs[filename].get_fingerprint_sha1()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["fingerprint_sha1"], sha1)
 
     def test_get_fingerprint_sha256(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_fingerprint_sha256(),
-                             self.cert_properties[filename]["fingerprint_sha256"])
+            # When:
+            sha256 = self.certs[filename].get_fingerprint_sha256()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["fingerprint_sha256"], sha256)
 
     def test_get_fingerprint_signature(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_fingerprint_signature(),
-                             self.cert_properties[filename]["fingerprint_signature"])
+            # When:
+            signature = self.certs[filename].get_fingerprint_signature()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["fingerprint_signature"], signature)
 
     def test_get_fingerprint_version(self):
         for filename in self.certs:
-            self.assertEqual(self.certs[filename].get_fingerprint_version(),
-                             self.cert_properties[filename]["fingerprint_version"])
+            # When:
+            version = self.certs[filename].get_fingerprint_version()
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["fingerprint_version"], version)
 
     def test_get_owner(self):
         for filename in self.certs:
+            # When:
             owner = self.certs[filename].get_owner()
-            self.assertEqual(owner["name"], self.cert_properties[filename]["owner"]["name"])
-            self.assertEqual(owner["email"], self.cert_properties[filename]["owner"]["email"])
-            self.assertEqual(owner["unit"], self.cert_properties[filename]["owner"]["unit"])
-            self.assertEqual(owner["organization"], self.cert_properties[filename]["owner"]["organization"])
-            self.assertEqual(owner["city"], self.cert_properties[filename]["owner"]["city"])
-            self.assertEqual(owner["state"], self.cert_properties[filename]["owner"]["state"])
-            self.assertEqual(owner["country"], self.cert_properties[filename]["owner"]["country"])
-            self.assertEqual(owner["domain"], self.cert_properties[filename]["owner"]["domain"])
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["owner"]["name"], owner["name"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["email"], owner["email"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["unit"], owner["unit"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["organization"], owner["organization"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["city"], owner["city"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["state"], owner["state"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["country"], owner["country"])
+            self.assertEqual(self.cert_properties[filename]["owner"]["domain"], owner["domain"])
 
     def test_get_issuer(self):
         for filename in self.certs:
+            # When:
             issuer = self.certs[filename].get_issuer()
-            self.assertEqual(issuer["name"], self.cert_properties[filename]["issuer"]["name"])
-            self.assertEqual(issuer["email"], self.cert_properties[filename]["issuer"]["email"])
-            self.assertEqual(issuer["unit"], self.cert_properties[filename]["issuer"]["unit"])
-            self.assertEqual(issuer["organization"], self.cert_properties[filename]["issuer"]["organization"])
-            self.assertEqual(issuer["city"], self.cert_properties[filename]["issuer"]["city"])
-            self.assertEqual(issuer["state"], self.cert_properties[filename]["issuer"]["state"])
-            self.assertEqual(issuer["country"], self.cert_properties[filename]["issuer"]["country"])
-            self.assertEqual(issuer["domain"], self.cert_properties[filename]["issuer"]["domain"])
+
+            # Then:
+            self.assertEqual(self.cert_properties[filename]["issuer"]["name"], issuer["name"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["email"], issuer["email"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["unit"], issuer["unit"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["organization"], issuer["organization"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["city"], issuer["city"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["state"], issuer["state"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["country"], issuer["country"])
+            self.assertEqual(self.cert_properties[filename]["issuer"]["domain"], issuer["domain"])
 
 
 if __name__ == "__main__":

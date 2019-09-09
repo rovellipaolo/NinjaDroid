@@ -53,24 +53,27 @@ class TestSignature(unittest.TestCase):
 
     def test_is_valid(self):
         for string in TestSignature.valid_commands:
-            self.assertTrue(
-                self.signature.is_valid(string),
-                "Signature for " + string + " should be valid"
-            )
+            # When:
+            is_valid = self.signature.is_valid(string)
+
+            # Then:
+            self.assertTrue(is_valid, "Signature for " + string + " should be valid")
 
         for string in TestSignature.invalid_commands:
-            self.assertFalse(
-                self.signature.is_valid(string),
-                "Signature for " + string + " should not be valid"
-            )
+            # When:
+            is_valid = self.signature.is_valid(string)
+
+            # Then:
+            self.assertFalse(is_valid, "Signature for " + string + " should not be valid")
         pass
 
     def test_get_matches_in_string(self):
         for string in TestSignature.strings_containing_commands:
-            self.assertEqual(
-                TestSignature.strings_containing_commands[string],
-                self.signature.get_matches_in_string(string)
-            )
+            # When:
+            matches = self.signature.get_matches_in_string(string)
+
+            # Then:
+            self.assertEqual(TestSignature.strings_containing_commands[string], matches)
 
 
 if __name__ == '__main__':

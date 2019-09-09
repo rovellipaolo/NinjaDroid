@@ -20,7 +20,6 @@ from tests.test_uri_signature import TestURISignature
 def get_test_suite():
     """
     Retrieve the NinjaDroid TestSuite.
-    :return:
     """
     suite = unittest.TestSuite()
 
@@ -38,6 +37,5 @@ def get_test_suite():
 
 
 if __name__ == '__main__':
-    # Test runner:
     runner = unittest.TextTestRunner()
     runner.run(get_test_suite())

@@ -40,27 +40,21 @@ NinjaDroid has two ways to be executed, in local environment or in Docker.
 
 ### Local installation:
 To execute NinjaDroid in your local machine, you need `Python 3.5` or higher installed.
-Make sure that `aapt`, `apktool` and `dex2jar` have execute permission.
 
-```
-$ sudo chmod 755 ninjadroid/aapt/aapt
-$ sudo chmod 755 ninjadroid/apktool/apktool.jar
-$ sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
-```
-
-If you have the Android SDK installed, instead of the included version of aapt, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
+If you have the Android SDK installed, instead of the included version of `aapt`, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
 
 #### MacOS:
-
-No additional operation is needed.
-
-#### Linux:
-
-If you use NinjaDroid on Linux, you will need to change the `aapt` binary with the `aapt_linux` one in the _ninjadroid/aapt/_ directory (just change the aapt location in 'ninjadroid/aapt/Aapt.py', or simply rename 'aapt_linux' into 'aapt').
+Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
 
 ```
-$ rm ninjadroid/aapt/aapt
-$ mv ninjadroid/aapt/aapt_linux ninjadroid/aapt/aapt
+$ make build-macos
+```
+
+#### Linux:
+Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
+
+```
+$ make build-linux
 ```
 
 Due to `aapt` dependencies, on Linux, you may also need to install some additional libraries such as: 'lib32z1', 'lib32z1-dev' and 'lib32stdc++6'.
@@ -128,14 +122,13 @@ $ cp /path/to/your/package.apk apks/package.apk
 Then launch the following command:
 
 ```
-$ docker run -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/package.apk
+$ make run-docker APK=/apks/package.apk
 ```
-
 
 If you want to store the extracted files and info, then launch the following command:
 ```
 $ mkdir output
-$ docker run --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/package.apk
+$ make run-docker-with-output APK=/apks/package.apk
 ```
 
 The result will be stored into the _ninjadroid/output_ directory.

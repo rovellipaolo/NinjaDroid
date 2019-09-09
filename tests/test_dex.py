@@ -69,8 +69,12 @@ class TestDex(unittest.TestCase):
 
     def test_init(self):
         for filename in self.dexes:
-            self.assertTrue(self.dexes[filename] is not None)
-            self.assertTrue(type(self.dexes[filename]) is Dex)
+            # When:
+            dex = self.dexes[filename]
+
+            # Then:
+            self.assertTrue(dex is not None)
+            self.assertTrue(type(dex) is Dex)
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
@@ -78,51 +82,91 @@ class TestDex(unittest.TestCase):
 
     def test_get_raw_file(self):
         for filename in self.dexes:
-            self.assertTrue(len(self.dexes[filename].get_raw_file()) > 0)
+            # When:
+            raw_file = self.dexes[filename].get_raw_file()
+
+            # Then:
+            self.assertTrue(len(raw_file) > 0)
 
     def test_get_file_name(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_file_name(), self.dex_properties[filename]["name"])
+            # When:
+            name = self.dexes[filename].get_file_name()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["name"], name)
 
     def test_get_size(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_size(), self.dex_properties[filename]["size"])
+            # When:
+            size = self.dexes[filename].get_size()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["size"], size)
 
     def test_get_md5(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_md5(), self.dex_properties[filename]["md5"])
+            # When:
+            md5 = self.dexes[filename].get_md5()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["md5"], md5)
 
     def test_get_sha1(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_sha1(), self.dex_properties[filename]["sha1"])
+            # When:
+            sha1 = self.dexes[filename].get_sha1()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["sha1"], sha1)
 
     def test_get_sha256(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_sha256(), self.dex_properties[filename]["sha256"])
+            # When:
+            sha256 = self.dexes[filename].get_sha256()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["sha256"], sha256)
 
     def test_get_sha512(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_sha512(), self.dex_properties[filename]["sha512"])
+            # When:
+            sha512 = self.dexes[filename].get_sha512()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["sha512"], sha512)
 
     def test_get_strings(self):
         for filename in self.dexes:
-            self.assertEqual(
-                set(self.dexes[filename].get_strings()),
-                set(self.dex_properties[filename]["strings"])
-            )
+            # When:
+            strings = self.dexes[filename].get_strings()
+
+            # Then:
+            self.assertEqual(set(self.dex_properties[filename]["strings"]), set(strings))
 
     def test_get_urls(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_urls(), self.dex_properties[filename]["urls"])
+            # When:
+            urls = self.dexes[filename].get_urls()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["urls"], urls)
 
     def test_get_shell_commands(self):
         for filename in self.dexes:
-            self.assertEqual(self.dexes[filename].get_shell_commands(), self.dex_properties[filename]["shell_commands"])
+            # When:
+            shell_commands = self.dexes[filename].get_shell_commands()
+
+            # Then:
+            self.assertEqual(self.dex_properties[filename]["shell_commands"], shell_commands)
 
     # def test_get_custom_signatures(self):
-    #    for filename in self.dexes:
-    #        self.assertEqual(self.dexes[filename].get_custom_signatures(),
-    #                         self.dex_properties[filename]["custom_signatures"])
+    #     for filename in self.dexes:
+    #         # When:
+    #         custom_signatures = self.dexes[filename].get_custom_signatures()
+    #
+    #         # Then:
+    #         self.assertEqual(self.dex_properties[filename]["custom_signatures"], custom_signatures)
 
 
 if __name__ == "__main__":

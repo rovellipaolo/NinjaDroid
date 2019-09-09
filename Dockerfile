@@ -30,7 +30,7 @@ COPY ninjadroid.py ${NINJADROID_DIR}
 COPY ninjadroid/ ${NINJADROID_DIR}/ninjadroid/
 COPY tests/ ${NINJADROID_DIR}/tests/
 
-RUN rm ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
+RUN rm -f ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     # && mv -f ${NINJADROID_DIR}/ninjadroid/aapt/aapt_linux ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     && ln -s ${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/aapt ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_DIR}/ninjadroid/aapt/aapt \

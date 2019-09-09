@@ -22,14 +22,17 @@ RUN mkdir -p /opt/android-sdk && cd /opt \
 
 # Copy and configure NinjaDroid
 RUN mkdir -p ${NINJADROID_DIR}
+
 COPY requirements.txt ${NINJADROID_DIR}
 RUN pip3 install -r ${NINJADROID_DIR}/requirements.txt
 
 COPY ninjadroid.py ${NINJADROID_DIR}
 COPY ninjadroid/ ${NINJADROID_DIR}/ninjadroid/
+COPY tests/ ${NINJADROID_DIR}/tests/
 
-RUN ln -s ${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/aapt ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
-    # && mv ${NINJADROID_DIR}/ninjadroid/aapt/aapt_linux ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
+RUN rm ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
+    # && mv -f ${NINJADROID_DIR}/ninjadroid/aapt/aapt_linux ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
+    && ln -s ${ANDROID_HOME}/build-tools/${BUILD_TOOLS_VERSION}/aapt ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_DIR}/ninjadroid/apktool/apktool.jar \
     && chmod a+x ${NINJADROID_DIR}/ninjadroid/dex2jar/d2j-dex2jar.sh

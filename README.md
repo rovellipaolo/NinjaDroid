@@ -81,6 +81,10 @@ Once you've configured it (see the _"Configuration"_ section), you can run Ninja
 To execute NinjaDroid in your local machine, launch the following command:
 
 ```
+$ make run APK=/path/to/your/package.apk
+```
+Or alternatively:
+```
 $ python ninjadroid.py /path/to/your/package.apk
 ```
 
@@ -153,7 +157,7 @@ $ make test-docker
 If you want to test changes to the code without rebuilding the Docker image, use the following command:
 
 ```
-$ docker run -w /opt/NinjaDroid/ -v $(pwd)/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers -v $(pwd)/tests:/opt/NinjaDroid/tests --rm -it ninjadroid:latest python3 -m unittest tests.test
+$ make test-docker-with-reload
 ```
 
 ## Licence:

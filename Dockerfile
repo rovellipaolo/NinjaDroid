@@ -20,7 +20,7 @@ RUN mkdir -p /opt/android-sdk && cd /opt \
     && rm -f android-sdk-tools.zip \
     && echo y | android update sdk --no-ui -a --filter tools,platform-tools,${ANDROID_EXTRAS},${API_LEVELS},build-tools-${BUILD_TOOLS_VERSION} --no-https
 
-# Copy and configure NinjaDroid
+# Install NinjaDroid
 RUN mkdir -p ${NINJADROID_DIR}
 
 COPY requirements.txt ${NINJADROID_DIR}
@@ -41,11 +41,11 @@ RUN mkdir -p /var/log/ninjadroid \
     && chgrp -R ninjadroid /var/log/ninjadroid \
     && chmod -R g+w /var/log/ninjadroid
 
-COPY entrypoint.sh ${NINJADROID_DIR}
+COPY ninjadroid.sh ${NINJADROID_DIR}
 
 USER ninjadroid
 WORKDIR /home/ninjadroid
 
-# Execute NinjaDroid
-ENTRYPOINT ["/opt/NinjaDroid/entrypoint.sh"]
-CMD ["ninjadroid.py", "-h"] # set default arg for entrypoint
+# Run NinjaDroid
+ENTRYPOINT ["/opt/NinjaDroid/ninjadroid.sh"]
+CMD ["ninjadroid.py", "-h"]

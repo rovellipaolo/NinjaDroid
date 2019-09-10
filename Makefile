@@ -1,5 +1,5 @@
 IMAGE := ninjadroid
-PWD = $(shell pwd)
+PWD := $(shell pwd)
 
 
 # Build:
@@ -26,7 +26,7 @@ build-docker:
 # Run:
 .PHONY: run
 run:
-	@python ninjadroid.py $(APK)
+	@python3 ninjadroid.py $(APK)
 
 .PHONY: run-docker
 run-docker:
@@ -40,12 +40,15 @@ run-docker-with-output:
 # Test:
 .PHONY: test
 test:
-	python -m unittest -v tests.test
+	@python3 -m unittest -v tests.test
 
 .PHONY: test-docker
 test-docker:
-	@docker run --rm \
-		-w /opt/NinjaDroid \
-		-v $$(pwd)/tests:/opt/NinjaDroid/tests \
-		${IMAGE}:latest \
-		python3 -m unittest -v tests.test
+	@docker run --rm -w /opt/NinjaDroid ${IMAGE}:latest python3 -m unittest -v tests.test
+
+.PHONY: test-docker-with-reload
+test-docker-with-reload:
+	@docker run --rm -it -w /opt/NinjaDroid \
+	-v ${PWD}/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers \
+	-v ${PWD}/tests:/opt/NinjaDroid/tests \
+	${IMAGE}:latest python3 -m unittest -v tests.test

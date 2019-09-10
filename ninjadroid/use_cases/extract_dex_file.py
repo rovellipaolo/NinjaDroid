@@ -33,10 +33,15 @@ class ExtractDexFile(UseCase):
 
         :param output_directory: The directory where to save the DEX files.
         """
-        with ZipFile(self.apk.get_file_name()) as package:
+        apk_filename = self.apk.get_file_name()
+        with ZipFile(apk_filename) as package:
             for dex_file in self.apk.get_dex_files():
                 dex_name = dex_file.get_file_name()
+                self.logger.debug("Extracting %s from %s", dex_name, apk_filename)
                 dex_abspath = os.path.join(output_directory, dex_name)
+                output_directory = os.path.split(dex_abspath)[0]
+                os.makedirs(output_directory, exist_ok=True)
+
                 with package.open(dex_name) as dex:
                     with open(dex_abspath, 'wb') as fp:
                         self.logger.info("Extracting DEX %s", dex_name)

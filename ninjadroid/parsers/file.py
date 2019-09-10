@@ -37,7 +37,7 @@ class File(FileInterface):
 
     def _extract_and_set_file_hashes(self):
         """
-        Extract the file hashes and set the correspondent attributes.
+        Extract the file hashes and set the corresponding attributes.
         """
         self._md5 = md5(self._raw).hexdigest()
         self._sha1 = sha1(self._raw).hexdigest()

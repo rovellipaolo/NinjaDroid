@@ -1,5 +1,4 @@
 import logging
-import os.path
 import re
 import subprocess
 from typing import Dict, List, Sequence
@@ -8,7 +7,7 @@ from ninjadroid.parsers.dex_interface import DexInterface
 from ninjadroid.parsers.file import File
 from ninjadroid.signatures.uri_signature import URISignature
 from ninjadroid.signatures.shell_command_signature import ShellCommandSignature
-# from ninjadroid.signatures.signature import Signature
+from ninjadroid.signatures.signature import Signature
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +23,7 @@ class Dex(File, DexInterface):
         super(Dex, self).__init__(filepath, filename)
 
         self.logger = logger
-        self.logger.debug(
-            "Init Dex on %s, filename=%s, string_processing=%s",
-            filepath,
-            filename,
-            string_processing
-        )
+        self.logger.debug("Init Dex on %s, filename=%s, string_processing=%s", filepath, filename, string_processing)
 
         self._filename = filename
 
@@ -43,7 +37,7 @@ class Dex(File, DexInterface):
         if string_processing:
             self._extract_and_set_urls()
             self._extract_and_set_shell_commands()
-            #self. _extract_and_set_signatures()
+            # self. _extract_and_set_signatures()
 
     def _extract_and_set_strings(self):
         self.logger.debug("Extracting strings...")
@@ -113,7 +107,7 @@ class Dex(File, DexInterface):
         dump = super(Dex, self).dump()
         dump["urls"] = self._urls
         dump["shell_commands"] = self._shell_commands
-        #dump["custom_signatures"] = self._custom_signatures
+        # dump["custom_signatures"] = self._custom_signatures
         dump["strings"] = self.get_strings()
         return dump
 

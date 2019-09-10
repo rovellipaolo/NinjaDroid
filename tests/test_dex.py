@@ -54,7 +54,7 @@ class TestDex(unittest.TestCase):
 
         for file in listdir(join("tests", "data")):
             if file in cls.dex_properties:
-                cls.dexes[file] = Dex(join("tests", "data", file))
+                cls.dexes[file] = Dex(join("tests", "data", file), file)
                 # print(cls.dexes[filename].dump())
 
     @classmethod
@@ -78,7 +78,8 @@ class TestDex(unittest.TestCase):
 
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
-            Dex(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
+            filename = "aaa_this_is_a_non_existent_file_xxx"
+            Dex(join("tests", "data", filename), filename)
 
     def test_get_raw_file(self):
         for filename in self.dexes:

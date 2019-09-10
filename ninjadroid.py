@@ -13,6 +13,12 @@ import os
 import re
 import sys
 
+logging.basicConfig(
+    format="  >> %(name)s: [%(levelname)s] %(message)s",
+    level=logging.INFO
+)
+
+
 from ninjadroid.use_cases.get_apk_info_in_html import GetApkInfoInHtml
 from ninjadroid.use_cases.get_apk_info_in_json import GetApkInfoInJson
 from ninjadroid.use_cases.extract_apk_entries import ExtractApkEntries
@@ -24,13 +30,7 @@ from ninjadroid.parsers.apk import APK
 VERSION = "3.0"
 
 
-# Initialise the logger:
 logger = logging.getLogger("NinjaDroid")
-logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-ch.setFormatter(logging.Formatter("  >> %(name)s: [%(levelname)s] %(message)s"))
-logger.addHandler(ch)
 
 
 def main():

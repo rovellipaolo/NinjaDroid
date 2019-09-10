@@ -43,13 +43,13 @@ class ExtractApkEntries(UseCase):
             os.makedirs(self.output_directory)
 
     def launch_apktool(self) -> Future:
-        return LaunchApkTool(self.input_filepath, self.output_directory).execute()
+        return LaunchApkTool(self.input_filepath, self.output_directory, self.logger).execute()
 
     def launch_dex2jar(self) -> Future:
-        return LaunchDex2Jar(self.input_filepath, self.input_filename, self.output_directory).execute()
+        return LaunchDex2Jar(self.input_filepath, self.input_filename, self.output_directory, self.logger).execute()
 
     def extract_certificate_file(self) -> Future:
-        return ExtractCertificateFile(self.apk, self.output_directory).execute()
+        return ExtractCertificateFile(self.apk, self.output_directory, self.logger).execute()
 
     def extract_dex_file(self) -> Future:
-        return ExtractDexFile(self.apk, self.output_directory).execute()
+        return ExtractDexFile(self.apk, self.output_directory, self.logger).execute()

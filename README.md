@@ -81,7 +81,7 @@ Once you've configured it (see the _"Configuration"_ section), you can run Ninja
 To execute NinjaDroid in your local machine, launch the following command:
 
 ```
-$ make run APK=/path/to/your/package.apk
+$ make run apk=/path/to/your/package.apk
 ```
 Or alternatively:
 ```
@@ -126,13 +126,13 @@ $ cp /path/to/your/package.apk apks/package.apk
 Then launch the following command:
 
 ```
-$ make run-docker APK=/apks/package.apk
+$ make run-docker apk=/apks/package.apk
 ```
 
 If you want to store the extracted files and info, then launch the following command:
 ```
 $ mkdir output
-$ make run-docker-with-output APK=/apks/package.apk
+$ make run-docker-with-output apk=/apks/package.apk
 ```
 
 The result will be stored into the _ninjadroid/output_ directory.

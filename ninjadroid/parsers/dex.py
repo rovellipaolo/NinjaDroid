@@ -107,6 +107,7 @@ class Dex(File, DexInterface):
         dump = super(Dex, self).dump()
         dump["urls"] = self._urls
         dump["shell_commands"] = self._shell_commands
+        # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
         # dump["custom_signatures"] = self._custom_signatures
         dump["strings"] = self.get_strings()
         return dump

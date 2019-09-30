@@ -16,8 +16,8 @@ class URISignature(Signature):
     def __init__(self):
         super(URISignature, self).__init__()
 
-    @classmethod
-    def _compile_regex(cls, signatures: Dict):
+    @staticmethod
+    def _compile_regex(signatures: Dict):
         regex = r'('
 
         # Scheme (HTTP, HTTPS, FTP and SFTP):
@@ -50,5 +50,7 @@ class URISignature(Signature):
 
         regex += r')'
 
-        cls._is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
-        cls._is_contained_regex = re.compile(regex, re.IGNORECASE)
+        _is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
+        _is_contained_regex = re.compile(regex, re.IGNORECASE)
+
+        return (_is_regex, _is_contained_regex)

@@ -43,13 +43,6 @@ To execute NinjaDroid in your local machine, you need `Python 3.5` or higher ins
 
 If you have the Android SDK installed, instead of the included version of `aapt`, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
 
-#### MacOS:
-Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
-
-```
-$ make build-macos
-```
-
 #### Linux:
 Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
 
@@ -63,6 +56,13 @@ For example, in Ubuntu:
 
 ```
 $ sudo apt-get install lib32z1 lib32z1-dev lib32stdc++6
+```
+
+#### MacOS:
+Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
+
+```
+$ make build-macos
 ```
 
 ### Docker installation:

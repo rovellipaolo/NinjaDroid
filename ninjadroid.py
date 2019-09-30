@@ -36,12 +36,15 @@ logger = logging.getLogger("NinjaDroid")
 def main():
     args = retrieve_commandline_parameters()
     apk = read_target_file(args.target, args.no_string_processing)
-    if apk is not None:
-        filename = get_apk_filename_without_extension(args.target)
-        if args.extract_to_directory is None:
-            dumps_apk_info(apk)
-        else:
-            extract_apk_info_to_directory(apk, args.target, filename, args.extract_to_directory)
+
+    if apk is None:
+        sys.exit(1)
+
+    filename = get_apk_filename_without_extension(args.target)
+    if args.extract_to_directory is None:
+        dumps_apk_info(apk)
+    else:
+        extract_apk_info_to_directory(apk, args.target, filename, args.extract_to_directory)
 
 
 def retrieve_commandline_parameters():

@@ -67,7 +67,7 @@ class Aapt:
         Retrieve the aapt dump badging.
 
         Example:
-            $ aapt dump badging test/data/Example.apk
+            $ aapt dump badging tests/data/Example.apk
             package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4.2.2-576024'
             sdkVersion:'10'
             maxSdkVersion:'20'
@@ -104,7 +104,7 @@ class Aapt:
         Retrieve the aapt dump permissions.
 
         Example:
-            $ aapt dump permissions test/data/Example.apk
+            $ aapt dump permissions tests/data/Example.apk
             package: com.example.app
             uses-permission: name='android.permission.INTERNET'
             uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
@@ -120,7 +120,7 @@ class Aapt:
         Dump the XML tree of the AndroidManifest.xml file of a given APK package.
 
         Example:
-            $ aapt dump xmltree test/data/Example.apk AndroidManifest.xml
+            $ aapt dump xmltree tests/data/Example.apk AndroidManifest.xml
             N: android=http://schemas.android.com/apk/res/android
               E: manifest (line=2)
                 A: android:versionCode(0x0101021b)=(type 0x10)0x1

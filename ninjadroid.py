@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Ninja Reverse Engineering of Android APK packages.
 
@@ -34,7 +36,7 @@ logger = logging.getLogger("NinjaDroid")
 
 
 def main():
-    args = retrieve_commandline_parameters()
+    args = get_args()
     apk = read_target_file(args.target, args.no_string_processing)
 
     if apk is None:
@@ -47,7 +49,7 @@ def main():
         extract_apk_info_to_directory(apk, args.target, filename, args.extract_to_directory)
 
 
-def retrieve_commandline_parameters():
+def get_args():
     parser = argparse.ArgumentParser(description="NinjaDroid description: \n"
                                                  "  >> %(prog)s /path/to/file.apk\n"
                                                  "  >> %(prog)s --no-string-processing /path/to/file.apk\n"

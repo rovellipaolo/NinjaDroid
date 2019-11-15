@@ -85,7 +85,7 @@ $ make run apk=/path/to/your/package.apk
 ```
 Or alternatively:
 ```
-$ python ninjadroid.py /path/to/your/package.apk
+$ python3 ninjadroid.py /path/to/your/package.apk
 ```
 
 This will produce as output a JSON containing all the extracted APK metadata.
@@ -93,7 +93,7 @@ This will produce as output a JSON containing all the extracted APK metadata.
 If you want to store the extracted files and info, use the "--extract" option:
 
 ```
-$ python ninjadroid.py /path/to/your/package.apk --extract
+$ python3 ninjadroid.py /path/to/your/package.apk --extract
 ```
 
 A folder named as the APK package (e.g. 'package/') will be created inside the current working directory (e.g. the NinjaDroid folder). Inside this folder you will find the JSON and HTML report files (e.g. report-package.json and report-package.html), the _.jar_ file (e.g. package.jar) and all the rest of the APK content.
@@ -103,13 +103,13 @@ A folder named as the APK package (e.g. 'package/') will be created inside the c
 It is also possible to store the information in another directory, by specifying it explicitly:
 
 ```
-$ python ninjadroid.py /path/to/your/package.apk --extract /output/path/
+$ python3 ninjadroid.py /path/to/your/package.apk --extract /output/path/
 ```
 
 Some APKs which contains many strings may require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
 
 ```
-$ python ninjadroid.py --no-string-process /path/to/your/package.apk
+$ python3 ninjadroid.py --no-string-process /path/to/your/package.apk
 ```
 
 **NOTE:** You can of course mix the usage of `--no-string-process` and `--export`.
@@ -169,7 +169,7 @@ NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu
 
 The following is the output of NinjaDroid run against the sample APK package:
 ```
-$ python ninjadroid.py tests/data/Example.apk
+$ python3 ninjadroid.py tests/data/Example.apk
 ```
 ```json
 {

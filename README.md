@@ -38,7 +38,7 @@ $ cd NinjaDroid
 
 NinjaDroid has two ways to be executed, in local environment or in Docker.
 
-### Local installation:
+### Locally:
 To execute NinjaDroid in your local machine, you need `Python 3.5` or higher installed.
 
 If you have the Android SDK installed, instead of the included version of `aapt`, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
@@ -65,10 +65,14 @@ Just launch the following command, which will install the Python dependencies an
 $ make build-macos
 ```
 
-### Docker installation:
+### Docker:
 To execute NinjaDroid in Docker, you need `Docker` installed.
 To build the Docker image, launch the following command:
 
+```
+$ docker build -t ninjadroid:latest .
+```
+Or alternatively:
 ```
 $ make build-docker
 ```
@@ -77,15 +81,15 @@ $ make build-docker
 ## Run:
 Once you've configured it (see the _"Configuration"_ section), you can run NinjaDroid as follows.
 
-### Local run:
+### Locally:
 To execute NinjaDroid in your local machine, launch the following command:
 
 ```
-$ make run apk=/path/to/your/package.apk
+$ ninjadroid /path/to/your/package.apk
 ```
 Or alternatively:
 ```
-$ python3 ninjadroid.py /path/to/your/package.apk
+$ make run apk=/path/to/your/package.apk
 ```
 
 This will produce as output a JSON containing all the extracted APK metadata.
@@ -93,7 +97,7 @@ This will produce as output a JSON containing all the extracted APK metadata.
 If you want to store the extracted files and info, use the "--extract" option:
 
 ```
-$ python3 ninjadroid.py /path/to/your/package.apk --extract
+$ ninjadroid /path/to/your/package.apk --extract
 ```
 
 A folder named as the APK package (e.g. 'package/') will be created inside the current working directory (e.g. the NinjaDroid folder). Inside this folder you will find the JSON and HTML report files (e.g. report-package.json and report-package.html), the _.jar_ file (e.g. package.jar) and all the rest of the APK content.
@@ -103,19 +107,19 @@ A folder named as the APK package (e.g. 'package/') will be created inside the c
 It is also possible to store the information in another directory, by specifying it explicitly:
 
 ```
-$ python3 ninjadroid.py /path/to/your/package.apk --extract /output/path/
+$ ninjadroid /path/to/your/package.apk --extract /output/path/
 ```
 
 Some APKs which contains many strings may require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
 
 ```
-$ python3 ninjadroid.py --no-string-process /path/to/your/package.apk
+$ ninjadroid --no-string-process /path/to/your/package.apk
 ```
 
 **NOTE:** You can of course mix the usage of `--no-string-process` and `--export`.
 
 
-### Docker run:
+### Docker:
 To execute NinjaDroid in Docker, move the APK package to analyze to the _ninjadroid/apks/_ directory.
 
 ```
@@ -126,10 +130,19 @@ $ cp /path/to/your/package.apk apks/package.apk
 Then launch the following command:
 
 ```
+$ docker run -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/package.apk
+```
+Or alternatively:
+```
 $ make run-docker apk=/apks/package.apk
 ```
 
 If you want to store the extracted files and info, then launch the following command:
+```
+$ mkdir output
+$ docker run --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/package.apk
+```
+Or alternatively:
 ```
 $ mkdir output
 $ make run-docker-with-output apk=/apks/package.apk
@@ -141,13 +154,13 @@ The result will be stored into the _ninjadroid/output_ directory.
 ## Run Tests:
 Once you've configured it (see the _"Configuration"_ section), you can also run NinjaDroid tests as follows.
 
-### Local run:
+### Locally:
 To run NinjaDroid tests in your local machine, launch the following command:
 ```
 $ make test
 ```
 
-### Docker run:
+### Docker:
 To run NinjaDroid tests in Docker, launch the following command:
 ```
 $ make build-docker
@@ -169,7 +182,7 @@ NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu
 
 The following is the output of NinjaDroid run against the sample APK package:
 ```
-$ python3 ninjadroid.py tests/data/Example.apk
+$ ninjadroid tests/data/Example.apk
 ```
 ```json
 {

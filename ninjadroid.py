@@ -52,12 +52,12 @@ def main():
 
 def get_args() -> Namespace:
     parser = ArgumentParser(
-        description="NinjaDroid description: \n"
-                    "  >> %(prog)s /path/to/file.apk\n"
-                    "  >> %(prog)s --no-string-processing /path/to/file.apk\n"
-                    "  >> %(prog)s /path/to/file.apk --extract\n"
-                    "  >> %(prog)s --no-string-processing /path/to/file.apk --extract\n"
-                    "  >> %(prog)s /path/to/file.apk --extract /dir/where/to/store/info/\n"
+        description="examples: \n"
+                    "  >> %(prog)s /path/to/input.apk\n"
+                    "  >> %(prog)s /path/to/input.apk --no-string-processing\n"
+                    "  >> %(prog)s /path/to/input.apk --extract\n"
+                    "  >> %(prog)s /path/to/input.apk --extract /path/to/output/\n"
+                    "  >> %(prog)s /path/to/input.apk --extract /path/to/output/ --no-string-processing\n"
                     "  >> %(prog)s --version\n"
                     "  >> %(prog)s --help",
         formatter_class=RawTextHelpFormatter

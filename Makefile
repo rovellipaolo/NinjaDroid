@@ -10,7 +10,7 @@ build:
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
-	@pip3 install -r requirements.txt
+	sudo @pip3 install -r requirements.txt
 	sudo ln -s $(ROOT_DIR)/ninjadroid.py /usr/local/bin/ninjadroid
 
 build-macos:

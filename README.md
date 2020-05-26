@@ -44,7 +44,7 @@ To execute NinjaDroid in your local machine, you need `Python 3.5` or higher ins
 If you have the Android SDK installed, instead of the included version of `aapt`, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
 
 #### Linux:
-Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
+Just launch the following command, which will install all the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
 
 ```
 $ make build-linux
@@ -61,7 +61,7 @@ $ sudo apt install lib32stdc++6
 In Fedora everything should work out-of-the-box.
 
 #### MacOS:
-Just launch the following command, which will install the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
+Just launch the following command, which will install all the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
 
 ```
 $ make build-macos
@@ -120,7 +120,6 @@ $ ninjadroid --no-string-process /path/to/your/package.apk
 
 **NOTE:** You can of course mix the usage of `--no-string-process` and `--export`.
 
-
 ### Docker:
 To execute NinjaDroid in Docker, move the APK package to analyze to the _ninjadroid/apks/_ directory.
 
@@ -157,13 +156,13 @@ The result will be stored into the _ninjadroid/output_ directory.
 Once you've configured it (see the _"Configuration"_ section), you can also run NinjaDroid tests as follows.
 
 ### Locally:
-To run NinjaDroid tests in your local machine, launch the following command:
+To run the tests in your local machine, launch the following command:
 ```
 $ make test
 ```
 
 ### Docker:
-To run NinjaDroid tests in Docker, launch the following command:
+To run the tests in Docker, launch the following command:
 ```
 $ make build-docker
 $ make test-docker
@@ -174,6 +173,7 @@ If you want to test changes to the code without rebuilding the Docker image, use
 ```
 $ make test-docker-with-reload
 ```
+
 
 ## Licence:
 

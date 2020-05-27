@@ -38,8 +38,10 @@ logger = logging.getLogger("NinjaDroid")
 
 def main():
     args = get_args()
-    apk = read_target_file(args.target, args.no_string_processing)
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
 
+    apk = read_target_file(args.target, args.no_string_processing)
     if apk is None:
         sys.exit(1)
 
@@ -87,6 +89,13 @@ def get_args() -> Namespace:
     )
     parser.add_argument(
         "-v",
+        "--verbose",
+        action="store_true",
+        dest="verbose",
+        help="Show verbose logs."
+    )
+    parser.add_argument(
+        "-V",
         "--version",
         action="version",
         version="NinjaDroid " + VERSION,
@@ -99,7 +108,7 @@ def read_target_file(filepath: str, no_string_processing: bool) -> Optional[APK]
     apk = None
     logger.debug("Reading %s...", filepath)
     try:
-        apk = APK(filepath, no_string_processing)
+        apk = APK(filepath, no_string_processing, logger)
     except APKParsingError:
         logger.error("The target file ('%s') must be an APK package!", filepath)
     except ParsingError:

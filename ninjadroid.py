@@ -97,7 +97,7 @@ def get_args() -> Namespace:
 
 def read_target_file(filepath: str, no_string_processing: bool) -> Optional[APK]:
     apk = None
-    logger.info("Reading %s...", filepath)
+    logger.debug("Reading %s...", filepath)
     try:
         apk = APK(filepath, no_string_processing)
     except APKParsingError:

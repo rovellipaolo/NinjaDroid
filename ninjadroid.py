@@ -46,20 +46,20 @@ def main():
         sys.exit(1)
 
     filename = get_apk_filename_without_extension(args.target)
-    if args.extract_to_directory is None:
+    if args.target_output_directory is None:
         print_apk_info(apk)
     else:
-        extract_apk_info_to_directory(apk, args.target, filename, args.extract_to_directory)
+        extract_apk_info_to_directory(apk, args.target, filename, args.target_output_directory)
 
 
 def get_args() -> Namespace:
     parser = ArgumentParser(
         description="examples: \n"
-                    "  >> %(prog)s /path/to/input.apk\n"
-                    "  >> %(prog)s /path/to/input.apk --no-string-processing\n"
-                    "  >> %(prog)s /path/to/input.apk --extract\n"
-                    "  >> %(prog)s /path/to/input.apk --extract /path/to/output/\n"
-                    "  >> %(prog)s /path/to/input.apk --extract /path/to/output/ --no-string-processing\n"
+                    "  >> %(prog)s /path/to/file.apk\n"
+                    "  >> %(prog)s /path/to/file.apk --no-string-processing\n"
+                    "  >> %(prog)s /path/to/file.apk --extract\n"
+                    "  >> %(prog)s /path/to/file.apk --extract /path/to/output/directory/\n"
+                    "  >> %(prog)s /path/to/file.apk --extract /path/to/output/directory/ --no-string-processing\n"
                     "  >> %(prog)s --version\n"
                     "  >> %(prog)s --help",
         formatter_class=RawTextHelpFormatter
@@ -77,15 +77,15 @@ def get_args() -> Namespace:
         nargs="?",
         const="./",
         action="store",
-        dest="extract_to_directory",
-        help="Extract and store all the APK entries and info in a given folder (default: ./APK)."
+        dest="target_output_directory",
+        help="Extract and store all the APK entries and info into a given folder (default: './')."
     )
     parser.add_argument(
         "-ns",
         "--no-string-processing",
         action="store_false",
         dest="no_string_processing",
-        help="If set the URLs and shell commands in the classes.dex will not be extracted."
+        help="If set the URLs and shell commands in the classes.dex file will not be extracted."
     )
     parser.add_argument(
         "-v",
@@ -99,7 +99,7 @@ def get_args() -> Namespace:
         "--version",
         action="version",
         version="NinjaDroid " + VERSION,
-        help="Show program's version and number."
+        help="Show version information."
     )
     return parser.parse_args()
 

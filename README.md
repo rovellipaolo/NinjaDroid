@@ -131,7 +131,7 @@ $ cp /path/to/your/package.apk apks/package.apk
 Then launch the following command:
 
 ```
-$ docker run -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/package.apk
+$ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/package.apk
 ```
 Or alternatively:
 ```
@@ -141,7 +141,7 @@ $ make run-docker apk=/apks/package.apk
 If you want to store the extracted files and info, then launch the following command:
 ```
 $ mkdir output
-$ docker run --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/package.apk
+$ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/package.apk
 ```
 Or alternatively:
 ```

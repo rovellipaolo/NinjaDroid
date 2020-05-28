@@ -33,25 +33,25 @@ run:
 
 .PHONY: run-docker
 run-docker:
-	@docker run -it --rm -v ${PWD}/apks:/apks ${DOCKER_IMAGE}:${DOCKER_TAG} json $(apk)
+	@docker run --name ${DOCKER_IMAGE} -it --rm -v ${PWD}/apks:/apks ${DOCKER_IMAGE}:${DOCKER_TAG} json $(apk)
 
 .PHONY: run-docker-with-output
 run-docker-with-output:
-	@docker run --rm -v ${PWD}/apks:/apks -v ${PWD}/output:/output ${DOCKER_IMAGE}:${DOCKER_TAG} ninjadroid -e /output $(apk)
+	@docker run --name ${DOCKER_IMAGE} --rm -v ${PWD}/apks:/apks -v ${PWD}/output:/output ${DOCKER_IMAGE}:${DOCKER_TAG} ninjadroid -e /output $(apk)
 
 
 # Test:
 .PHONY: test
 test:
-	@python3 -m unittest -v tests.test
+	@python3 -m unittest
 
 .PHONY: test-docker
 test-docker:
-	@docker run --rm -w /opt/NinjaDroid ${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest -v tests.test
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid ${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest
 
 .PHONY: test-docker-with-reload
 test-docker-with-reload:
-	@docker run --rm -it -w /opt/NinjaDroid \
+	@docker run --name ${DOCKER_IMAGE} --rm -it -w /opt/NinjaDroid \
 	-v ${PWD}/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers \
 	-v ${PWD}/tests:/opt/NinjaDroid/tests \
-	${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest -v tests.test
+	${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest

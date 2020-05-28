@@ -53,5 +53,6 @@ test-docker:
 test-docker-with-reload:
 	@docker run --name ${DOCKER_IMAGE} --rm -it -w /opt/NinjaDroid \
 	-v ${PWD}/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers \
+	-v ${PWD}/ninjadroid/use_cases:/opt/NinjaDroid/ninjadroid/use_cases \
 	-v ${PWD}/tests:/opt/NinjaDroid/tests \
 	${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest

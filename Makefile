@@ -1,7 +1,7 @@
 DOCKER_IMAGE := ninjadroid
 DOCKER_TAG := latest
 PWD := $(shell pwd)
-ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+NINJADROID_HOME := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 
 # Build:
@@ -11,7 +11,7 @@ build:
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
 	@pip3 install -r requirements.txt
-	sudo ln -s $(ROOT_DIR)/ninjadroid.py /usr/local/bin/ninjadroid
+	sudo ln -s $(NINJADROID_HOME)/ninjadroid.py /usr/local/bin/ninjadroid
 
 build-macos:
 	make build
@@ -20,6 +20,10 @@ build-macos:
 build-linux:
 	make build
 	mv -f ninjadroid/aapt/aapt_linux ninjadroid/aapt/aapt
+
+.PHONY: uninstall
+uninstall:
+	sudo unlink /usr/local/bin/ninjadroid
 
 .PHONY: build-docker
 build-docker:

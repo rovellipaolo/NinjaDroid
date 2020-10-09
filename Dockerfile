@@ -1,6 +1,6 @@
 FROM openjdk:8u212-jre-slim-stretch
 
-ENV NINJADROID_DIR=/opt/NinjaDroid
+ENV NINJADROID_HOME=/opt/NinjaDroid
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_SDK_TOOLS_VERSION=25.2.5
 ENV ANDROID_SDK_API_LEVELS=android-23
@@ -22,23 +22,23 @@ RUN mkdir -p /opt/android-sdk && cd /opt \
     && echo y | android update sdk --no-ui -a --filter tools,platform-tools,${ANDROID_SDK_EXTRAS},${ANDROID_SDK_API_LEVELS},build-tools-${ANDROID_SDK_BUILD_TOOLS_VERSION} --no-https
 
 # Install NinjaDroid
-RUN mkdir -p ${NINJADROID_DIR}
-COPY requirements.txt ${NINJADROID_DIR}
-COPY ninjadroid.py ${NINJADROID_DIR}
-COPY ninjadroid/ ${NINJADROID_DIR}/ninjadroid/
-COPY tests/ ${NINJADROID_DIR}/tests/
+RUN mkdir -p ${NINJADROID_HOME}
+COPY requirements.txt ${NINJADROID_HOME}
+COPY ninjadroid.py ${NINJADROID_HOME}
+COPY ninjadroid/ ${NINJADROID_HOME}/ninjadroid/
+COPY tests/ ${NINJADROID_HOME}/tests/
 
-RUN pip3 install -r ${NINJADROID_DIR}/requirements.txt \
-    && ln -s ${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}/aapt ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
-    && chmod a+x ${NINJADROID_DIR}/ninjadroid/aapt/aapt \
-    && chmod a+x ${NINJADROID_DIR}/ninjadroid/apktool/apktool.jar \
-    && chmod a+x ${NINJADROID_DIR}/ninjadroid/dex2jar/d2j-dex2jar.sh
+RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt \
+    && ln -s ${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}/aapt ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
+    && chmod a+x ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
+    && chmod a+x ${NINJADROID_HOME}/ninjadroid/apktool/apktool.jar \
+    && chmod a+x ${NINJADROID_HOME}/ninjadroid/dex2jar/d2j-dex2jar.sh
 
 RUN mkdir -p /var/log/ninjadroid \
     && chgrp -R ninjadroid /var/log/ninjadroid \
     && chmod -R g+w /var/log/ninjadroid
 
-COPY ninjadroid.sh ${NINJADROID_DIR}
+COPY ninjadroid.sh ${NINJADROID_HOME}
 
 USER ninjadroid
 WORKDIR /home/ninjadroid

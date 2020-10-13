@@ -158,11 +158,20 @@ Once you've configured it (see the _"Configuration"_ section), you can also run 
 ### Locally:
 To run the tests in your local machine, launch the following command:
 ```
+$ python3 -m unittest
+```
+Or alternatively:
+```
 $ make test
 ```
 
 ### Docker:
 To run the tests in Docker, launch the following command:
+```
+$ docker build -t ninjadroid:latest .
+$ docker run --name ninjadroid --rm -w /opt/NinjaDroid ninjadroid:latest python3 -m unittest
+```
+Or alternatively:
 ```
 $ make build-docker
 $ make test-docker

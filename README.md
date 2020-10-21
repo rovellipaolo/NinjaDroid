@@ -50,16 +50,6 @@ Just launch the following command, which will install all the Python dependencie
 $ make build-linux
 ```
 
-Due to `aapt` dependencies, on some Linux distributions, you may also need to install some additional libraries such as: `lib32stdc++6` or `libstdc++`.
-
-For example, in Debian and Ubuntu:
-
-```
-$ sudo apt install lib32stdc++6
-```
-
-In Fedora everything should work out-of-the-box.
-
 #### MacOS:
 Just launch the following command, which will install all the Python dependencies and make sure that `aapt`, `apktool` and `dex2jar` have executable permissions.
 

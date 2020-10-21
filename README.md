@@ -152,6 +152,18 @@ $ make run-docker-with-output apk=/apks/package.apk
 The result will be stored into the _ninjadroid/output_ directory.
 
 
+## Run checkstyle:
+Once you've configured it (see the _"Configuration"_ section), to run the checkstyle execute:
+```
+$ pylint ninjadroid.py
+```
+Or alternatively:
+```
+$ make checkstyle
+```
+**NOTE:** This is using [`pylint`](https://github.com/PyCQA/pylint) under-the-hood.
+
+
 ## Run Tests:
 Once you've configured it (see the _"Configuration"_ section), you can also run NinjaDroid tests as follows.
 

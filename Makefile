@@ -60,3 +60,7 @@ test-docker-with-reload:
 	-v ${PWD}/ninjadroid/use_cases:/opt/NinjaDroid/ninjadroid/use_cases \
 	-v ${PWD}/tests:/opt/NinjaDroid/tests \
 	${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest
+
+.PHONY: checkstyle
+checkstyle:
+	pylint ninjadroid.py  # NOTE: currently running only against main file

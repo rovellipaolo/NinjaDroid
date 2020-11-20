@@ -4,7 +4,7 @@ import subprocess
 import re
 from typing import Dict, List
 
-logger = logging.getLogger(__name__)
+global_logger = logging.getLogger(__name__)
 
 
 class Aapt:
@@ -23,28 +23,26 @@ class Aapt:
     __LABEL_SDK_TARGET_VERSION = "targetSdkVersion:"
     __LABEL_PERMISSION_NAME = "uses-permission: name="
 
-    def __init__(self, logger=logger):
+    def __init__(self, logger=global_logger):
         self.logger = logger
         self.logger.debug("aapt exec path: %s", self.__AAPT_EXEC_PATH)
-        pass
 
     @staticmethod
     def _extract_string_pattern(string: str, pattern: str) -> str:
         match = re.search(pattern, string, re.MULTILINE | re.IGNORECASE)
         if match and match.group(1):
             return match.group(1).strip()
-        else:
-            return ""
+        return ""
 
     @staticmethod
-    def _find_between(s: str, prefix: str, suffix: str) -> str:
+    def _find_between(string: str, prefix: str, suffix: str) -> str:
         """
         Find a substring in a string, starting after a specified prefix and ended before a specified suffix.
         """
         try:
-            start = s.index(prefix) + len(prefix)
-            end = s.index(suffix, start)
-            return s[start:end]
+            start = string.index(prefix) + len(prefix)
+            end = string.index(suffix, start)
+            return string[start:end]
         except ValueError:
             return ""
 
@@ -58,8 +56,7 @@ class Aapt:
             offs = haystack.find(needle, offs+1)
             if offs == -1:
                 break
-            else:
-                yield offs
+            yield offs
 
     @classmethod
     def _dump_badging(cls, filepath: str) -> str:
@@ -202,8 +199,8 @@ class Aapt:
     def get_apk_info(cls, filepath: str) -> Dict:
         info = cls._dump_badging(filepath)
 
-        apk_package_name_pattern = "^" + cls.__LABEL_PACKAGE_NAME + "'([a-zA-Z0-9\-\.]+)'"
-        apk_version_name_pattern = "^" + cls.__LABEL_PACKAGE_VERSION_NAME + "'([a-zA-Z0-9_\-\.]+)'"
+        apk_package_name_pattern = "^" + cls.__LABEL_PACKAGE_NAME + "'([a-zA-Z0-9\-\.]+)'"  # pylint: disable=anomalous-backslash-in-string
+        apk_version_name_pattern = "^" + cls.__LABEL_PACKAGE_VERSION_NAME + "'([a-zA-Z0-9_\-\.]+)'"  # pylint: disable=anomalous-backslash-in-string
 
         apk = {
             "package_name": cls._extract_string_pattern(info, apk_package_name_pattern),
@@ -215,7 +212,7 @@ class Aapt:
         }
 
         try:
-            apk_version_code_pattern = "^" + cls.__LABEL_PACKAGE_VERSION_CODE + "'([0-9\.]+)'"
+            apk_version_code_pattern = "^" + cls.__LABEL_PACKAGE_VERSION_CODE + "'([0-9\.]+)'"  # pylint: disable=anomalous-backslash-in-string
             apk["version"]["code"] = int(cls._extract_string_pattern(info, apk_version_code_pattern))
         except ValueError:
             pass

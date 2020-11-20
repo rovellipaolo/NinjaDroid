@@ -63,4 +63,4 @@ test-docker-with-reload:
 
 .PHONY: checkstyle
 checkstyle:
-	pylint ninjadroid.py ninjadroid/use_cases/ ninjadroid/signatures/
+	pylint ninjadroid.py ninjadroid/use_cases/ ninjadroid/signatures/ ninjadroid/errors/ ninjadroid/aapt/

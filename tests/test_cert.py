@@ -27,7 +27,6 @@ class TestCert(unittest.TestCase):
                 "from": "2015-06-27 10:06:13Z",
                 "until": "2515-02-26 10:06:13Z",
             },
-            "fingerprint_md5": "90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45",
             "fingerprint_sha1": "5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6",
             "fingerprint_sha256": "E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77",
             "fingerprint_signature": "SHA1withRSA",
@@ -164,14 +163,6 @@ class TestCert(unittest.TestCase):
 
             # Then:
             self.assertEqual(self.cert_properties[filename]["validity"], validity)
-
-    def test_get_fingerprint_md5(self):
-        for filename in self.certs:
-            # When:
-            md5 = self.certs[filename].get_fingerprint_md5()
-
-            # Then:
-            self.assertEqual(self.cert_properties[filename]["fingerprint_md5"], md5)
 
     def test_get_fingerprint_sha1(self):
         for filename in self.certs:

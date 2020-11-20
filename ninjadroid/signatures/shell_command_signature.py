@@ -13,9 +13,6 @@ class ShellCommandSignature(Signature):
     _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "shell.json")
     _SIGNATURE_KEYS_LIST = ["commands", "dirs"]
 
-    def __init__(self):
-        super(ShellCommandSignature, self).__init__()
-
     @staticmethod
     def _compile_regex(signatures: Dict):
         regex = r'('

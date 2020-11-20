@@ -13,9 +13,6 @@ class URISignature(Signature):
     _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "uri.json")
     _SIGNATURE_KEYS_LIST = ["tlds"]
 
-    def __init__(self):
-        super(URISignature, self).__init__()
-
     @staticmethod
     def _compile_regex(signatures: Dict):
         regex = r'('

@@ -18,7 +18,7 @@ class Signature:
         # they don't change at runtime we can do this just once.
         if self._IS_REGEX is None or self._IS_CONTAINED_REGEX is None:
             signatures_regex = self._get_signature_regex_from_config()
-            (self._IS_REGEX, self._IS_CONTAINED_REGEX) = self._compile_regex(signatures_regex)
+            (self._IS_REGEX, self._IS_CONTAINED_REGEX) = self._compile_regex(signatures_regex)  # pylint: disable=invalid-name
 
     @classmethod
     def _get_signature_regex_from_config(cls):

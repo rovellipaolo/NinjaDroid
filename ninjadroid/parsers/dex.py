@@ -9,9 +9,11 @@ from ninjadroid.signatures.uri_signature import URISignature
 from ninjadroid.signatures.shell_command_signature import ShellCommandSignature
 from ninjadroid.signatures.signature import Signature
 
-logger = logging.getLogger(__name__)
+
+global_logger = logging.getLogger(__name__)
 
 
+# pylint: disable=too-many-instance-attributes
 class Dex(File, DexInterface):
     """
     Parser implementation for Android DEX file.
@@ -19,8 +21,8 @@ class Dex(File, DexInterface):
 
     __DEX_FILE_REGEX = ".*\\.dex$"
 
-    def __init__(self, filepath: str, filename: str, string_processing: bool = True, logger=logger):
-        super(Dex, self).__init__(filepath, filename)
+    def __init__(self, filepath: str, filename: str, string_processing: bool = True, logger=global_logger):
+        super().__init__(filepath, filename)
 
         self.logger = logger
         self.logger.debug("Init Dex on %s, filename=%s, string_processing=%s", filepath, filename, string_processing)
@@ -76,7 +78,7 @@ class Dex(File, DexInterface):
 
     def _extract_urls_from(self, string: str) -> Sequence[str]:
         if not hasattr(self, "_uri"):
-            self._uri_signature = URISignature()
+            self._uri_signature = URISignature()  # pylint: disable=attribute-defined-outside-init
         if len(string) > 6:
             uri = self._uri_signature.get_matches_in_string(string)
             if uri != "":
@@ -85,7 +87,7 @@ class Dex(File, DexInterface):
 
     def _extract_shell_commands_from(self, string: str) -> Sequence[str]:
         if not hasattr(self, "_shell"):
-            self._shell_signature = ShellCommandSignature()
+            self._shell_signature = ShellCommandSignature()  # pylint: disable=attribute-defined-outside-init
         command = self._shell_signature.get_matches_in_string(string)
         if command != "":
             return [command]
@@ -93,7 +95,7 @@ class Dex(File, DexInterface):
 
     def _extract_custom_signature_from(self, string: str) -> Sequence[str]:
         if not hasattr(self, "_signatures"):
-            self._generic_signature = Signature()
+            self._generic_signature = Signature()  # pylint: disable=attribute-defined-outside-init
         signature = self._generic_signature.get_matches_in_string(string)
         if signature != "":
             return [signature]
@@ -104,7 +106,7 @@ class Dex(File, DexInterface):
         return bool(re.search(Dex.__DEX_FILE_REGEX, filename))
 
     def dump(self) -> Dict:
-        dump = super(Dex, self).dump()
+        dump = super().dump()
         dump["urls"] = self._urls
         dump["shell_commands"] = self._shell_commands
         # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)

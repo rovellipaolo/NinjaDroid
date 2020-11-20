@@ -165,7 +165,7 @@ check-str-concat-over-line-jumps=no
 [MISCELLANEOUS]
 
 # List of note tags to take in consideration, separated by a comma.
-notes=FIXME, XXX, TODO
+notes=FIXME, XXX
 
 
 [TYPECHECK]
@@ -214,8 +214,7 @@ min-similarity-lines=4
 [DESIGN]
 
 # Maximum number of arguments for function / method.
-#max-args=5
-max-args=4
+max-args=5
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7

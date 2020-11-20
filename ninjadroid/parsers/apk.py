@@ -18,7 +18,7 @@ from ninjadroid.parsers.dex import Dex
 from ninjadroid.parsers.file import File
 
 
-logger = logging.getLogger(__name__)
+global_logger = logging.getLogger(__name__)
 
 
 class APK(File, APKInterface):
@@ -28,8 +28,8 @@ class APK(File, APKInterface):
 
     _TEMPORARY_DIR = ".ninjadroid"
 
-    def __init__(self, filepath: str, string_processing: bool = True, logger: Logger = logger):
-        super(APK, self).__init__(filepath)
+    def __init__(self, filepath: str, string_processing: bool = True, logger: Logger = global_logger):
+        super().__init__(filepath)
 
         self.logger = logger
 
@@ -90,11 +90,11 @@ class APK(File, APKInterface):
                 raise APKParsingError
 
     @staticmethod
-    def looks_like_an_apk(filepath: str) -> bool:
-        return File.is_a_file(filepath) and is_zipfile(filepath)
+    def looks_like_an_apk(filename: str) -> bool:
+        return File.is_a_file(filename) and is_zipfile(filename)
 
     def dump(self) -> Dict:
-        dump = super(APK, self).dump()
+        dump = super().dump()
         dump["app_name"] = self._app_name
         dump["cert"] = self._cert.dump() if self._cert is not None else None
         dump["manifest"] = self._manifest.dump() if self._manifest is not None else None

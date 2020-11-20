@@ -11,25 +11,30 @@ from ninjadroid.parsers.file import File
 from ninjadroid.errors.android_manifest_parsing_error import AndroidManifestParsingError
 
 
+# pylint: disable=too-many-instance-attributes
 class AndroidManifest(File, AndroidManifestInterface):
+    """
+    Parser implementation for AndroidManifest.xml file.
+    """
+
     __FILE_NAME_ANDROIDMANIFEST_XML = "AndroidManifest.xml"
     __MANIFEST_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "manifest.json")
 
     def __init__(self, filepath: str, binary: bool = False, apk_path: str = ""):
-        super(AndroidManifest, self).__init__(filepath, "AndroidManifest.xml")
+        super().__init__(filepath, "AndroidManifest.xml")
 
         # Load the AndroidManifest.xml structure:
         with open(AndroidManifest.__MANIFEST_CONFIG_FILE, 'r') as config:
             cfg = json.load(config)
 
-        with open(filepath, 'rb') as fp:
+        with open(filepath, 'rb') as file:
             try:
                 if binary:
-                    self._raw = AXMLPrinter(fp.read()).get_buff()
+                    self._raw = AXMLPrinter(file.read()).get_buff()
                     xml = minidom.parseString(self._raw)
                 else:
                     xml = minidom.parse(filepath)
-            except ExpatError:
+            except ExpatError as error:
                 if apk_path != "":
                     apk = Aapt.get_apk_info(apk_path)
                     self._package_name = apk["package_name"]
@@ -41,9 +46,9 @@ class AndroidManifest(File, AndroidManifestInterface):
                     self._services = man["services"]
                     self._receivers = man["receivers"]
                 else:
-                    raise AndroidManifestParsingError
-            except IOError:
-                raise AndroidManifestParsingError
+                    raise AndroidManifestParsingError from error
+            except IOError as error:
+                raise AndroidManifestParsingError from error
             else:
                 manifest = xml.documentElement
 
@@ -64,22 +69,30 @@ class AndroidManifest(File, AndroidManifestInterface):
                     self._sdk = {}
 
                 # Extract the permissions info:
-                self._permissions = AndroidManifest._parse_element_to_simple_list(manifest,
-                                                                                  "uses-permission",
-                                                                                  cfg['uses-permission'][0])
+                self._permissions = AndroidManifest._parse_element_to_simple_list(
+                    manifest,
+                    "uses-permission",
+                    cfg['uses-permission'][0]
+                )
 
                 # Extract the application info:
                 application = manifest.getElementsByTagName(cfg['application']['tag'])
                 application = application[0]
-                self._activities = AndroidManifest._parse_element_to_list_of_dict(application,
-                                                                                  cfg['application']['activity'],
-                                                                                  "activity")
-                self._services = AndroidManifest._parse_element_to_list_of_dict(application,
-                                                                                cfg['application']['service'],
-                                                                                "service")
-                self._receivers = AndroidManifest._parse_element_to_list_of_dict(application,
-                                                                                 cfg['application']['receiver'],
-                                                                                 "receiver")
+                self._activities = AndroidManifest._parse_element_to_list_of_dict(
+                    application,
+                    cfg['application']['activity'],
+                    "activity"
+                )
+                self._services = AndroidManifest._parse_element_to_list_of_dict(
+                    application,
+                    cfg['application']['service'],
+                    "service"
+                )
+                self._receivers = AndroidManifest._parse_element_to_list_of_dict(
+                    application,
+                    cfg['application']['receiver'],
+                    "receiver"
+                )
 
     @staticmethod
     def looks_like_a_manifest(filename: str) -> bool:
@@ -121,16 +134,16 @@ class AndroidManifest(File, AndroidManifestInterface):
             data = {}
 
             for key, value in component.items():
-                if type(value) is dict:
+                if isinstance(value, dict):
                     tmp = AndroidManifest._parse_element_to_list_of_dict(element, component[key], key)
                     if len(tmp) > 0:
                         data[key] = tmp
-                elif type(value) is list:
+                elif isinstance(value, list):
                     tmp = AndroidManifest._parse_element_to_simple_list(element, key, value[0])
                     if len(tmp) > 0:
                         tmp.sort()
                         data[key] = tmp
-                else:  # type(value) is str (in Python 2.7 this will be unicode)
+                else:  # isinstance(value, str)
                     if element.hasAttribute(component[key]):
                         data[key] = element.getAttribute(component[key])
 
@@ -139,7 +152,7 @@ class AndroidManifest(File, AndroidManifestInterface):
         return res
 
     def dump(self) -> Dict:
-        dump = super(AndroidManifest, self).dump()
+        dump = super().dump()
         dump["package_name"] = self._package_name
         dump["version"] = self._version
         dump["sdk"] = self._sdk

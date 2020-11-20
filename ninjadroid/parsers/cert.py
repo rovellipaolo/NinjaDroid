@@ -1,9 +1,9 @@
-from datetime import datetime
-from dateutil.tz import tzutc
-from fnmatch import fnmatch
 import re
 import subprocess
+from datetime import datetime
+from fnmatch import fnmatch
 from typing import Dict
+from dateutil.tz import tzutc
 import tzlocal
 
 from ninjadroid.parsers.cert_interface import CertInterface
@@ -11,6 +11,7 @@ from ninjadroid.parsers.file import File
 from ninjadroid.errors.cert_parsing_error import CertParsingError
 
 
+# pylint: disable=too-many-instance-attributes
 class Cert(File, CertInterface):
     """
     Parser implementation for Android CERT.RSA/DSA certificate file.
@@ -55,7 +56,7 @@ class Cert(File, CertInterface):
     }
 
     def __init__(self, filepath: str, filename: str = ""):
-        super(Cert, self).__init__(filepath, filename)
+        super().__init__(filepath, filename)
 
         self._raw = self._extract_decoded_cert_file()
         self._serial_number = self._extract_string_pattern(self._raw, "^" + Cert.__LABEL_SERIAL_NUMBER + "(.*)$")
@@ -92,15 +93,15 @@ class Cert(File, CertInterface):
             cert_validity_until_pattern = Cert.__LABEL_VALIDITY["until"] + "(.*)$"
             self._validity["until"] = self._extract_string_pattern(validity, cert_validity_until_pattern)
 
-            tz = tzlocal.get_localzone()
+            time_zone = tzlocal.get_localzone()
 
             try:
                 dt_from = datetime.strptime(self._validity["from"], "%a %b %d %H:%M:%S %Z %Y")
-                local_dt_from = tz.localize(dt_from)
+                local_dt_from = time_zone.localize(dt_from)
                 utc_dt_from = local_dt_from.astimezone(tzutc())
 
                 dt_until = datetime.strptime(self._validity["until"], "%a %b %d %H:%M:%S %Z %Y")
-                local_dt_until = tz.localize(dt_until)
+                local_dt_until = time_zone.localize(dt_until)
                 utc_dt_until = local_dt_until.astimezone(tzutc())
 
             except ValueError:
@@ -168,8 +169,7 @@ class Cert(File, CertInterface):
         match = re.search(pattern, string, re.MULTILINE | re.IGNORECASE)
         if match and match.group(1):
             return match.group(1).strip()
-        else:
-            return ""
+        return ""
 
     @staticmethod
     def looks_like_a_cert(filename: str) -> bool:
@@ -178,7 +178,7 @@ class Cert(File, CertInterface):
             fnmatch(filename, Cert.__FILE_NAME_CERT_ALT_REGEX)
 
     def dump(self) -> Dict:
-        dump = super(Cert, self).dump()
+        dump = super().dump()
         dump["serial_number"] = self._serial_number
         dump["validity"] = self._validity
         dump["fingerprint"] = {}

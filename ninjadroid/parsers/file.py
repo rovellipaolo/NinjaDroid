@@ -7,6 +7,7 @@ from ninjadroid.errors.parsing_error import ParsingError
 from ninjadroid.parsers.file_interface import FileInterface
 
 
+# pylint: disable=too-many-instance-attributes
 class File(FileInterface):
     """
     Parser implementation for a file.
@@ -31,8 +32,8 @@ class File(FileInterface):
 
         self._size = getsize(filepath)
 
-        with open(filepath, "rb") as fp:
-            self._raw = fp.read()
+        with open(filepath, "rb") as file:
+            self._raw = file.read()
             self._extract_and_set_file_hashes()
 
     def _extract_and_set_file_hashes(self):

@@ -4,9 +4,10 @@ import os
 import os.path
 
 
-logger = logging.getLogger(__name__)
+default_logger = logging.getLogger(__name__)
 
 
+# pylint: disable=too-few-public-methods
 class LaunchDex2Jar:
     """
     Generate a JAR file from the DEX one.
@@ -15,7 +16,7 @@ class LaunchDex2Jar:
     __DIRECTORY = "dex2jar"
     __FILE = "d2j-dex2jar.sh"
 
-    def __init__(self, logger: Logger = logger):  # noqa
+    def __init__(self, logger: Logger = default_logger):
         self.logger = logger
         self.dex2jar = os.path.join(
             os.path.dirname(__file__),

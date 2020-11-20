@@ -4,9 +4,10 @@ import os
 import os.path
 
 
-logger = logging.getLogger(__name__)
+default_logger = logging.getLogger(__name__)
 
 
+# pylint: disable=too-few-public-methods
 class LaunchApkTool:
     """
     Extract the (decrypted) AndroidManifest.xml, the resources and generate the disassembled smali files.
@@ -15,7 +16,7 @@ class LaunchApkTool:
     __DIRECTORY = "apktool"
     __FILE = "apktool.jar"
 
-    def __init__(self, logger: Logger = logger):  # noqa
+    def __init__(self, logger: Logger = default_logger):
         self.logger = logger
         self.apktool = os.path.join(
             os.path.dirname(__file__),

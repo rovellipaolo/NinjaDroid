@@ -5,7 +5,7 @@ fail-under=10.0
 
 # Disable some rules.
 # For example: C0114 (missing-module-docstring), C0115 (missing-class-docstring), C0116 (missing-function-docstring).
-disable=C0116, E0611
+disable=C0114, C0116, E0611, R0801
 
 # Add files or directories to the blacklist. They should be base names, not paths.
 ignore=CVS

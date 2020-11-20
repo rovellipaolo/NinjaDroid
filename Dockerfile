@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim-buster
+FROM openjdk:14-slim-buster
 
 # Install dependencies
 

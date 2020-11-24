@@ -1,0 +1,12 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+# default_stages: [commit, push]
+# fail_fast: true
+repos:
+-   repo: local
+    hooks:
+    -   id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [ python ]

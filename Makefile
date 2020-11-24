@@ -11,7 +11,6 @@ build:
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
 	@pip3 install -r requirements.txt
-	sudo ln -s $(NINJADROID_HOME)/ninjadroid.py /usr/local/bin/ninjadroid
 
 build-macos:
 	make build
@@ -21,13 +20,28 @@ build-linux:
 	make build
 	mv -f ninjadroid/aapt/aapt_linux ninjadroid/aapt/aapt
 
+.PHONY: build-docker
+build-docker:
+	@docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+
+
+# Install:
+.PHONY: install
+install:
+	sudo ln -s $(NINJADROID_HOME)/ninjadroid.py /usr/local/bin/ninjadroid
+
 .PHONY: uninstall
 uninstall:
 	sudo unlink /usr/local/bin/ninjadroid
 
-.PHONY: build-docker
-build-docker:
-	@docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+.PHONY: install-githooks
+install-githooks:
+	@pip3 install pre-commit
+	pre-commit install
+
+.PHONY: uninstall-githooks
+uninstall-githooks:
+	pre-commit uninstall
 
 
 # Run:

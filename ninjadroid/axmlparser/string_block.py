@@ -1,3 +1,5 @@
+# pylint: skip-file
+# Original project: https://github.com/antitree/AxmlParserPY
 from struct import unpack
 
 from ninjadroid.axmlparser.axml_constants import *

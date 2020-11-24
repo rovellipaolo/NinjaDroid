@@ -1,3 +1,5 @@
+# pylint: skip-file
+# Original project: https://github.com/antitree/AxmlParserPY
 TYPE_NULL = 0
 TYPE_REFERENCE = 1
 TYPE_ATTRIBUTE = 2

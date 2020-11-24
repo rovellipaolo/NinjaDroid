@@ -1,3 +1,5 @@
+# pylint: skip-file
+# Original project: https://github.com/antitree/AxmlParserPY
 class BuffHandle:
     """
     BuffHandle

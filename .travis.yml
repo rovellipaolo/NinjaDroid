@@ -1,0 +1,24 @@
+language: python
+jobs:
+  include:
+    - name: "Python 3.5 on Linux"
+      python: 3.5
+      before_install:
+        - make build-linux
+    - name: "Python 3.8 on Linux"
+      python: 3.8
+      before_install:
+        - make build-linux
+    - name: "Python 3.7.4 on macOS"
+      os: osx
+      osx_image: xcode11.2
+      language: shell
+      before_install:
+        - make build-macos
+install:
+  - pip install coveralls
+script:
+  - make checkstyle
+  - make test-coverage
+after_success:
+  - coveralls

@@ -3,6 +3,12 @@ NinjaDroid
 
 NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
+[![Build Status: TravisCI](https://travis-ci.org/rovellipaolo/NinjaDroid.svg?branch=master)](https://travis-ci.org/rovellipaolo/NinjaDroid)
+[![Test Coverage: Coveralls](https://coveralls.io/repos/github/rovellipaolo/NinjaDroid/badge.svg?branch=master)](https://coveralls.io/github/rovellipaolo/NinjaDroid?branch=master)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+![NinjaDroid](docs/images/ninjadroid.gif "Screencast of NinjaDroid")
+
 ## Overview:
 
 NinjaDroid uses a modified version of the Androguard `AXMLParser` (by Anthony Desnos) together with a series of other Python scripts (by Paolo Rovelli) based on `aapt`, `keytool`, string and such to extract a series of information from a given APK package, such as:
@@ -172,6 +178,12 @@ Or alternatively:
 ```
 $ make test
 ```
+
+You can also run the tests with coverage by launching the following command:
+```
+$ make test-coverage
+```
+
 
 ### Docker:
 To run the tests in Docker, launch the following command:

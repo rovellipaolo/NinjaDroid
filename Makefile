@@ -63,6 +63,11 @@ run-docker-with-output:
 test:
 	@python3 -m unittest
 
+.PHONY: test-coverage
+test-coverage:
+	coverage run --source=. -m unittest
+	coverage report
+
 .PHONY: test-docker
 test-docker:
 	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid ${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest

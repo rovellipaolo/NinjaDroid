@@ -1,4 +1,5 @@
-pylint==2.6.0
+coverage
+pylint
 python-dateutil==2.8.0
 typing==3.6.1
 tzlocal==1.5.1

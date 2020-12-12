@@ -144,6 +144,17 @@ class TestFile(unittest.TestCase):
             # Then:
             self.assertEqual(self.files_properties[filename]["sha512"], sha512)
 
+    def test_dump(self):
+        for filename in self.files:
+            dump = self.files[filename].dump()
+
+            self.assertEqual(self.files_properties[filename]["name"], dump["file"])
+            self.assertEqual(self.files_properties[filename]["size"], dump["size"])
+            self.assertEqual(self.files_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.files_properties[filename]["sha1"], dump["sha1"])
+            self.assertEqual(self.files_properties[filename]["sha256"], dump["sha256"])
+            self.assertEqual(self.files_properties[filename]["sha512"], dump["sha512"])
+
 
 if __name__ == "__main__":
     unittest.main()

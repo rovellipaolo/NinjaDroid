@@ -176,7 +176,6 @@ class TestDex(unittest.TestCase):
             self.assertEqual(self.dex_properties[filename]["name"], dump["file"])
             self.assertEqual(self.dex_properties[filename]["size"], dump["size"])
             self.assertEqual(self.dex_properties[filename]["md5"], dump["md5"])
-            self.assertEqual(self.dex_properties[filename]["md5"], dump["md5"])
             self.assertEqual(self.dex_properties[filename]["sha1"], dump["sha1"])
             self.assertEqual(self.dex_properties[filename]["sha256"], dump["sha256"])
             self.assertEqual(self.dex_properties[filename]["sha512"], dump["sha512"])

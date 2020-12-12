@@ -65,8 +65,8 @@ test:
 
 .PHONY: test-coverage
 test-coverage:
-	coverage run --source=. -m unittest
-	coverage report
+	@coverage3 run --source=. -m unittest
+	@coverage3 report
 
 .PHONY: test-docker
 test-docker:

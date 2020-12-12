@@ -42,6 +42,19 @@ class TestAndroidManifest(unittest.TestCase):
         self.assertTrue(self.manifests["binary"] is not None)
         self.assertTrue(type(self.manifests["binary"]) is AndroidManifest)
 
+        # Test AndroidManifest.xml file with wrong configuration but original APK file is passed:
+        manifest = AndroidManifest(
+            filepath=join("tests", "data", "AndroidManifestBinary.xml"),
+            binary=False,
+            apk_path=join("tests", "data", "Example.apk")
+        )
+        self.assertTrue(manifest is not None)
+        self.assertTrue(type(manifest) is AndroidManifest)
+
+        # Test the class raise when a AndroidManifest.xml file with wrong configuration is given:
+        with self.assertRaises(AndroidManifestParsingError):
+            AndroidManifest(join("tests", "data", "AndroidManifestBinary.xml"), False)
+
         # Test the class raise when a non-existing file is given:
         with self.assertRaises(ParsingError):
             AndroidManifest(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
@@ -423,6 +436,14 @@ class TestAndroidManifest(unittest.TestCase):
         for man in self.manifests:
             receivers_count = self.manifests[man].get_number_of_broadcast_receivers()
             self.assertEqual(4, receivers_count)
+
+    def test_dump(self):
+        for man in self.manifests:
+            dump = self.manifests[man].dump()
+
+            self.assertEqual("AndroidManifest.xml", dump["file"])
+            self.assertEqual('com.example.app', dump["package_name"])
+            self.assertEqual({"code": 1, "name": "1.0"}, dump["version"])
 
 
 if __name__ == "__main__":

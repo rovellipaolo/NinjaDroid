@@ -169,6 +169,20 @@ class TestDex(unittest.TestCase):
     #         # Then:
     #         self.assertEqual(self.dex_properties[filename]["custom_signatures"], custom_signatures)
 
+    def test_dump(self):
+        for filename in self.dexes:
+            dump = self.dexes[filename].dump()
+
+            self.assertEqual(self.dex_properties[filename]["name"], dump["file"])
+            self.assertEqual(self.dex_properties[filename]["size"], dump["size"])
+            self.assertEqual(self.dex_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.dex_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.dex_properties[filename]["sha1"], dump["sha1"])
+            self.assertEqual(self.dex_properties[filename]["sha256"], dump["sha256"])
+            self.assertEqual(self.dex_properties[filename]["sha512"], dump["sha512"])
+            self.assertEqual(self.dex_properties[filename]["urls"], dump["urls"])
+            self.assertEqual(self.dex_properties[filename]["shell_commands"], dump["shell_commands"])
+
 
 if __name__ == "__main__":
     unittest.main()

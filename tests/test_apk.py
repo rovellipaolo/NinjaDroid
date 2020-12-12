@@ -232,6 +232,19 @@ class TestAPK(unittest.TestCase):
             # Then:
             self.assertEqual(self.apks_properties[filename]["app_name"], name)
 
+    def test_dump(self):
+        for filename in self.apks:
+            dump = self.apks[filename].dump()
+
+            self.assertEqual(self.apks_properties[filename]["name"], dump["file"])
+            self.assertEqual(self.apks_properties[filename]["size"], dump["size"])
+            self.assertEqual(self.apks_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.apks_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.apks_properties[filename]["sha1"], dump["sha1"])
+            self.assertEqual(self.apks_properties[filename]["sha256"], dump["sha256"])
+            self.assertEqual(self.apks_properties[filename]["sha512"], dump["sha512"])
+            self.assertEqual(self.apks_properties[filename]["app_name"], dump["app_name"])
+
 
 if __name__ == "__main__":
     unittest.main()

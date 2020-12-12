@@ -226,6 +226,19 @@ class TestCert(unittest.TestCase):
             self.assertEqual(self.cert_properties[filename]["issuer"]["country"], issuer["country"])
             self.assertEqual(self.cert_properties[filename]["issuer"]["domain"], issuer["domain"])
 
+    def test_dump(self):
+        for filename in self.certs:
+            dump = self.certs[filename].dump()
+
+            self.assertEqual(self.cert_properties[filename]["name"], dump["file"])
+            self.assertEqual(self.cert_properties[filename]["size"], dump["size"])
+            self.assertEqual(self.cert_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.cert_properties[filename]["md5"], dump["md5"])
+            self.assertEqual(self.cert_properties[filename]["sha1"], dump["sha1"])
+            self.assertEqual(self.cert_properties[filename]["sha256"], dump["sha256"])
+            self.assertEqual(self.cert_properties[filename]["sha512"], dump["sha512"])
+            self.assertEqual(self.cert_properties[filename]["serial_number"], dump["serial_number"])
+
 
 if __name__ == "__main__":
     unittest.main()

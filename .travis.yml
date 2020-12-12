@@ -1,5 +1,7 @@
 language: python
 jobs:
+  allow_failures:
+    - os: osx
   include:
     - name: "Python 3.5 on Linux"
       python: 3.5

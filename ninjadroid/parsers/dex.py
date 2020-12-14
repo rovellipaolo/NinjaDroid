@@ -3,7 +3,6 @@ import re
 import subprocess
 from typing import Dict, List, Sequence
 
-from ninjadroid.parsers.dex_interface import DexInterface
 from ninjadroid.parsers.file import File
 from ninjadroid.signatures.uri_signature import URISignature
 from ninjadroid.signatures.shell_command_signature import ShellCommandSignature
@@ -14,7 +13,7 @@ global_logger = logging.getLogger(__name__)
 
 
 # pylint: disable=too-many-instance-attributes
-class Dex(File, DexInterface):
+class Dex(File):
     """
     Parser implementation for Android DEX file.
     """

@@ -6,13 +6,12 @@ from typing import Any, Dict, List
 
 from ninjadroid.aapt.aapt import Aapt
 from ninjadroid.axmlparser.axml_printer import AXMLPrinter
-from ninjadroid.parsers.android_manifest_interface import AndroidManifestInterface
 from ninjadroid.parsers.file import File
 from ninjadroid.errors.android_manifest_parsing_error import AndroidManifestParsingError
 
 
 # pylint: disable=too-many-instance-attributes
-class AndroidManifest(File, AndroidManifestInterface):
+class AndroidManifest(File):
     """
     Parser implementation for AndroidManifest.xml file.
     """

@@ -4,11 +4,10 @@ from os.path import getsize, isfile
 from typing import Dict
 
 from ninjadroid.errors.parsing_error import ParsingError
-from ninjadroid.parsers.file_interface import FileInterface
 
 
 # pylint: disable=too-many-instance-attributes
-class File(FileInterface):
+class File:
     """
     Parser implementation for a file.
     """

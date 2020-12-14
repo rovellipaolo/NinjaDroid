@@ -6,13 +6,12 @@ from typing import Dict
 from dateutil.tz import tzutc
 import tzlocal
 
-from ninjadroid.parsers.cert_interface import CertInterface
 from ninjadroid.parsers.file import File
 from ninjadroid.errors.cert_parsing_error import CertParsingError
 
 
 # pylint: disable=too-many-instance-attributes
-class Cert(File, CertInterface):
+class Cert(File):
     """
     Parser implementation for Android CERT.RSA/DSA certificate file.
     """

@@ -11,7 +11,6 @@ from ninjadroid.errors.apk_parsing_error import APKParsingError
 from ninjadroid.errors.android_manifest_parsing_error import AndroidManifestParsingError
 from ninjadroid.errors.cert_parsing_error import CertParsingError
 from ninjadroid.errors.parsing_error import ParsingError
-from ninjadroid.parsers.apk_interface import APKInterface
 from ninjadroid.parsers.android_manifest import AndroidManifest
 from ninjadroid.parsers.cert import Cert
 from ninjadroid.parsers.dex import Dex
@@ -21,7 +20,7 @@ from ninjadroid.parsers.file import File
 global_logger = logging.getLogger(__name__)
 
 
-class APK(File, APKInterface):
+class APK(File):
     """
     Parser implementation for Android APK package.
     """

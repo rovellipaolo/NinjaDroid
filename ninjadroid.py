@@ -43,13 +43,14 @@ def main():
 
     apk = read_target_file(args.target, args.no_string_processing)
     if apk is None:
-        sys.exit(1)
+        return 1
 
     filename = get_apk_filename_without_extension(args.target)
     if args.target_output_directory is None:
         print_apk_info(apk)
     else:
         extract_apk_info_to_directory(apk, args.target, filename, args.target_output_directory)
+    return 0
 
 
 def get_args() -> Namespace:

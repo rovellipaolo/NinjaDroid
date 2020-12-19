@@ -55,7 +55,7 @@ class AXMLPrinter:
         return self.buff.encode("utf-8")
 
     def __get_prefix(self, prefix):
-        if prefix == None or len(prefix) == 0:
+        if prefix is None or len(prefix) == 0:
             return ""
 
         return prefix + ":"

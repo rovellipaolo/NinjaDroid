@@ -1,5 +1,4 @@
-import logging
-from logging import Logger
+from logging import getLogger, Logger
 import os
 import shutil
 from zipfile import ZipFile
@@ -7,7 +6,7 @@ from zipfile import ZipFile
 from ninjadroid.parsers.apk import APK
 
 
-default_logger = logging.getLogger(__name__)
+default_logger = getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods

@@ -1,5 +1,4 @@
-import logging
-from logging import Logger
+from logging import getLogger, Logger
 import os
 import shutil
 import tempfile
@@ -17,7 +16,7 @@ from ninjadroid.parsers.dex import Dex
 from ninjadroid.parsers.file import File
 
 
-global_logger = logging.getLogger(__name__)
+global_logger = getLogger(__name__)
 
 
 class APK(File):

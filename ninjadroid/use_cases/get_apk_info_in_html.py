@@ -1,12 +1,11 @@
 # pylint: skip-file
-import logging
-from logging import Logger
+from logging import getLogger, Logger
 import os
 
 from ninjadroid.parsers.apk import APK
 
 
-default_logger = logging.getLogger(__name__)
+default_logger = getLogger(__name__)
 
 
 class GetApkInfoInHtml:

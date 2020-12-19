@@ -1,10 +1,9 @@
-import logging
-from logging import Logger
+from logging import getLogger, Logger
 import os
 import os.path
 
 
-default_logger = logging.getLogger(__name__)
+default_logger = getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods

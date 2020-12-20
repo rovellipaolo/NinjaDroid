@@ -11,7 +11,7 @@ NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 ## Overview:
 
-NinjaDroid uses a modified version of the Androguard `AXMLParser` (by Anthony Desnos) together with a series of other Python scripts (by Paolo Rovelli) based on `aapt`, `keytool`, string and such to extract a series of information from a given APK package, such as:
+NinjaDroid uses a modified version of the Androguard `AXMLParser` (https://github.com/appknox/pyaxmlparser) together with a series of other Python scripts (by Paolo Rovelli) based on `aapt`, `keytool`, `string` and such to extract a series of information from a given APK package, such as:
 
 - APK file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
 - App info (e.g. app name, package name, version, lists of permissions, list of Activities/Services/BroadcastReceivers, etc...);
@@ -45,7 +45,7 @@ $ cd NinjaDroid
 NinjaDroid has two ways to be executed, in local environment or in Docker.
 
 ### Locally:
-To execute NinjaDroid in your local machine, you need `Python 3.5` or higher installed.
+To execute NinjaDroid in your local machine, you need to install `Python 3.5` or higher and `Java 8` or higher.
 
 If you have the Android SDK installed, instead of the included version of `aapt`, you can use the SDK version. In order to do so, you need to change the aapt location in 'ninjadroid/aapt/Aapt.py' (i.e. __AAPT_EXEC_PATH = "ninjadroid/aapt/aapt").
 

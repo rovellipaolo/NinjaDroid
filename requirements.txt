@@ -1,5 +1,6 @@
 coverage
 pylint
+pyaxmlparser==0.3.24
 python-dateutil==2.8.0
 typing==3.6.1
 tzlocal==1.5.1

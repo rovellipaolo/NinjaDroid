@@ -13,7 +13,16 @@ build:
 	@pip3 install -r requirements.txt
 
 build-macos:
-	make build
+	#make build
+	sudo chmod 755 ninjadroid/aapt/aapt
+	sudo chmod 755 ninjadroid/apktool/apktool.jar
+	sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
+	@pip3 install coverage
+	@pip3 install pylint
+	@pip3 install python-dateutil
+	@pip3 install typing
+	@pip3 install tzlocal
+	@pip3 install pyaxmlparser --user
 	mv -f ninjadroid/aapt/aapt_macos ninjadroid/aapt/aapt
 
 build-linux:

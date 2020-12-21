@@ -5,6 +5,7 @@ NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 [![Build Status: TravisCI](https://travis-ci.org/rovellipaolo/NinjaDroid.svg?branch=master)](https://travis-ci.org/rovellipaolo/NinjaDroid)
 [![Test Coverage: Coveralls](https://coveralls.io/repos/github/rovellipaolo/NinjaDroid/badge.svg?branch=master)](https://coveralls.io/github/rovellipaolo/NinjaDroid?branch=master)
+[![Language Grade: LGTM.com](https://img.shields.io/lgtm/grade/python/g/rovellipaolo/NinjaDroid.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rovellipaolo/NinjaDroid/context:python)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ![NinjaDroid](docs/images/ninjadroid.gif "Screencast of NinjaDroid")

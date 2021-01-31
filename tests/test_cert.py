@@ -186,7 +186,7 @@ class TestCert(unittest.TestCase):
             signature = self.certs[filename].get_fingerprint_signature()
 
             # Then:
-            self.assertEqual(self.cert_properties[filename]["fingerprint_signature"], signature)
+            self.assertTrue(signature.startswith(self.cert_properties[filename]["fingerprint_signature"]))
 
     def test_get_fingerprint_version(self):
         for filename in self.certs:

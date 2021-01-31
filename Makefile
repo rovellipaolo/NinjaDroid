@@ -92,3 +92,7 @@ test-docker-with-reload:
 .PHONY: checkstyle
 checkstyle:
 	pylint ninjadroid.py ninjadroid/
+
+.PHONY: checkstyle-docker
+checkstyle-docker:
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/

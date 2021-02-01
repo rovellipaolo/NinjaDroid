@@ -152,9 +152,12 @@ The result will be stored into the _ninjadroid/output_ directory.
 
 
 ## Run checkstyle:
-Once you've configured it (see the _"Configuration"_ section), to run the checkstyle execute:
+Once you've configured it (see the _"Configuration"_ section), you can also run NinjaDroid checkstyle as follows.
+
+### Locally:
+To run the checkstyle in your local machine, launch the following command:
 ```
-$ pylint ninjadroid.py
+$ pylint ninjadroid.py ninjadroid/
 ```
 Or alternatively:
 ```
@@ -166,6 +169,19 @@ You can also run the checkstyle automatically at every git commit by launching t
 ```
 $ make install-githooks
 ```
+
+### Docker:
+To run the checkstyle in Docker, launch the following commands:
+```
+$ docker build -t ninjadroid:latest .
+$ docker run --name ninjadroid --rm -w /opt/NinjaDroid ninjadroid:latest pylint ninjadroid.py ninjadroid/
+```
+Or alternatively:
+```
+$ make build-docker
+$ make checkstyle-docker
+```
+
 
 ## Run Tests:
 Once you've configured it (see the _"Configuration"_ section), you can also run NinjaDroid tests as follows.
@@ -185,9 +201,8 @@ You can also run the tests with coverage by launching the following command:
 $ make test-coverage
 ```
 
-
 ### Docker:
-To run the tests in Docker, launch the following command:
+To run the tests in Docker, launch the following commands:
 ```
 $ docker build -t ninjadroid:latest .
 $ docker run --name ninjadroid --rm -w /opt/NinjaDroid ninjadroid:latest python3 -m unittest

@@ -3,6 +3,18 @@ jobs:
   allow_failures:
     - osx_image: xcode12
   include:
+    # Docker: checkstyle and tests (without coverage)
+    - name: "Docker"
+      services:
+        - docker
+      install:
+        - make build-docker
+      script:  # NOTE: needed to override the generic "script" section
+        - make checkstyle-docker
+        - make test-docker
+      after_success:  # NOTE: needed to override the generic "after_success" section (i.e. coveralls report)
+        - docker ps -a
+    # Linux: checkstyle and tests (with coverage)
     - name: "Python 3.5 on Linux"
       python: 3.5
       install:
@@ -10,9 +22,10 @@ jobs:
         - pip install coveralls
     - name: "Python 3.8 on Linux"
       python: 3.8
-      before_install:
+      install:
         - make build-linux
         - pip install coveralls
+    # MacOS: checkstyle and tests (with coverage)
     - name: "Python 3.7.4 on macOS"
       os: osx
       osx_image: xcode11.2  # macOS 10.14.6

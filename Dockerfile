@@ -32,8 +32,6 @@ COPY requirements.txt ${NINJADROID_HOME}
 COPY ninjadroid.py ${NINJADROID_HOME}
 COPY ninjadroid.sh ${NINJADROID_HOME}
 COPY ninjadroid/ ${NINJADROID_HOME}/ninjadroid/
-COPY tests/ ${NINJADROID_HOME}/tests/
-COPY .pylintrc ${NINJADROID_HOME}
 
 RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt \
     && ln -s ${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}/aapt ${NINJADROID_HOME}/ninjadroid/aapt/aapt \

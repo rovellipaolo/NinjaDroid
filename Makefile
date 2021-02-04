@@ -79,15 +79,7 @@ test-coverage:
 
 .PHONY: test-docker
 test-docker:
-	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid ${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest
-
-.PHONY: test-docker-with-reload
-test-docker-with-reload:
-	@docker run --name ${DOCKER_IMAGE} --rm -it -w /opt/NinjaDroid \
-	-v ${PWD}/ninjadroid/parsers:/opt/NinjaDroid/ninjadroid/parsers \
-	-v ${PWD}/ninjadroid/use_cases:/opt/NinjaDroid/ninjadroid/use_cases \
-	-v ${PWD}/tests:/opt/NinjaDroid/tests \
-	${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/tests:/opt/NinjaDroid/tests ${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest
 
 .PHONY: checkstyle
 checkstyle:
@@ -95,4 +87,4 @@ checkstyle:
 
 .PHONY: checkstyle-docker
 checkstyle-docker:
-	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/

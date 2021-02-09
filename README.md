@@ -176,13 +176,8 @@ $ make run-flatpak apk=/path/to/your/package.apk
 
 To store the extracted info and files, use the _"-e"_ or _"--extract"_ option:
 ```
-$ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid /path/to/your/package.apk --extract
-```
-Or alternatively:
-```
 $ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid /path/to/your/package.apk --extract /output/path/
 ```
-**NOTE:** without specifying an output directory, one with the APK package name will be created inside the current working directory (e.g. `package/`). Inside this directory you will find the JSON and HTML report files (e.g. `report-package.json` and `report-package.html`), the jar file (e.g. `package.jar`) and all the rest of the APK content.
 
 
 

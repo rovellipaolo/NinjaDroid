@@ -31,9 +31,9 @@ modules:
     build-commands:
       - mkdir /app/NinjaDroid
       - cp requirements.txt /app/NinjaDroid/requirements.txt
-      - pip3 install -r requirements.txt
       - cp ninjadroid.py /app/NinjaDroid/ninjadroid.py
       - cp -r ninjadroid /app/NinjaDroid/ninjadroid
+      - pip3 install -r requirements.txt
       - ln -s /app/NinjaDroid/ninjadroid.py /app/bin/ninjadroid
     sources:
       # Build against remote source code:

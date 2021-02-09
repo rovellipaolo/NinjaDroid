@@ -9,16 +9,14 @@ NINJADROID_HOME := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 build:
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
-	sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
-	sudo chmod 755 ninjadroid/dex2jar/d2j_invoke.sh
+	sudo chmod -R 755 ninjadroid/dex2jar/
 	@pip3 install -r requirements.txt
 
 build-macos:
 	#make build
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
-	sudo chmod 755 ninjadroid/dex2jar/d2j-dex2jar.sh
-	sudo chmod 755 ninjadroid/dex2jar/d2j_invoke.sh
+	sudo chmod -R 755 ninjadroid/dex2jar/
 	@pip3 install coverage
 	@pip3 install pylint
 	@pip3 install python-dateutil

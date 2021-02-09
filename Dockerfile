@@ -37,8 +37,7 @@ RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt \
     && ln -s ${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}/aapt ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_HOME}/ninjadroid/apktool/apktool.jar \
-    && chmod a+x ${NINJADROID_HOME}/ninjadroid/dex2jar/d2j-dex2jar.sh \
-    && chmod a+x ${NINJADROID_HOME}/ninjadroid/dex2jar/d2j_invoke.sh \
+    && chmod -R a+x ${NINJADROID_HOME}/ninjadroid/dex2jar/ \
     && mkdir -p /var/log/ninjadroid \
     && chgrp -R ninjadroid /var/log/ninjadroid \
     && chmod -R g+w /var/log/ninjadroid

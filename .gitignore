@@ -5,3 +5,5 @@ __pycache__
 .idea/*
 output/*
 apks/*
+flatpak/build/*
+.flatpak-builder/*

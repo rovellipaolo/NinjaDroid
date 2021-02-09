@@ -33,6 +33,12 @@ build-linux:
 build-docker:
 	@docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
 
+.PHONY: build-flatpak
+build-flatpak:
+	@flatpak install flathub org.freedesktop.Platform//20.08 org.freedesktop.Sdk//20.08 --user
+	@flatpak install flathub org.freedesktop.Sdk.Extension.openjdk11//20.08 --user
+	@flatpak install flathub org.freedesktop.Sdk.Extension.toolchain-i386//20.08 --user
+	@flatpak-builder flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml --force-clean
 
 # Install:
 .PHONY: install
@@ -62,9 +68,9 @@ run:
 run-docker:
 	@docker run --name ${DOCKER_IMAGE} -it --rm -v ${PWD}/apks:/apks ${DOCKER_IMAGE}:${DOCKER_TAG} json $(apk)
 
-.PHONY: run-docker-with-output
-run-docker-with-output:
-	@docker run --name ${DOCKER_IMAGE} --rm -v ${PWD}/apks:/apks -v ${PWD}/output:/output ${DOCKER_IMAGE}:${DOCKER_TAG} ninjadroid -e /output $(apk)
+.PHONY: run-flatpak
+run-flatpak:
+	@flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid $(apk)
 
 
 # Test:

@@ -1,0 +1,47 @@
+app-id: org.paolorovelli.NinjaDroid
+runtime: org.freedesktop.Platform
+runtime-version: "20.08"
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.openjdk11
+  - org.freedesktop.Sdk.Extension.toolchain-i386
+command: ninjadroid
+finish-args:
+  - --env=PATH=/app/bin:/app/jre/bin
+  - --env=JAVA_HOME=/app/jre
+modules:
+  - name: openjdk
+    buildsystem: simple
+    build-commands:
+      - /usr/lib/sdk/openjdk11/install.sh
+  - name: python3
+    sources:
+      - type: archive
+        url: https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz
+        sha256: e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0
+  - name: binutils
+    buildsystem: simple
+    build-commands:
+      - ln -s /usr/lib/sdk/toolchain-i386/bin/i686-unknown-linux-gnu-strings /app/bin/strings
+  - name: ninjadroid
+    buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network
+    build-commands:
+      - mkdir /app/NinjaDroid
+      - cp requirements.txt /app/NinjaDroid/requirements.txt
+      - pip3 install -r requirements.txt
+      - cp ninjadroid.py /app/NinjaDroid/ninjadroid.py
+      - cp -r ninjadroid /app/NinjaDroid/ninjadroid
+      - ln -s /app/NinjaDroid/ninjadroid.py /app/bin/ninjadroid
+    sources:
+      # Build against remote source code:
+      # - type: archive
+      #   url: https://github.com/rovellipaolo/NinjaDroid/archive/master.tar.gz
+      #   sha256: a61e745aa366ba0ff51cc428614dbf4969de31b95d8ec585a73d1c4761a7aeb2
+      # Build against local source code:
+      - type: dir
+        path: ../
+    cleanup:
+      - /app/NinjaDroid/requirements.txt

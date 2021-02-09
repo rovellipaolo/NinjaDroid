@@ -208,12 +208,10 @@ $ make install-githooks
 ### Docker:
 To run the checkstyle in Docker, launch the following commands:
 ```
-$ docker build -t ninjadroid:latest .
 $ docker run --name ninjadroid --rm -w /opt/NinjaDroid ninjadroid:latest pylint ninjadroid.py ninjadroid/
 ```
 Or alternatively:
 ```
-$ make build-docker
 $ make checkstyle-docker
 ```
 
@@ -240,12 +238,10 @@ $ make test-coverage
 ### Docker:
 To run the tests in Docker, launch the following commands:
 ```
-$ docker build -t ninjadroid:latest .
-$ docker run --name ninjadroid --rm -w /opt/NinjaDroid -v tests:/opt/NinjaDroid/tests ninjadroid:latest python3 -m unittest
+$ docker run --name ninjadroid --rm -w /opt/NinjaDroid -v $(pwd)/tests:/opt/NinjaDroid/tests ninjadroid:latest python3 -m unittest
 ```
 Or alternatively:
 ```
-$ make build-docker
 $ make test-docker
 ```
 

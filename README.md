@@ -174,10 +174,7 @@ Or alternatively:
 $ make run-flatpak apk=/path/to/your/package.apk
 ```
 
-To store the extracted info and files, use the _"-e"_ or _"--extract"_ option:
-```
-$ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid /path/to/your/package.apk --extract /output/path/
-```
+**NOTE:** the _"-e"_ or _"--extract"_ option does not work correctly in Flatpak at present.
 
 
 

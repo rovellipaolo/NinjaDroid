@@ -64,8 +64,7 @@ def get_args() -> Namespace:
                     "  >> %(prog)s /path/to/file.apk --all\n"
                     "  >> %(prog)s /path/to/file.apk --all --json\n"
                     "  >> %(prog)s /path/to/file.apk --all --extract\n"
-                    "  >> %(prog)s /path/to/file.apk --all --extract /path/to/output/directory/\n"
-                    "  >> %(prog)s --version\n",
+                    "  >> %(prog)s /path/to/file.apk --all --extract /path/to/output/directory/\n",
         formatter_class=RawTextHelpFormatter
     )
     parser.add_argument(

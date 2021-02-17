@@ -12,15 +12,14 @@ NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 
 
-## Overview:
+## Overview
 
 NinjaDroid uses a modified version of the Androguard [AXMLParser](https://github.com/appknox/pyaxmlparser) together with a series of other Python scripts based on `aapt`, `keytool`, `string` and such to extract a series of information from a given APK package, such as:
 
 - APK file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
-- App info (e.g. app name, package name, version, lists of permissions, list of Activities/Services/BroadcastReceivers, etc...);
-- Digital certificate info (e.g. validity, serial number, fingerprint MD5, SHA-1, SHA-256 and signture), including certificate issuer/owner info (e.g. name, email, company, country, etc...);
-- All the strings hard-coded into the classes.dex file;
-- The URLs and shell commands hard-coded into the classes.dex file;
+- App info (e.g. app name, package name, version, sdk, lists of permissions, list of Activities/Services/BroadcastReceivers, etc...);
+- Digital certificate info (e.g. validity, serial number, fingerprint, etc...), including certificate issuer and owner info (e.g. name, email, company, country, etc...);
+- All the URLs, shell commands and other strings hard-coded into the classes.dex file;
 - AndroidManifest file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
 - classes.dex file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
 - CERT.RSA/DSA file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
@@ -33,12 +32,12 @@ Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) a
 - disassembled smali files (thanks to `apktool`);
 - AndroidManifest.xml file (thanks to `apktool`);
 - CERT.RSA file;
-- assets/ and res/ folders together with their content (thanks to `apktool`);
+- `assets/` and `res/` folders together with their content (thanks to `apktool`);
 - JSON report file, which contains all the extracted APK metadata.
 
 
 
-## Installation:
+## Installation
 The first step is cloning the NinjaDroid repository, or downloading its source code.
 
 ```
@@ -48,145 +47,66 @@ $ cd NinjaDroid
 
 NinjaDroid has several ways to be executed: in local environment, in [Docker](https://www.docker.com/) or as a [Flatpak](https://flatpak.org/).
 
-### Locally:
+### Local
 To execute NinjaDroid in your local machine, you need to install `Python 3.5` or higher, `Java 8` or higher and `binutils`.
 
 Optionally, if you have the Android SDK installed locally, you can use the SDK version of `aapt` instead of the included one. In order to do so, you need to change the `aapt` location in `ninjadroid/aapt/Aapt.py` (i.e. `__AAPT_EXEC_PATH = "ninjadroid/aapt/aapt"`).
 
-#### Linux:
+#### Linux
 Just launch the following commands, which will install all the Python dependencies (making sure that `aapt`, `apktool` and `dex2jar` have executable permissions) and add a `ninjadroid` symlink to `/usr/local/bin/`.
 
 ```
 $ make build-linux
 $ make install
-```
-
-Then, to check that everything went well, launch:
-```
 $ ninjadroid --help
 ```
 
-#### MacOS:
+#### MacOS
 Just launch the following commands, which will install all the needed Python dependencies (making sure that `aapt`, `apktool` and `dex2jar` have executable permissions) and add a `ninjadroid` symlink to `/usr/local/bin/`.
 
 ```
 $ make build-macos
 $ make install
-```
-
-Then, to check that everything went well, launch:
-```
 $ ninjadroid --help
 ```
 
-### Docker:
+### Docker
 To execute NinjaDroid in Docker, you need `Docker` installed.
 
-To build the Docker image, launch the following command:
-```
-$ docker build -t ninjadroid:latest .
-```
-Or alternatively:
+To build the Docker image, launch the following commands:
 ```
 $ make build-docker
-```
-
-Then, to check that everything went well, launch:
-```
 $ docker run --name ninjadroid ninjadroid:latest ninjadroid --help
 ```
 
-### Flatpak:
+Note that you need to bind the directory containing the target APK package to the Docker image:
+```
+$ mkdir apks
+$ cp /path/to/your/package.apk apks/package.apk
+$ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest ninjadroid /apks/package.apk -aj
+```
+And the same applies also to the output directory when using the _"-e"_ or _"--extract"_ option:
+```
+$ mkdir output
+$ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid /apks/package.apk -ae /output
+```
+
+### Flatpak
 To execute NinjaDroid as a Flatpak, you need `Flatpak` installed.
 
-Just launch the following command, which will install all the needed Flatpak dependencies:
+Just launch the following commands, which will install all the needed Flatpak dependencies:
 ```
 $ make build-flatpak
-```
-
-Then, to check that everything went well, launch:
-```
 $ flatpak-builder --run flatpak/build flatpak/net.paolorovelli.NinjaDroid.yaml ninjadroid --help
 ```
 
 
 
-## Run:
-Once you've configured it (see the _"Installation"_ section), you can run NinjaDroid as follows.
-
-### Locally:
-To print the extracted info in JSON format, launch the following command:
-```
-$ ninjadroid /path/to/your/package.apk
-```
-Or alternatively:
-```
-$ make run apk=/path/to/your/package.apk
-```
-
-To store the extracted info and files, use the _"-e"_ or _"--extract"_ option:
-```
-$ ninjadroid /path/to/your/package.apk --extract
-```
-Or alternatively:
-```
-$ ninjadroid /path/to/your/package.apk --extract /output/path/
-```
-**NOTE:** without specifying an output directory, one with the APK package name will be created inside the current working directory (e.g. `package/`). Inside this directory you will find the JSON report file (e.g. `report-package.json`), the jar file (e.g. `package.jar`) and all the rest of the APK content.
-
-Some APKs which contain many strings may require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
-```
-$ ninjadroid --no-string-process /path/to/your/package.apk
-```
-
-### Docker:
-To execute NinjaDroid in Docker, you need to firstly move the APK package to be analyzed in the `ninjadroid/apks/` directory.
-
-```
-$ mkdir apks
-$ cp /path/to/your/package.apk apks/package.apk
-```
-
-To print the extracted info in JSON format, launch the following command:
-```
-$ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest ninjadroid /apks/package.apk --all --json
-```
-Or alternatively:
-```
-$ make run-docker apk=/apks/package.apk
-```
-
-To store the extracted info and files, use the _"-e"_ or _"--extract"_ option:
-```
-$ mkdir output
-$ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid /apks/package.apk --all --extract /output
-```
-**NOTE:** the result will be stored into the `ninjadroid/output` directory.
-
-
-### Flatpak:
-To print the extracted info in JSON format, launch the following command:
-```
-$ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid /path/to/your/package.apk
-```
-Or alternatively:
-```
-$ make run-flatpak apk=/path/to/your/package.apk
-```
-
-**NOTE:** the _"-e"_ or _"--extract"_ option does not work correctly in Flatpak at present.
-
-
-
-## Run checkstyle:
+## Checkstyle
 Once you've configured it (see the _"Installation"_ section), you can also run NinjaDroid checkstyle as follows.
 
-### Locally:
+### Local
 To run the checkstyle in your local machine, launch the following command:
-```
-$ pylint ninjadroid.py ninjadroid/
-```
-Or alternatively:
 ```
 $ make checkstyle
 ```
@@ -197,27 +117,19 @@ You can also run the checkstyle automatically at every git commit by launching t
 $ make install-githooks
 ```
 
-### Docker:
-To run the checkstyle in Docker, launch the following commands:
-```
-$ docker run --name ninjadroid --rm -w /opt/NinjaDroid ninjadroid:latest pylint ninjadroid.py ninjadroid/
-```
-Or alternatively:
+### Docker
+To run the checkstyle in Docker, launch the following command:
 ```
 $ make checkstyle-docker
 ```
 
 
 
-## Run Tests:
+## Tests
 Once you've configured it (see the _"Installation"_ section), you can also run NinjaDroid tests as follows.
 
-### Locally:
+### Local
 To run the tests in your local machine, launch the following command:
-```
-$ python3 -m unittest
-```
-Or alternatively:
 ```
 $ make test
 ```
@@ -227,29 +139,19 @@ You can also run the tests with coverage by launching the following command:
 $ make test-coverage
 ```
 
-### Docker:
-To run the tests in Docker, launch the following commands:
-```
-$ docker run --name ninjadroid --rm -w /opt/NinjaDroid -v $(pwd)/tests:/opt/NinjaDroid/tests ninjadroid:latest python3 -m unittest
-```
-Or alternatively:
+### Docker
+To run the tests in Docker, launch the following command:
 ```
 $ make test-docker
 ```
 
 
 
-## Licence:
-
-NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu.org/licenses/gpl-3.0.html).
-
-
-
-## Examples
+## Usage
 
 The following are examples of running NinjaDroid against the sample APK package.
 
-### Summary
+### Show APK summary
 ```
 $ ninjadroid tests/data/Example.apk
 ```
@@ -288,7 +190,7 @@ dex:
 	sha512: 0725f961bc1bac47eb8dd045c2f0a0cf5475fd77089af7ddc3098e341a95d8b5624969b6fa47606a05d5a6adf9d74d0c52562ea41a376bd3d7d0aa3695ca2e22
 ```
 
-### Extended in JSON format
+### Show APK extended information in JSON format
 ```
 $ ninjadroid tests/data/Example.apk --all --json
 ```
@@ -617,7 +519,7 @@ $ ninjadroid tests/data/Example.apk --all --json
 }
 ```
 
-### Extract
+### Extract and store APK entries and information
 ```
 $ ninjadroid tests/data/Example.apk --all --extract analysis/Example/ 
 ```
@@ -637,3 +539,10 @@ dex2jar tests/data/Example.apk -> analysis/Example/Example.jar
   >> NinjaDroid: [INFO] Generating JSON report file...
   >> NinjaDroid: [INFO] Creating analysis/Example/report-Example.json...
 ```
+**NOTE:** without specifying an output directory, one with the APK package name will be created inside the current working directory.
+
+
+
+## Licence
+
+NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu.org/licenses/gpl-3.0.html).

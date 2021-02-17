@@ -27,7 +27,7 @@ class TestPrintApkInfo(unittest.TestCase):
             as_json=False
         )
 
-        mock_apk.dump.assert_called_once()
+        mock_apk.dump.assert_called_once_with()
         mock_json.dumps.assert_not_called()
 
     @patch('ninjadroid.use_cases.print_apk_info.json')
@@ -41,7 +41,7 @@ class TestPrintApkInfo(unittest.TestCase):
             as_json=True
         )
 
-        mock_apk.dump.assert_called_once()
+        mock_apk.dump.assert_called_once_with()
         mock_json.dumps.assert_called_once_with(
             TestPrintApkInfo.ANY_APK_DUMP,
             sort_keys=True,

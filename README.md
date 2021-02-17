@@ -14,26 +14,22 @@ NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 ## Overview
 
-NinjaDroid uses a modified version of the Androguard [AXMLParser](https://github.com/appknox/pyaxmlparser) together with a series of other Python scripts based on `aapt`, `keytool`, `string` and such to extract a series of information from a given APK package, such as:
+NinjaDroid uses [AXMLParser](https://github.com/appknox/pyaxmlparser) together with a series of Python scripts based on `aapt`, `keytool`, `string` and such to extract a series of information from a given APK package, such as:
 
-- APK file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
-- App info (e.g. app name, package name, version, sdk, lists of permissions, list of Activities/Services/BroadcastReceivers, etc...);
-- Digital certificate info (e.g. validity, serial number, fingerprint, etc...), including certificate issuer and owner info (e.g. name, email, company, country, etc...);
-- All the URLs, shell commands and other strings hard-coded into the classes.dex file;
-- AndroidManifest file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
-- classes.dex file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
-- CERT.RSA/DSA file info (i.e. file size, MD5, SHA-1, SHA-256 and SHA-512);
-- List of file entries (i.e. file name, file size, MD5, SHA-1, SHA-256 and SHA-512) in the APK package.
+- List of files of the APK package: file name, size, MD5, SHA-1, SHA-256 and SHA-512
+- AndroidManifest.xml info: app name, package name, version, sdks, permissions, activities, services, broadcast-receivers, ...
+- CERT.RSA/DSA digital certificate info: serial number, validity, fingerprint, issuer and owner
+- List of URLs, shell commands and other generic strings hard-coded into the classes.dex files
 
-Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) and [dex2jar](https://github.com/pxb1988/dex2jar), together with other Python scripts in order to extract from an APK package:
+Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) and [dex2jar](https://github.com/pxb1988/dex2jar) to extract and store:
 
-- classes.dex file;
-- translated .jar file (thanks to `dex2jar`);
-- disassembled smali files (thanks to `apktool`);
-- AndroidManifest.xml file (thanks to `apktool`);
-- CERT.RSA file;
-- `assets/` and `res/` folders together with their content (thanks to `apktool`);
-- JSON report file, which contains all the extracted APK metadata.
+- JSON report file, which contains all the extracted APK info
+- AndroidManifest.xml file (thanks to `apktool`)
+- CERT.RSA/DSA digital certificate file
+- classes.dex files
+- translated .jar file (thanks to `dex2jar`)
+- disassembled smali files (thanks to `apktool`)
+- `assets/` and `res/` folders together with their content (thanks to `apktool`)
 
 
 

@@ -76,38 +76,22 @@ class TestURISignature(unittest.TestCase):
     def setUpClass(cls):
         cls.uri = URISignature()
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_is_valid(self):
         for url in TestURISignature.valid_urls:
-            # When:
             is_valid = self.uri.is_valid(url)
 
-            # Then:
             self.assertTrue(is_valid, "URI " + url + " should be valid")
 
         for url in TestURISignature.invalid_urls:
-            # When:
             is_valid = self.uri.is_valid(url)
 
-            # Then:
             self.assertFalse(is_valid, "URI " + url + " should not be valid")
         pass
 
     def test_get_matches_in_string(self):
         for string in TestURISignature.strings_containing_urls:
-            # When:
             matches = self.uri.get_matches_in_string(string)
 
-            # Then:
             self.assertEqual(TestURISignature.strings_containing_urls[string], matches)
 
 

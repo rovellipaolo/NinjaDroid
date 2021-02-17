@@ -1,9 +1,9 @@
 FROM openjdk:11-slim-buster
 
-# Install dependencies
+# Install general dependencies
 
 RUN apt update \
-    && apt install -qy git python3 python3-pip unzip wget binutils
+    && apt install -qy python3 python3-pip unzip wget binutils
 
 # Install Android SDK
 
@@ -30,7 +30,6 @@ RUN useradd -ms /bin/bash ninjadroid && \
 
 COPY requirements.txt ${NINJADROID_HOME}
 COPY ninjadroid.py ${NINJADROID_HOME}
-COPY ninjadroid.sh ${NINJADROID_HOME}
 COPY ninjadroid/ ${NINJADROID_HOME}/ninjadroid/
 
 RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt \
@@ -40,11 +39,12 @@ RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt \
     && chmod -R a+x ${NINJADROID_HOME}/ninjadroid/dex2jar/ \
     && mkdir -p /var/log/ninjadroid \
     && chgrp -R ninjadroid /var/log/ninjadroid \
-    && chmod -R g+w /var/log/ninjadroid
+    && chmod -R g+w /var/log/ninjadroid \
+    && ln -s ${NINJADROID_HOME}/ninjadroid.py /usr/local/bin/ninjadroid
 
 USER ninjadroid
 WORKDIR /home/ninjadroid
 
 # Run NinjaDroid
-ENTRYPOINT ["/opt/NinjaDroid/ninjadroid.sh"]
+
 CMD ["ninjadroid", "-h"]

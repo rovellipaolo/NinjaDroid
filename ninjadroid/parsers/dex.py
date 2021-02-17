@@ -20,25 +20,21 @@ class Dex(File):
 
     __DEX_FILE_REGEX = ".*\\.dex$"
 
-    def __init__(self, filepath: str, filename: str, string_processing: bool = True, logger=global_logger):
+    def __init__(self, filepath: str, filename: str, logger=global_logger):
         super().__init__(filepath, filename)
-
         self.logger = logger
-        self.logger.debug("Init Dex on %s, filename=%s, string_processing=%s", filepath, filename, string_processing)
+        self.logger.debug("Dex: %filepath=s, filename=%s", filepath, filename)
 
         self._filename = filename
-
         self._strings = []  # type: List[str]
         self._urls = []  # type: List[str]
         self._shell_commands = []  # type: List[str]
         self._custom_signatures = []  # type: List[str]
 
         self._extract_and_set_strings()
-
-        if string_processing:
-            self._extract_and_set_urls()
-            self._extract_and_set_shell_commands()
-            # self. _extract_and_set_signatures()
+        self._extract_and_set_urls()
+        self._extract_and_set_shell_commands()
+        # self. _extract_and_set_signatures()
 
     def _extract_and_set_strings(self):
         self.logger.debug("Extracting strings...")

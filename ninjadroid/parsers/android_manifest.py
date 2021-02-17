@@ -19,8 +19,14 @@ class AndroidManifest(File):
     __FILE_NAME_ANDROIDMANIFEST_XML = "AndroidManifest.xml"
     __MANIFEST_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "manifest.json")
 
-    def __init__(self, filepath: str, binary: bool = False, apk_path: str = ""):
+    # TODO: refactor this code...
+    def __init__(self, filepath: str, binary: bool = False, apk_path: str = "", extended_processing: bool = True):
         super().__init__(filepath, "AndroidManifest.xml")
+        self._sdk = None
+        self._permissions = None
+        self._activities = None
+        self._services = None
+        self._receivers = None
 
         # Load the AndroidManifest.xml structure:
         with open(AndroidManifest.__MANIFEST_CONFIG_FILE, 'r') as config:
@@ -38,12 +44,13 @@ class AndroidManifest(File):
                     apk = Aapt.get_apk_info(apk_path)
                     self._package_name = apk["package_name"]
                     self._version = apk["version"]
-                    self._sdk = apk["sdk"]
-                    self._permissions = Aapt.get_app_permissions(apk_path)
-                    man = Aapt.get_manifest_info(apk_path)
-                    self._activities = man["activities"]
-                    self._services = man["services"]
-                    self._receivers = man["receivers"]
+                    if extended_processing:
+                        self._sdk = apk["sdk"]
+                        self._permissions = Aapt.get_app_permissions(apk_path)
+                        man = Aapt.get_manifest_info(apk_path)
+                        self._activities = man["activities"]
+                        self._services = man["services"]
+                        self._receivers = man["receivers"]
                 else:
                     raise AndroidManifestParsingError from error
             except IOError as error:
@@ -60,39 +67,35 @@ class AndroidManifest(File):
                     pass
                 self._version['name'] = manifest.getAttribute(cfg['package']['version']['name'])
 
-                # Extract the SDK info:
-                sdk = self._parse_element_to_list_of_dict(manifest, cfg['uses-sdk'], "uses-sdk")
-                if len(sdk) > 0:
-                    self._sdk = sdk[0]
-                else:
-                    self._sdk = {}
+                if extended_processing:
+                    # Extract the SDK info:
+                    sdk = self._parse_element_to_list_of_dict(manifest, cfg['uses-sdk'], "uses-sdk")
+                    self._sdk = sdk[0] if len(sdk) > 0 else {}
 
-                # Extract the permissions info:
-                self._permissions = AndroidManifest._parse_element_to_simple_list(
-                    manifest,
-                    "uses-permission",
-                    cfg['uses-permission'][0]
-                )
+                    # Extract the permissions info:
+                    self._permissions = AndroidManifest._parse_element_to_simple_list(
+                        manifest,
+                        "uses-permission",
+                        cfg['uses-permission'][0]
+                    )
 
-                # Extract the application info:
-                application = manifest.getElementsByTagName(cfg['application']['tag'])
-                application = application[0]
-                self._activities = AndroidManifest._parse_element_to_list_of_dict(
-                    application,
-                    cfg['application']['activity'],
-                    "activity"
-                )
-                self._services = AndroidManifest._parse_element_to_list_of_dict(
-                    application,
-                    cfg['application']['service'],
-                    "service"
-                )
-                self._receivers = AndroidManifest._parse_element_to_list_of_dict(
-                    application,
-                    cfg['application']['receiver'],
-                    "receiver"
-                )
-
+                    # Extract the application info:
+                    application = manifest.getElementsByTagName(cfg['application']['tag'])[0]
+                    self._activities = AndroidManifest._parse_element_to_list_of_dict(
+                        application,
+                        cfg['application']['activity'],
+                        "activity"
+                    )
+                    self._services = AndroidManifest._parse_element_to_list_of_dict(
+                        application,
+                        cfg['application']['service'],
+                        "service"
+                    )
+                    self._receivers = AndroidManifest._parse_element_to_list_of_dict(
+                        application,
+                        cfg['application']['receiver'],
+                        "receiver"
+                    )
     @staticmethod
     def looks_like_a_manifest(filename: str) -> bool:
         return filename == AndroidManifest.__FILE_NAME_ANDROIDMANIFEST_XML
@@ -152,13 +155,18 @@ class AndroidManifest(File):
 
     def dump(self) -> Dict:
         dump = super().dump()
-        dump["package_name"] = self._package_name
+        dump["package"] = self._package_name
         dump["version"] = self._version
-        dump["sdk"] = self._sdk
-        dump["permissions"] = self._permissions
-        dump["activities"] = self._activities
-        dump["services"] = self._services
-        dump["receivers"] = self._receivers
+        if self._sdk is not None:
+            dump["sdk"] = self._sdk
+        if self._permissions is not None:
+            dump["permissions"] = self._permissions
+        if self._activities is not None:
+            dump["activities"] = self._activities
+        if self._services is not None:
+            dump["services"] = self._services
+        if self._receivers is not None:
+            dump["receivers"] = self._receivers
         return dump
 
     def get_package_name(self) -> str:
@@ -173,23 +181,11 @@ class AndroidManifest(File):
     def get_permissions(self) -> List:
         return self._permissions
 
-    def get_number_of_permissions(self) -> int:
-        return len(self._permissions)
-
     def get_activities(self) -> List:
         return self._activities
-
-    def get_number_of_activities(self) -> int:
-        return len(self._activities)
 
     def get_services(self) -> List:
         return self._services
 
-    def get_number_of_services(self) -> int:
-        return len(self._services)
-
     def get_broadcast_receivers(self) -> List:
         return self._receivers
-
-    def get_number_of_broadcast_receivers(self) -> int:
-        return len(self._receivers)

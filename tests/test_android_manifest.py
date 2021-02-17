@@ -6,6 +6,7 @@ from ninjadroid.errors.parsing_error import ParsingError
 from ninjadroid.parsers.android_manifest import AndroidManifest
 
 
+# TODO: refactor these tests...
 class TestAndroidManifest(unittest.TestCase):
     """
     UnitTest for android_manifest.py.
@@ -15,51 +16,57 @@ class TestAndroidManifest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.manifests = {}
-
-        try:
-            cls.manifests["clean"] = AndroidManifest(join("tests", "data", "AndroidManifest.xml"), False)
-            # print(self.manifests["clean"].dump())
-
-            cls.manifests["binary"] = AndroidManifest(join("tests", "data", "AndroidManifestBinary.xml"), True)
-            # print(self.manifests["binary"].dump())
-        except AndroidManifestParsingError:
-            pass
-
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+        cls.manifests = {
+            "summary": AndroidManifest(
+                filepath=join("tests", "data", "AndroidManifest.xml"),
+                binary=False,
+                apk_path="",
+                extended_processing=False
+            ),
+            "extended": AndroidManifest(
+                filepath=join("tests", "data", "AndroidManifest.xml"),
+                binary=False,
+                apk_path="",
+                extended_processing=True
+            ),
+            "binary": AndroidManifest(
+                filepath=join("tests", "data", "AndroidManifestBinary.xml"),
+                binary=True,
+                apk_path="",
+                extended_processing=True
+            )
+        }
+        # print(self.manifests["summary"].dump())
+        # print(self.manifests["extended"].dump())
+        # print(self.manifests["binary"].dump())
 
     def test_init(self):
-        self.assertTrue(self.manifests["clean"] is not None)
-        self.assertTrue(type(self.manifests["clean"]) is AndroidManifest)
+        self.assertTrue(self.manifests["summary"] is not None)
+        self.assertTrue(type(self.manifests["summary"]) is AndroidManifest)
+        self.assertTrue(self.manifests["extended"] is not None)
+        self.assertTrue(type(self.manifests["extended"]) is AndroidManifest)
         self.assertTrue(self.manifests["binary"] is not None)
         self.assertTrue(type(self.manifests["binary"]) is AndroidManifest)
 
-        # Test AndroidManifest.xml file with wrong configuration but original APK file is passed:
+    def test_init_with_wrong_configuration_but_original_apk(self):
         manifest = AndroidManifest(
             filepath=join("tests", "data", "AndroidManifestBinary.xml"),
             binary=False,
             apk_path=join("tests", "data", "Example.apk")
         )
+
         self.assertTrue(manifest is not None)
         self.assertTrue(type(manifest) is AndroidManifest)
 
-        # Test the class raise when a AndroidManifest.xml file with wrong configuration is given:
+    def test_init_with_wrong_configuration(self):
         with self.assertRaises(AndroidManifestParsingError):
             AndroidManifest(join("tests", "data", "AndroidManifestBinary.xml"), False)
 
-        # Test the class raise when a non-existing file is given:
+    def test_init_with_non_existing_file(self):
         with self.assertRaises(ParsingError):
             AndroidManifest(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
 
-        # Test the class raise when a non-AndroidManifest.xml file is given:
+    def test_init_with_non_manifests_file(self):
         with self.assertRaises(AndroidManifestParsingError):
             AndroidManifest(join("tests", "data", "classes.dex"), False)
             AndroidManifest(join("tests", "data", "classes.dex"), True)
@@ -67,29 +74,38 @@ class TestAndroidManifest(unittest.TestCase):
             AndroidManifest(join("tests", "data", "CERT.RSA"), True)
 
     def test_get_raw_file(self):
-        self.assertTrue(len(self.manifests["clean"].get_raw_file()) > 0)
+        self.assertTrue(len(self.manifests["summary"].get_raw_file()) > 0)
+        self.assertTrue(len(self.manifests["extended"].get_raw_file()) > 0)
         self.assertTrue(len(self.manifests["binary"].get_raw_file()) > 0)
 
     def test_get_file_name(self):
-        self.assertEqual("AndroidManifest.xml", self.manifests["clean"].get_file_name())
+        self.assertEqual("AndroidManifest.xml", self.manifests["summary"].get_file_name())
+        self.assertEqual("AndroidManifest.xml", self.manifests["extended"].get_file_name())
         self.assertEqual("AndroidManifest.xml", self.manifests["binary"].get_file_name())
 
     def test_get_size(self):
-        self.assertEqual(3358, self.manifests["clean"].get_size())
+        self.assertEqual(3358, self.manifests["summary"].get_size())
+        self.assertEqual(3358, self.manifests["extended"].get_size())
         self.assertEqual(6544, self.manifests["binary"].get_size())
 
     def test_get_md5(self):
-        self.assertEqual("c098fdd0a5dcf615118dad5457a2d016", self.manifests["clean"].get_md5())
+        self.assertEqual("c098fdd0a5dcf615118dad5457a2d016", self.manifests["summary"].get_md5())
+        self.assertEqual("c098fdd0a5dcf615118dad5457a2d016", self.manifests["extended"].get_md5())
         self.assertEqual("1f97f7e7ca62f39f8f81d79b1b540c37", self.manifests["binary"].get_md5())
 
     def test_get_sha1(self):
-        self.assertEqual("d69bbde630c8a5623b72a16d46b579432f2c944d", self.manifests["clean"].get_sha1())
+        self.assertEqual("d69bbde630c8a5623b72a16d46b579432f2c944d", self.manifests["summary"].get_sha1())
+        self.assertEqual("d69bbde630c8a5623b72a16d46b579432f2c944d", self.manifests["extended"].get_sha1())
         self.assertEqual("011316a011e5b8738c12c662cb0b0a6ffe04ca74", self.manifests["binary"].get_sha1())
 
     def test_get_sha256(self):
         self.assertEqual(
             "a042569824ff2e268fdde5b8e00981293b27fe8a2a1dc72aa791e579f80bd720",
-            self.manifests["clean"].get_sha256()
+            self.manifests["summary"].get_sha256()
+        )
+        self.assertEqual(
+            "a042569824ff2e268fdde5b8e00981293b27fe8a2a1dc72aa791e579f80bd720",
+            self.manifests["extended"].get_sha256()
         )
         self.assertEqual(
             "7c8011a46191ecb368bf2e0104049abeb98bae8a7b1fa3328ff050aed85b1347",
@@ -99,7 +115,11 @@ class TestAndroidManifest(unittest.TestCase):
     def test_get_sha512(self):
         self.assertEqual(
             "8875e2d19725c824c93e9f4e45b9ebcd599bffafde1af4b98975a2d6e497fde76870e5129eef289a25328562f4f21d9ff214db95dcd3ddb3b58f358ec362d78a",
-            self.manifests["clean"].get_sha512()
+            self.manifests["summary"].get_sha512()
+        )
+        self.assertEqual(
+            "8875e2d19725c824c93e9f4e45b9ebcd599bffafde1af4b98975a2d6e497fde76870e5129eef289a25328562f4f21d9ff214db95dcd3ddb3b58f358ec362d78a",
+            self.manifests["extended"].get_sha512()
         )
         self.assertEqual(
             "8c7c1ede610f9c6613418b46a52a196ad6d5e8cc067c2f26b931738ad8087f998d9ea95e80ec4352c95fbdbb93a4f29c646973535068a3a3d584da95480ab45f",
@@ -118,31 +138,44 @@ class TestAndroidManifest(unittest.TestCase):
             self.assertEqual("1.0", version["name"])
 
     def test_get_sdk_version(self):
-        for man in self.manifests:
+        sdk = self.manifests["summary"].get_sdk_version()
+
+        self.assertIsNone(sdk)
+
+    def test_get_sdk_version_with_extended_processing(self):
+        for man in ["extended", "binary"]:
             sdk = self.manifests[man].get_sdk_version()
+
             self.assertEqual("20", sdk["target"])
             self.assertEqual("10", sdk["min"])
             self.assertEqual("20", sdk["max"])
 
     def test_get_permissions(self):
+        permissions = self.manifests["summary"].get_permissions()
+
+        self.assertIsNone(permissions)
+
+    def test_get_permissions_with_extended_processing(self):
         expected_permissions = [
             "android.permission.INTERNET",
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.RECEIVE_BOOT_COMPLETED",
-            "android.permission.WRITE_EXTERNAL_STORAGE"]
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+        ]
         expected_permissions.sort()
 
-        for man in self.manifests:
+        for man in ["extended", "binary"]:
             permissions = self.manifests[man].get_permissions()
+
             self.assertEqual(expected_permissions, permissions)
 
-    def test_get_number_of_permissions(self):
-        for man in self.manifests:
-            permissions_count = self.manifests[man].get_number_of_permissions()
-            self.assertEqual(4, permissions_count)
-
     def test_get_activities(self):
-        for man in self.manifests:
+        activities = self.manifests["summary"].get_activities()
+
+        self.assertIsNone(activities)
+
+    def test_get_activities_with_extended_processing(self):
+        for man in ["extended", "binary"]:
             activities = self.manifests[man].get_activities()
 
             # Test 1st Activity:
@@ -269,13 +302,13 @@ class TestAndroidManifest(unittest.TestCase):
                 activities[1]["intent-filter"][0]["data"][2]["mimeType"]
             )
 
-    def test_get_number_of_activities(self):
-        for man in self.manifests:
-            activities_count = self.manifests[man].get_number_of_activities()
-            self.assertEqual(2, activities_count)
-
     def test_get_services(self):
-        for man in self.manifests:
+        services = self.manifests["summary"].get_services()
+
+        self.assertIsNone(services)
+
+    def test_get_services_with_extended_processing(self):
+        for man in ["extended", "binary"]:
             services = self.manifests[man].get_services()
 
             # Test 1st Service:
@@ -329,13 +362,13 @@ class TestAndroidManifest(unittest.TestCase):
             # Test intent-filter parsing:
             self.assertTrue("intent-filter" not in services[2])
 
-    def test_get_number_of_services(self):
-        for man in self.manifests:
-            services_count = self.manifests[man].get_number_of_services()
-            self.assertEqual(3, services_count)
-
     def test_get_broadcast_receivers(self):
-        for man in self.manifests:
+        receivers = self.manifests["summary"].get_broadcast_receivers()
+
+        self.assertIsNone(receivers)
+
+    def test_get_broadcast_receivers_with_extended_processing(self):
+        for man in ["extended", "binary"]:
             receivers = self.manifests[man].get_broadcast_receivers()
 
             # Test 1st BroadcastReceiver:
@@ -432,17 +465,19 @@ class TestAndroidManifest(unittest.TestCase):
             # Test intent-filter parsing:
             self.assertTrue("intent-filter" not in receivers[3])
 
-    def test_get_number_of_broadcast_receivers(self):
-        for man in self.manifests:
-            receivers_count = self.manifests[man].get_number_of_broadcast_receivers()
-            self.assertEqual(4, receivers_count)
-
     def test_dump(self):
-        for man in self.manifests:
+        dump = self.manifests["summary"].dump()
+
+        self.assertEqual("AndroidManifest.xml", dump["file"])
+        self.assertEqual('com.example.app', dump["package"])
+        self.assertEqual({"code": 1, "name": "1.0"}, dump["version"])
+
+    def test_dump_with_extended_processing(self):
+        for man in ["extended", "binary"]:
             dump = self.manifests[man].dump()
 
             self.assertEqual("AndroidManifest.xml", dump["file"])
-            self.assertEqual('com.example.app', dump["package_name"])
+            self.assertEqual('com.example.app', dump["package"])
             self.assertEqual({"code": 1, "name": "1.0"}, dump["version"])
 
 

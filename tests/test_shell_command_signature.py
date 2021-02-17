@@ -68,38 +68,22 @@ class TestShellCommandSignature(unittest.TestCase):
     def setUpClass(cls):
         cls.shell = ShellCommandSignature()
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_is_valid(self):
         for command in TestShellCommandSignature.valid_commands:
-            # When:
             is_valid = self.shell.is_valid(command)
 
-            # Then:
             self.assertTrue(is_valid, "Command " + command + " should be valid")
 
         for command in TestShellCommandSignature.invalid_commands:
-            # When:
             is_valid = self.shell.is_valid(command)
 
-            # Then:
             self.assertFalse(is_valid, "Command " + command + " should not be valid")
         pass
 
     def test_get_matches_in_string(self):
         for string in TestShellCommandSignature.strings_containing_commands:
-            # When:
             matches = self.shell.get_matches_in_string(string)
 
-            # Then:
             self.assertEqual(TestShellCommandSignature.strings_containing_commands[string], matches)
 
 

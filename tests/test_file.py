@@ -6,6 +6,7 @@ from ninjadroid.errors.parsing_error import ParsingError
 from ninjadroid.parsers.file import File
 
 
+# TODO: refactor these tests...
 class TestFile(unittest.TestCase):
     """
     UnitTest for file.py.
@@ -65,83 +66,57 @@ class TestFile(unittest.TestCase):
                 cls.files[filename] = File(join("tests", "data", filename))
                 # print(cls.files[filename].dump())
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_init(self):
         for filename in self.files:
-            # When:
             files = self.files[filename]
 
-            # Then:
             self.assertTrue(files is not None)
             self.assertTrue(type(files) is File)
 
-        # Test the class raise when a non-existing file is given:
+    def test_init_with_non_existing_file(self):
         with self.assertRaises(ParsingError):
             File(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
 
     def test_get_raw_file(self):
         for filename in self.files:
-            # When:
             raw_file = self.files[filename].get_raw_file()
 
-            # Then:
             self.assertTrue(len(raw_file) > 0)
 
     def test_get_file_name(self):
         for filename in self.files:
-            # When:
             name = self.files[filename].get_file_name()
 
-            # Then:
             self.assertEqual(self.files_properties[filename]["name"], name)
 
     def test_get_size(self):
         for filename in self.files:
-            # When:
             size = self.files[filename].get_size()
 
-            # Then:
             self.assertEqual(self.files_properties[filename]["size"], size)
 
     def test_get_md5(self):
         for filename in self.files:
-            # When:
             md5 = self.files[filename].get_md5()
 
-            # Then:
             self.assertEqual(self.files_properties[filename]["md5"], md5)
 
     def test_get_sha1(self):
         for filename in self.files:
-            # When:
             sha1 = self.files[filename].get_sha1()
 
-            # Then:
             self.assertEqual(self.files_properties[filename]["sha1"], sha1)
 
     def test_get_sha256(self):
         for filename in self.files:
-            # When:
             sha256 = self.files[filename].get_sha256()
 
-            # Then:
             self.assertEqual(self.files_properties[filename]["sha256"], sha256)
 
     def test_get_sha512(self):
         for filename in self.files:
-            # When:
             sha512 = self.files[filename].get_sha512()
 
-            # Then:
             self.assertEqual(self.files_properties[filename]["sha512"], sha512)
 
     def test_dump(self):

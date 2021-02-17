@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock, mock_open, patch
+from unittest.mock import mock_open, patch
 
 from ninjadroid.use_cases.get_apk_info_in_json import GetApkInfoInJson
 
@@ -15,7 +15,7 @@ class TestGetApkInfoInJson(unittest.TestCase):
     ANY_DIRECTORY = "any-directory"
     ANY_JSON_PATH = "any-json-path"
     ANY_JSON_REPORT = "any-json-report"
-    ANY_APK_DUMP = "any-apk-dump"
+    ANY_APK_DUMP = { "any-key": "any-value" }
 
     sut = GetApkInfoInJson()
 

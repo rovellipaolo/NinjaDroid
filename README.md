@@ -34,7 +34,7 @@ Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) a
 - AndroidManifest.xml file (thanks to `apktool`);
 - CERT.RSA file;
 - assets/ and res/ folders together with their content (thanks to `apktool`);
-- JSON and HTML report files, which contains all the extracted APK metadata.
+- JSON report file, which contains all the extracted APK metadata.
 
 
 
@@ -132,7 +132,7 @@ Or alternatively:
 ```
 $ ninjadroid /path/to/your/package.apk --extract /output/path/
 ```
-**NOTE:** without specifying an output directory, one with the APK package name will be created inside the current working directory (e.g. `package/`). Inside this directory you will find the JSON and HTML report files (e.g. `report-package.json` and `report-package.html`), the jar file (e.g. `package.jar`) and all the rest of the APK content.
+**NOTE:** without specifying an output directory, one with the APK package name will be created inside the current working directory (e.g. `package/`). Inside this directory you will find the JSON report file (e.g. `report-package.json`), the jar file (e.g. `package.jar`) and all the rest of the APK content.
 
 Some APKs which contain many strings may require a considerable amount of time to be processed. You can speed up the process by avoiding to extract URLs and shell commands as follows:
 ```
@@ -149,7 +149,7 @@ $ cp /path/to/your/package.apk apks/package.apk
 
 To print the extracted info in JSON format, launch the following command:
 ```
-$ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest json /apks/package.apk
+$ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest ninjadroid /apks/package.apk --all --json
 ```
 Or alternatively:
 ```
@@ -159,7 +159,7 @@ $ make run-docker apk=/apks/package.apk
 To store the extracted info and files, use the _"-e"_ or _"--extract"_ option:
 ```
 $ mkdir output
-$ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid -e /output /apks/package.apk
+$ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid /apks/package.apk --all --extract /output
 ```
 **NOTE:** the result will be stored into the `ninjadroid/output` directory.
 
@@ -245,15 +245,55 @@ NinjaDroid is licensed under the GNU General Public License v3.0 (http://www.gnu
 
 
 
-## Sample JSON output
+## Examples
 
-The following is the output of NinjaDroid run against the sample APK package:
+The following are examples of running NinjaDroid against the sample APK package.
+
+### Summary
 ```
 $ ninjadroid tests/data/Example.apk
 ```
+```
+file:    tests/data/Example.apk
+size:    70058
+md5:     c9504f487c8b51412ba4980bfe3cc15d
+sha1:    482a28812495b996a92191fbb3be1376193ca59b
+sha256:  8773441a656b60c5e18481fd5ba9c1bf350d98789b975987cb3b2b57ee44ee51
+sha512:  559eab9840ff2f8507842605e60bb0730442ddf9ee7ca4ab4f386f715c1a4707766065d6f0b977816886692bf88b400643979e2fd13e6999358a21cabdfb3071
+name:    Example
+cert:
+	file:   META-INF/CERT.RSA
+	size:   906
+	md5:    860e19fa47d37d9510f1245c511a8578
+	sha1:   59a04084c0d5ef23fd05f0f429dab6267ccb3d0b
+	sha256: 0efa622919417adfa6eb77770fd33d3bcd93265ac7343695e246dab1a7b6bfee
+	sha512: 2a5befcc0bcb14e44d7b7cb4322a76933ad3e90e5e1ffbb87ba31ee7cc0172725dcc98e9d414fb3a207bc107b2a7ca7563b5f954cac6bd41d77e4726c70a95a3
+manifest:
+	file:   AndroidManifest.xml
+	size:   6544
+	md5:    1f97f7e7ca62f39f8f81d79b1b540c37
+	sha1:   011316a011e5b8738c12c662cb0b0a6ffe04ca74
+	sha256: 7c8011a46191ecb368bf2e0104049abeb98bae8a7b1fa3328ff050aed85b1347
+	sha512: 8c7c1ede610f9c6613418b46a52a196ad6d5e8cc067c2f26b931738ad8087f998d9ea95e80ec4352c95fbdbb93a4f29c646973535068a3a3d584da95480ab45f
+	package: com.example.app
+	version:
+		code:  1
+		name:  1.0
+dex:
+	file:   classes.dex
+	size:   2132
+	md5:    7bc52ece5249ccd2d72c4360f9be2ca5
+	sha1:   89476799bf92798047ca026c922a5bc33983b008
+	sha256: 3f543c68c4c059548cec619a68f329010d797e5e4c00aa46cd34c0d19cabe056
+	sha512: 0725f961bc1bac47eb8dd045c2f0a0cf5475fd77089af7ddc3098e341a95d8b5624969b6fa47606a05d5a6adf9d74d0c52562ea41a376bd3d7d0aa3695ca2e22
+```
+
+### Extended in JSON format
+```
+$ ninjadroid tests/data/Example.apk --all --json
+```
 ```json
 {
-    "app_name": "Example",
     "cert": {
         "file": "META-INF/CERT.RSA",
         "fingerprint": {
@@ -296,7 +336,7 @@ $ ninjadroid tests/data/Example.apk
             "until": "2515-02-26 10:06:13Z"
         }
     },
-    "dex_files": [
+    "dex": [
         {
             "file": "classes.dex",
             "md5": "7bc52ece5249ccd2d72c4360f9be2ca5",
@@ -389,7 +429,7 @@ $ ninjadroid tests/data/Example.apk
         ],
         "file": "AndroidManifest.xml",
         "md5": "1f97f7e7ca62f39f8f81d79b1b540c37",
-        "package_name": "com.example.app",
+        "package": "com.example.app",
         "permissions": [
             "android.permission.INTERNET",
             "android.permission.READ_EXTERNAL_STORAGE",
@@ -471,7 +511,8 @@ $ ninjadroid tests/data/Example.apk
         }
     },
     "md5": "c9504f487c8b51412ba4980bfe3cc15d",
-    "other_files": [
+    "name": "Example",
+    "other": [
         {
             "file": "res/drawable-hdpi-v4/ic_launcher.png",
             "md5": "e74dbf28ebab4e1b7442a9c78067d1c2",
@@ -574,4 +615,25 @@ $ ninjadroid tests/data/Example.apk
     "sha512": "559eab9840ff2f8507842605e60bb0730442ddf9ee7ca4ab4f386f715c1a4707766065d6f0b977816886692bf88b400643979e2fd13e6999358a21cabdfb3071",
     "size": 70058
 }
+```
+
+### Extract
+```
+$ ninjadroid tests/data/Example.apk --all --extract analysis/Example/ 
+```
+```
+  >> NinjaDroid: [INFO] Executing apktool...
+  >> NinjaDroid: [INFO] Creating analysis/Example/smali/...
+  >> NinjaDroid: [INFO] Creating analysis/Example/AndroidManifest.xml...
+  >> NinjaDroid: [INFO] Creating analysis/Example/res/...
+  >> NinjaDroid: [INFO] Creating analysis/Example/assets/...
+  >> NinjaDroid: [INFO] Executing dex2jar...
+  >> NinjaDroid: [INFO] Creating analysis/Example/Example.jar...
+dex2jar tests/data/Example.apk -> analysis/Example/Example.jar
+  >> NinjaDroid: [INFO] Extracting certificate file...
+  >> NinjaDroid: [INFO] Creating analysis/Example/META-INF/CERT.RSA...
+  >> NinjaDroid: [INFO] Extracting DEX files...
+  >> NinjaDroid: [INFO] Creating analysis/Example/classes.dex...
+  >> NinjaDroid: [INFO] Generating JSON report file...
+  >> NinjaDroid: [INFO] Creating analysis/Example/report-Example.json...
 ```

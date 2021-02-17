@@ -10,7 +10,7 @@ default_logger = getLogger(__name__)
 # pylint: disable=too-few-public-methods
 class GetApkInfoInJson:
     """
-    Generate the JSON report file.
+    Generate the APK report and store it a JSON file.
     """
 
     __REPORT_FILENAME_PREFIX = "report-"

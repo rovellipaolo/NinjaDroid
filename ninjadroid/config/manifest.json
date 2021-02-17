@@ -6,17 +6,18 @@
             "name": "android:versionName"
         }
     },
-    "uses-sdk":{
+    "uses-sdk": {
         "target":"android:targetSdkVersion",
         "min":"android:minSdkVersion",
         "max":"android:maxSdkVersion"
     },
-    "uses-permission":[
+    "uses-permission": [
         "android:name"
     ],
-    "application":{
+    "application": {
         "tag":"application",
-        "activity":{
+        "label":"android:label",
+        "activity": {
             "name":"android:name",
             "allowEmbedded":"android:allowEmbedded",
             "allowTaskReparenting":"android:allowTaskReparenting",
@@ -47,21 +48,21 @@
             "theme":"android:theme",
             "uiOptions":"android:uiOptions",
             "windowSoftInputMode":"android:windowSoftInputMode",
-            "meta-data":{
+            "meta-data": {
                 "name":"android:name",
                 "value":"android:value",
                 "resource":"android:resource"
             },
-            "intent-filter":{
+            "intent-filter": {
                 "label":"android:label",
                 "priority":"android:priority",
-                "action":[
+                "action": [
                     "android:name"
                 ],
-                "category":[
+                "category": [
                     "android:name"
                 ],
-                "data":{
+                "data": {
                     "scheme":"android:scheme",
                     "host":"android:host",
                     "port":"android:port",
@@ -72,7 +73,7 @@
                 }
             }
         },
-        "service":{
+        "service": {
             "name":"android:name",
             "enabled":"android:enabled",
             "exported":"android:exported",
@@ -81,21 +82,21 @@
             "label":"android:label",
             "permission":"android:permission",
             "process":"android:process",
-            "meta-data":{
+            "meta-data": {
                 "name":"android:name",
                 "value":"android:value",
                 "resource":"android:resource"
             },
-            "intent-filter":{
+            "intent-filter": {
                 "label":"android:label",
                 "priority":"android:priority",
-                "action":[
+                "action": [
                     "android:name"
                 ],
-                "category":[
+                "category": [
                     "android:name"
                 ],
-                "data":{
+                "data": {
                     "scheme":"android:scheme",
                     "host":"android:host",
                     "port":"android:port",
@@ -106,7 +107,7 @@
                 }
             }
         },
-        "receiver":{
+        "receiver": {
             "name":"android:name",
             "enabled":"android:enabled",
             "exported":"android:exported",
@@ -114,21 +115,21 @@
             "label":"android:label",
             "permission":"android:permission",
             "process":"android:process",
-            "meta-data":{
+            "meta-data": {
                 "name":"android:name",
                 "value":"android:value",
                 "resource":"android:resource"
             },
-            "intent-filter":{
+            "intent-filter": {
                 "label":"android:label",
                 "priority":"android:priority",
-                "action":[
+                "action": [
                     "android:name"
                 ],
-                "category":[
+                "category": [
                     "android:name"
                 ],
-                "data":{
+                "data": {
                     "scheme":"android:scheme",
                     "host":"android:host",
                     "port":"android:port",

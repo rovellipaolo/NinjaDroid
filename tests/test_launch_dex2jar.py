@@ -8,7 +8,7 @@ class TestLaunchDex2Jar(unittest.TestCase):
     """
     UnitTest for launch_dex2jar.py.
 
-    RUN: python -m unittest -v tests.test_launch_dex2jar
+    RUN: python3 -m unittest -v tests.test_launch_dex2jar
     """
 
     ANY_PATH = "any-path"

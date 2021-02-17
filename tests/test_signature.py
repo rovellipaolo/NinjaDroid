@@ -41,38 +41,22 @@ class TestSignature(unittest.TestCase):
     def setUpClass(cls):
         cls.signature = Signature()
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_is_valid(self):
         for string in TestSignature.valid_commands:
-            # When:
             is_valid = self.signature.is_valid(string)
 
-            # Then:
             self.assertTrue(is_valid, "Signature for " + string + " should be valid")
 
         for string in TestSignature.invalid_commands:
-            # When:
             is_valid = self.signature.is_valid(string)
 
-            # Then:
             self.assertFalse(is_valid, "Signature for " + string + " should not be valid")
         pass
 
     def test_get_matches_in_string(self):
         for string in TestSignature.strings_containing_commands:
-            # When:
             matches = self.signature.get_matches_in_string(string)
 
-            # Then:
             self.assertEqual(TestSignature.strings_containing_commands[string], matches)
 
 

@@ -16,18 +16,18 @@ NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 NinjaDroid uses [AXMLParser](https://github.com/appknox/pyaxmlparser) together with a series of Python scripts based on `aapt`, `keytool`, `string` and such to extract a series of information from a given APK package, such as:
 
-- List of files of the APK package: file name, size, MD5, SHA-1, SHA-256 and SHA-512
-- AndroidManifest.xml info: app name, package name, version, sdks, permissions, activities, services, broadcast-receivers, ...
-- CERT.RSA/DSA digital certificate info: serial number, validity, fingerprint, issuer and owner
-- List of URLs, shell commands and other generic strings hard-coded into the classes.dex files
+- List of files of the APK: file name, size, MD5, SHA-1, SHA-256 and SHA-512
+- `AndroidManifest.xml` info: app name, package name, version, sdks, permissions, activities, services, broadcast-receivers, ...
+- `CERT.RSA/DSA` digital certificate info: serial number, validity, fingerprint, issuer and owner
+- List of URLs, shell commands and other generic strings hard-coded into the `classes.dex` files
 
 Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) and [dex2jar](https://github.com/pxb1988/dex2jar) to extract and store:
 
 - JSON report file, which contains all the extracted APK info
-- AndroidManifest.xml file (thanks to `apktool`)
-- CERT.RSA/DSA digital certificate file
-- classes.dex files
-- translated .jar file (thanks to `dex2jar`)
+- `AndroidManifest.xml` file (thanks to `apktool`)
+- `CERT.RSA/DSA` digital certificate file
+- `classes.dex` files
+- translated _.jar_ file (thanks to `dex2jar`)
 - disassembled smali files (thanks to `apktool`)
 - `assets/` and `res/` folders together with their content (thanks to `apktool`)
 

@@ -123,14 +123,6 @@ class Aapt:
     def _dump_permissions(cls, filepath: str) -> str:
         """
         Retrieve the aapt dump permissions.
-
-        Example:
-            $ aapt dump permissions tests/data/Example.apk
-            package: com.example.app
-            uses-permission: name='android.permission.INTERNET'
-            uses-permission: name='android.permission.READ_EXTERNAL_STORAGE'
-            uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'
-            uses-permission: name='android.permission.WRITE_EXTERNAL_STORAGE'
         """
         command = Aapt.__AAPT_EXEC_PATH + " dump permissions " + filepath
         return Aapt._launch_shell_command_and_get_result(command)

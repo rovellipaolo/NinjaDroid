@@ -12,7 +12,15 @@ class TestPrintApkInfo(unittest.TestCase):
     """
 
     ANY_JSON_REPORT = "any-json-report"
-    ANY_APK_DUMP = { "any-key": "any-value" }
+    ANY_APK_DUMP = {
+        "any-key": "any-value",
+        "any-dict-key": {
+            "any-dict-internal-key": "any-dict-internal-value"
+        },
+        "any-list-key": [
+            "any-list-internal-value"
+        ]
+    }
 
     sut = PrintApkInfo()
 

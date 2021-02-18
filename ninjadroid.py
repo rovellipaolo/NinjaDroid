@@ -16,7 +16,7 @@ from typing import Optional
 
 from ninjadroid.use_cases.extract_certificate_file import ExtractCertificateFile
 from ninjadroid.use_cases.extract_dex_file import ExtractDexFile
-from ninjadroid.use_cases.get_apk_info_in_json import GetApkInfoInJson
+from ninjadroid.use_cases.generate_apk_info_report import GenerateApkInfoReport
 from ninjadroid.use_cases.launch_apk_tool import LaunchApkTool
 from ninjadroid.use_cases.launch_dex2jar import LaunchDex2Jar
 from ninjadroid.use_cases.print_apk_info import PrintApkInfo
@@ -53,7 +53,7 @@ def main():
         LaunchDex2Jar(logger).execute(args.target, filename, output_directory)
         ExtractCertificateFile(logger).execute(apk, output_directory)
         ExtractDexFile(logger).execute(apk, output_directory)
-        GetApkInfoInJson(logger).execute(apk, filename, output_directory)
+        GenerateApkInfoReport(logger).execute(apk, filename, output_directory)
     return 0
 
 

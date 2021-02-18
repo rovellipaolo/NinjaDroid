@@ -8,7 +8,7 @@ default_logger = getLogger(__name__)
 
 
 # pylint: disable=too-few-public-methods
-class GetApkInfoInJson:
+class GenerateApkInfoReport:
     """
     Generate the APK report and store it a JSON file.
     """
@@ -20,7 +20,7 @@ class GetApkInfoInJson:
 
     def execute(self, apk: APK, input_filename: str,  output_directory: str):
         self.logger.info("Generating JSON report file...")
-        report_filename = GetApkInfoInJson.__REPORT_FILENAME_PREFIX + input_filename + ".json"
+        report_filename = GenerateApkInfoReport.__REPORT_FILENAME_PREFIX + input_filename + ".json"
         self.logger.info("Creating %s/%s...", output_directory, report_filename)
         with open(os.path.join(output_directory, report_filename), "w") as file:
             apk_info = json.dumps(apk.dump(), sort_keys=True, ensure_ascii=False, indent=4)

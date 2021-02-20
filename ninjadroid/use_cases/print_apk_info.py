@@ -46,6 +46,11 @@ class PrintApkInfo:
 
     @staticmethod
     def print_value(key: Optional[str], value: Optional[Any], depth: int = 0):
+        value = PrintApkInfo.format_value(key, value, depth)
+        print(value)
+
+    @staticmethod
+    def format_value(key: Optional[str], value: Optional[Any], depth: int = 0) -> str:
         if key is None:
             output = "{0} {1}".format(("\t" * depth) + "-", value)
         else:
@@ -54,4 +59,4 @@ class PrintApkInfo:
                 output = key
             else:
                 output = "{0:8} {1}".format(key, value)
-        print(output)
+        return output

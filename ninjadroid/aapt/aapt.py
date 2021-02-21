@@ -1,7 +1,7 @@
 import logging
 import os.path
-import subprocess
 import re
+from subprocess import PIPE, Popen
 from typing import Dict, Optional, List
 
 global_logger = logging.getLogger(__name__)
@@ -137,7 +137,7 @@ class Aapt:
 
     @classmethod
     def _launch_shell_command_and_get_result(cls, command: str) -> str:
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
+        process = Popen(command, stdout=PIPE, stderr=None, shell=True)
         return process.communicate()[0].decode("utf-8")
 
     @classmethod

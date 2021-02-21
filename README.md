@@ -34,6 +34,7 @@ Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) a
 
 
 ## Installation
+
 The first step is cloning the NinjaDroid repository, or downloading its source code.
 
 ```
@@ -99,6 +100,7 @@ $ flatpak-builder --run flatpak/build flatpak/net.paolorovelli.NinjaDroid.yaml n
 
 
 ## Checkstyle
+
 Once you've configured it (see the _"Installation"_ section), you can also run NinjaDroid checkstyle as follows.
 
 ### Local
@@ -122,6 +124,7 @@ $ make checkstyle-docker
 
 
 ## Tests
+
 Once you've configured it (see the _"Installation"_ section), you can also run NinjaDroid tests as follows.
 
 ### Local

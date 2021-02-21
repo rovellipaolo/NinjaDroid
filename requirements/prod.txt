@@ -1,0 +1,4 @@
+pyaxmlparser==0.3.24
+python-dateutil==2.8.1
+typing==3.7.4
+tzlocal==2.1

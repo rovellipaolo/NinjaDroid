@@ -218,7 +218,7 @@ class TestAapt(unittest.TestCase):
     def test_get_app_name(self, mock_popen):
         mock_popen.return_value = self.any_popen(b"application: label='Example' icon='res/ic_launcher.png'\n")
 
-        app_name = Aapt.get_app_name("myApk.apk")
+        app_name = Aapt.get_app_name("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual("Example", app_name)
@@ -227,7 +227,7 @@ class TestAapt(unittest.TestCase):
     def test_get_app_name_when_dumb_badging_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
 
-        app_name = Aapt.get_app_name("myApk.apk")
+        app_name = Aapt.get_app_name("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual("", app_name)
@@ -249,7 +249,7 @@ class TestAapt(unittest.TestCase):
                        b"targetSdkVersion:'15'"
         mock_popen.return_value = self.any_popen(dump_badging)
 
-        apk = Aapt.get_apk_info("myApk.apk")
+        apk = Aapt.get_apk_info("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual(
@@ -272,7 +272,7 @@ class TestAapt(unittest.TestCase):
     def test_get_apk_info_when_dumb_badging_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
 
-        apk = Aapt.get_apk_info("myApk.apk")
+        apk = Aapt.get_apk_info("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual(
@@ -307,7 +307,7 @@ class TestAapt(unittest.TestCase):
     def test_get_manifest_info_when_dumb_xmltree_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
 
-        manifest = Aapt.get_manifest_info("myApk.apk")
+        manifest = Aapt.get_manifest_info("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual(
@@ -344,7 +344,7 @@ class TestAapt(unittest.TestCase):
                            b"uses-permission: name='android.permission.INTERNET'"
         mock_popen.return_value = self.any_popen(dump_permissions)
 
-        permissions = Aapt.get_app_permissions("myApk.apk")
+        permissions = Aapt.get_app_permissions("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual(
@@ -361,7 +361,7 @@ class TestAapt(unittest.TestCase):
     def test_get_app_permissions_when_dumb_permissions_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
 
-        permissions = Aapt.get_app_permissions("myApk.apk")
+        permissions = Aapt.get_app_permissions("any-file-path")
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual([], permissions)

@@ -1,5 +1,5 @@
 import re
-import subprocess
+from subprocess import PIPE, Popen
 from datetime import datetime
 from fnmatch import fnmatch
 from typing import Dict
@@ -57,22 +57,23 @@ class Cert(File):
     def __init__(self, filepath: str, filename: str = ""):
         super().__init__(filepath, filename)
 
-        self._raw = self._extract_decoded_cert_file()
+        self._raw = self._extract_decoded_cert_file(self.get_file_path())
         self._serial_number = self._extract_string_pattern(self._raw, "^" + Cert.__LABEL_SERIAL_NUMBER + "(.*)$")
         self._extract_and_set_validity()
         self._extract_and_set_fingerprint()
         self._extract_and_set_owner()
         self._extract_and_set_issuer()
 
-    def _extract_decoded_cert_file(self) -> str:
+    @staticmethod
+    def _extract_decoded_cert_file(file_path) -> str:
         """
         Retrieve decoded (PKCS7) certificate file, using keytool utility.
 
         :return: The raw decoded file.
         :raise CertParsingError: If there is a keytool error.
         """
-        command = "keytool -printcert -file " + self.get_file_path()
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
+        command = "keytool -printcert -file " + file_path
+        process = Popen(command, stdout=PIPE, stderr=None, shell=True)
         raw = process.communicate()[0].decode("utf-8")
         if re.search("^keytool error", raw, re.IGNORECASE):
             raise CertParsingError

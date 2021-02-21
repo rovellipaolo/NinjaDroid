@@ -1,13 +1,15 @@
 from os import listdir
 from os.path import join
+from parameterized import parameterized
+from subprocess import PIPE
 import unittest
+from unittest.mock import patch, Mock
 
 from ninjadroid.errors.cert_parsing_error import CertParsingError
 from ninjadroid.errors.parsing_error import ParsingError
 from ninjadroid.parsers.cert import Cert
 
 
-# TODO: refactor these tests...
 class TestCert(unittest.TestCase):
     """
     UnitTest for cert.py.
@@ -55,6 +57,12 @@ class TestCert(unittest.TestCase):
         },
     }
 
+    @staticmethod
+    def any_popen(stdout):
+        any_popen = Mock()
+        any_popen.communicate.return_value = (stdout, "")
+        return any_popen
+
     @classmethod
     def setUpClass(cls):
         cls.certs = {}
@@ -64,28 +72,46 @@ class TestCert(unittest.TestCase):
                 cls.certs[filename] = Cert(join("tests", "data", filename), filename)
                 # print(cls.certs[filename].dump())
 
-    def test_init(self):
-        for filename in self.certs:
-            cert = self.certs[filename]
+    def test_integration_init(self):
+        for filename in listdir(join("tests", "data")):
+            if filename in self.cert_properties:
+                cert = Cert(join("tests", "data", filename), filename)
 
-            self.assertTrue(cert is not None)
-            self.assertTrue(type(cert) is Cert)
+                self.assertTrue(cert is not None)
+                self.assertTrue(type(cert) is Cert)
 
-    def test_init_with_non_existing_file(self):
+    def test_integration_init_with_non_existing_file(self):
         with self.assertRaises(ParsingError):
             Cert(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
 
-    def test_init_with_non_cert_file(self):
+    def test_integration_init_with_non_cert_file(self):
         with self.assertRaises(CertParsingError):
             Cert(join("tests", "data", "Example.apk"))
             Cert(join("tests", "data", "AndroidManifest.xml"))
             Cert(join("tests", "data", "classes.dex"))
 
-    def test_get_raw_file(self):
-        for filename in self.certs:
-            raw_file = self.certs[filename].get_raw_file()
+    @patch('ninjadroid.parsers.cert.Popen')
+    def test_extract_decoded_cert_file(self, mock_popen):
+        mock_popen.return_value = self.any_popen(b"any-raw-file")
 
-            self.assertTrue(len(raw_file) > 0)
+        raw_file = Cert._extract_decoded_cert_file("any-file-path")
+
+        mock_popen.assert_called_once_with("keytool -printcert -file any-file-path", stdout=PIPE, stderr=None, shell=True)
+        self.assertEqual("any-raw-file", raw_file)
+
+    @parameterized.expand([
+        ["Serial number: 12345678", "^Serial number: (.*)$", "12345678"],
+        ["Valid from: any-from until: any-until", "^Valid (.*)$", "from: any-from until: any-until"],
+        ["from: any-from until: any-until", "^from: (.*)until: ", "any-from"],
+        ["from: any-from until: any-until", "until: (.*)$", "any-until"],
+        ["\tMD5: any-md5", "^\tMD5: (.*)$", "any-md5"],
+        ["\tSHA1: any-sha1", "^\tSHA1: (.*)$", "any-sha1"],
+        ["\tSHA256: any-sha256", "^\tSHA256: (.*)$", "any-sha256"],
+    ])
+    def test_extract_string_pattern(self, string, pattern, expected):
+        result = Cert._extract_string_pattern(string, pattern)
+
+        self.assertEqual(expected, result)
 
     def test_get_file_name(self):
         for filename in self.certs:

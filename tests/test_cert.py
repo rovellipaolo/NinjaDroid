@@ -120,7 +120,7 @@ class TestCert(unittest.TestCase):
                 self.assertEqual(self.cert_properties[filename]["validity"], cert.get_validity())
                 self.assertEqual(self.cert_properties[filename]["fingerprint_sha1"], cert.get_fingerprint_sha1())
                 self.assertEqual(self.cert_properties[filename]["fingerprint_sha256"], cert.get_fingerprint_sha256())
-                self.assertEqual(self.cert_properties[filename]["fingerprint_signature"], cert.get_fingerprint_signature())
+                self.assertTrue(cert.get_fingerprint_signature().startswith(self.cert_properties[filename]["fingerprint_signature"]))
                 self.assertEqual(self.cert_properties[filename]["fingerprint_version"], cert.get_fingerprint_version())
                 owner = cert.get_owner()
                 self.assertEqual(self.cert_properties[filename]["owner"]["name"], owner["name"])

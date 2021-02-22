@@ -14,31 +14,22 @@ class File:
 
     def __init__(self, filepath: str, filename: str = ""):
         self._path = filepath
-        if filename != "":
-            self._name = filename
-        else:
-            self._name = filepath
-
+        self._name = filename if filename != "" else filepath
         if not self.is_a_readable_file(filepath):
             raise ParsingError
 
         self._raw = ""
-        self._size = 0
+        self._size = getsize(filepath)
         self._md5 = ""
         self._sha1 = ""
         self._sha256 = ""
         self._sha512 = ""
-
-        self._size = getsize(filepath)
 
         with open(filepath, "rb") as file:
             self._raw = file.read()
             self._extract_and_set_file_hashes()
 
     def _extract_and_set_file_hashes(self):
-        """
-        Extract the file hashes and set the corresponding attributes.
-        """
         self._md5 = md5(self._raw).hexdigest()
         self._sha1 = sha1(self._raw).hexdigest()
         self._sha256 = sha256(self._raw).hexdigest()

@@ -14,35 +14,7 @@ class TestAapt(unittest.TestCase):
     RUN: python -m unittest -v tests.test_aapt
     """
 
-    files_properties = {
-        "Example.apk": {
-            "app_name": "Example",
-            "package_name": "com.example.app",
-            "version": {"name": "1.0", "code": 1},
-            "sdk": {"target": "20", "min": "10", "max": "20"},
-            "permissions": [
-                "android.permission.INTERNET",
-                "android.permission.READ_EXTERNAL_STORAGE",
-                "android.permission.RECEIVE_BOOT_COMPLETED",
-                "android.permission.WRITE_EXTERNAL_STORAGE"
-            ],
-            "receivers": [
-                {"name": "com.example.app.ExampleBrodcastReceiver"},
-                {"name": "com.example.app.ExampleBrodcastReceiver2"},
-                {"name": "com.example.app.ExampleBrodcastReceiver3"},
-                {"name": "com.example.app.ExampleBrodcastReceiver4"}
-            ],
-            "activities": [
-                {"name": "com.example.app.HomeActivity"},
-                {"name": "com.example.app.OtherActivity"}
-            ],
-            "services": [
-                {"name": "com.example.app.ExampleService"},
-                {"name": "com.example.app.ExampleService2"},
-                {"name": "com.example.app.ExampleService3"}
-            ],
-        },
-    }
+    FILE_NAME = "Example.apk"
 
     @staticmethod
     def any_popen(stdout):
@@ -60,9 +32,7 @@ class TestAapt(unittest.TestCase):
         self.assertEqual("Example1", app_name)
 
     def test_extract_app_name_when_application_label_is_not_present_but_launchable_activity_label_is(self):
-        dump_badging = "launchable-activity: name='com.example.app.HomeActivity'  label='Example2' icon=''"
-
-        app_name = Aapt._extract_app_name(dump_badging)
+        app_name = Aapt._extract_app_name("launchable-activity: name='com.example.app.HomeActivity'  label='Example2' icon=''")
 
         self.assertEqual("Example2", app_name)
 
@@ -72,30 +42,29 @@ class TestAapt(unittest.TestCase):
         self.assertEqual("", app_name)
 
     def test_extract_package_name(self):
-        dump_badging = "package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'"
-
-        package_name = Aapt._extract_package_name(dump_badging)
+        package_name = Aapt._extract_package_name("package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'")
 
         self.assertEqual("com.example.app", package_name)
 
     def test_extract_version_name(self):
-        dump_badging = "package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'"
-
-        version_name = Aapt._extract_version_name(dump_badging)
+        version_name = Aapt._extract_version_name("package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'")
 
         self.assertEqual("1.0", version_name)
 
     def _extract_version_code_when_present(self):
-        dump_badging = "package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'"
-
-        version_code = Aapt._extract_version_code(dump_badging)
+        version_code = Aapt._extract_version_code("package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'")
 
         self.assertEqual(1, version_code)
+
+    def _extract_version_code_when_invalid(self):
+        version_code = Aapt._extract_version_code("package: name='com.example.app' versionCode='A' versionName='1.0' platformBuildVersionName='4'")
+
+        self.assertIsNone(version_code)
 
     def _extract_version_code_when_missing(self):
         version_code = Aapt._extract_version_code("")
 
-        self.assertEqual(None, version_code)
+        self.assertIsNone(version_code)
 
     def test_extract_sdk_target_when_present(self):
         dump_badging = "sdkVersion:'10'\n" \
@@ -232,15 +201,6 @@ class TestAapt(unittest.TestCase):
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual("", app_name)
 
-    def test_integration_get_app_name(self):
-        for filename in listdir(join("tests", "data")):
-            if filename in self.files_properties:
-                file = join("tests", "data", filename)
-
-                app_name = Aapt.get_app_name(file)
-
-                self.assertEqual(self.files_properties[filename]["app_name"], app_name)
-
     @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_apk_info(self, mock_popen):
         dump_badging = b"package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'\n" \
@@ -269,6 +229,20 @@ class TestAapt(unittest.TestCase):
         )
 
     @patch('ninjadroid.aapt.aapt.Popen')
+    def test_get_apk_info_with_invalid_version_code(self, mock_popen):
+        mock_popen.return_value = self.any_popen(b"package: name='com.example.app' versionCode='A' versionName='1.0'\n")
+
+        apk = Aapt.get_apk_info("any-file-path")
+
+        self.assertEqual(
+            {
+                "code": "",  # NOTE: None is converted into an empty string
+                "name": "1.0"
+            },
+            apk["version"]
+        )
+
+    @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_apk_info_when_dumb_badging_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
 
@@ -287,22 +261,6 @@ class TestAapt(unittest.TestCase):
             apk
         )
 
-    def test_integration_get_apk_info(self):
-        for filename in listdir(join("tests", "data")):
-            if filename in self.files_properties:
-                file = join("tests", "data", filename)
-
-                apk = Aapt.get_apk_info(file)
-
-                self.assertEqual(
-                    {
-                        "package_name": self.files_properties[filename]["package_name"],
-                        "version": self.files_properties[filename]["version"],
-                        "sdk": self.files_properties[filename]["sdk"]
-                    },
-                    apk
-                )
-
     @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_manifest_info_when_dumb_xmltree_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
@@ -320,20 +278,30 @@ class TestAapt(unittest.TestCase):
         )
 
     def test_integration_get_manifest_info(self):
-        for filename in listdir(join("tests", "data")):
-            if filename in self.files_properties:
-                file = join("tests", "data", filename)
+        file = join("tests", "data", TestAapt.FILE_NAME)
 
-                manifest = Aapt.get_manifest_info(file)
+        manifest = Aapt.get_manifest_info(file)
 
-                self.assertEqual(
-                    {
-                        "activities": self.files_properties[filename]["activities"],
-                        "services": self.files_properties[filename]["services"],
-                        "receivers": self.files_properties[filename]["receivers"]
-                    },
-                    manifest
-                )
+        self.assertEqual(
+            {
+                "activities": [
+                    {"name": "com.example.app.HomeActivity"},
+                    {"name": "com.example.app.OtherActivity"}
+                ],
+                "services": [
+                    {"name": "com.example.app.ExampleService"},
+                    {"name": "com.example.app.ExampleService2"},
+                    {"name": "com.example.app.ExampleService3"}
+                ],
+                "receivers": [
+                    {"name": "com.example.app.ExampleBrodcastReceiver"},
+                    {"name": "com.example.app.ExampleBrodcastReceiver2"},
+                    {"name": "com.example.app.ExampleBrodcastReceiver3"},
+                    {"name": "com.example.app.ExampleBrodcastReceiver4"}
+                ]
+            },
+            manifest
+        )
 
     @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_app_permissions(self, mock_popen):
@@ -365,15 +333,6 @@ class TestAapt(unittest.TestCase):
 
         mock_popen.assert_called_once_with(ANY, stdout=PIPE, stderr=None, shell=True)
         self.assertEqual([], permissions)
-
-    def test_integration_get_app_permissions(self):
-        for filename in listdir(join("tests", "data")):
-            if filename in self.files_properties:
-                file = join("tests", "data", filename)
-
-                permissions = Aapt.get_app_permissions(file)
-
-                self.assertEqual(self.files_properties[filename]["permissions"], permissions)
 
 
 if __name__ == "__main__":

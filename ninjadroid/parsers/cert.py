@@ -16,9 +16,10 @@ class Cert(File):
     Parser implementation for Android CERT.RSA/DSA certificate file.
     """
 
-    __FILE_NAME_CERT_RSA = "META-INF/CERT.RSA"
-    __FILE_NAME_CERT_DSA = "META-INF/CERT.DSA"
-    __FILE_NAME_CERT_ALT_REGEX = "META-INF/*.RSA"
+    __FILE_PATH = "META-INF/"
+    __FILE_NAME_CERT_RSA = __FILE_PATH + "CERT.RSA"
+    __FILE_NAME_CERT_DSA = __FILE_PATH + "CERT.DSA"
+    __FILE_NAME_CERT_ALT_REGEX = __FILE_PATH + "*.RSA"
 
     __LABEL_SERIAL_NUMBER = "Serial number: "
     __LABEL_VALIDITY = {

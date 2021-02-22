@@ -1,6 +1,6 @@
 import logging
 import re
-import subprocess
+from subprocess import PIPE, Popen
 from typing import Dict, List, Sequence
 
 from ninjadroid.parsers.file import File
@@ -34,12 +34,13 @@ class Dex(File):
         self._extract_and_set_strings()
         self._extract_and_set_urls()
         self._extract_and_set_shell_commands()
+        # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
         # self. _extract_and_set_signatures()
 
     def _extract_and_set_strings(self):
         self.logger.debug("Extracting strings...")
         command = "strings " + self.get_file_path()
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
+        process = Popen(command, stdout=PIPE, stderr=None, shell=True)
         strings = filter(
             lambda string: string != "",
             (string.strip() for string in process.communicate()[0].decode("utf-8").splitlines())

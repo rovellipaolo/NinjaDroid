@@ -1,9 +1,8 @@
-from os import listdir
 from os.path import join
 from parameterized import parameterized
-from subprocess import PIPE
 import unittest
 from unittest.mock import call, patch, Mock, mock_open
+from tests.utils.popen import any_popen, assert_popen_called_once_with
 
 from ninjadroid.errors.cert_parsing_error import CertParsingError
 from ninjadroid.errors.parsing_error import ParsingError
@@ -23,12 +22,6 @@ class TestCert(unittest.TestCase):
     ANY_FILE_SHA1 = "37210614d362672e19cdd7940b7f5037de6cbcb8"
     ANY_FILE_SHA256 = "0ba1a5ba50b277bb37d05e8b9d2c6422aad49b90c08e7136d2d7c204ceaaf412"
     ANY_FILE_SHA512 = "e16ce3b471f10043be642472dc4f0156dccb434331c0c1ca19470b7dc0d025d4bb512fc5e77e78011e704b69fe0872e6fd7dee648e87401062f59149695f36f5"
-
-    @staticmethod
-    def any_popen(stdout):
-        any_popen = Mock()
-        any_popen.communicate.return_value = (stdout, "")
-        return any_popen
 
     @staticmethod
     def any_file(mock_isfile, mock_access, mock_getsize, mock_md5, mock_sha1, mock_sha256, mock_sha512):
@@ -74,13 +67,14 @@ class TestCert(unittest.TestCase):
                            b"Signature algorithm name: SHA1withRSA\n" \
                            b"Subject Public Key Algorithm: 1024-bit RSA key\n" \
                            b"Version: 3"
-        mock_popen.return_value = self.any_popen(keytool_response)
+        mock_popen.return_value = any_popen(keytool_response)
         mock_get_localzone.return_value.localize.side_effect = ValueError()
         self.any_file(mock_isfile, mock_access, mock_getsize, mock_md5, mock_sha1, mock_sha256, mock_sha512)
 
         cert = Cert("any-file-path", "any-file-name")
 
         mock_file.assert_called_with("any-file-path", "rb")
+        assert_popen_called_once_with(mock_popen, "keytool -printcert -file any-file-path")
         self.assertTrue(len(cert.get_raw_file()) > 0)
         self.assertEqual("any-file-name", cert.get_file_name())
         self.assertEqual(TestCert.ANY_FILE_SIZE, cert.get_size())
@@ -158,11 +152,11 @@ class TestCert(unittest.TestCase):
 
     @patch('ninjadroid.parsers.cert.Popen')
     def test_extract_cert_info(self, mock_popen):
-        mock_popen.return_value = self.any_popen(b"any-raw-file")
+        mock_popen.return_value = any_popen(b"any-raw-file")
 
         raw_file = Cert._extract_cert_info("any-file-path")
 
-        mock_popen.assert_called_once_with("keytool -printcert -file any-file-path", stdout=PIPE, stderr=None, shell=True)
+        assert_popen_called_once_with(mock_popen, "keytool -printcert -file any-file-path")
         self.assertEqual("any-raw-file", raw_file)
 
     @patch('ninjadroid.parsers.cert.datetime')

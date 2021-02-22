@@ -4,7 +4,7 @@ from datetime import datetime
 from fnmatch import fnmatch
 from typing import Dict
 from dateutil.tz import tzutc
-import tzlocal
+from tzlocal import get_localzone
 
 from ninjadroid.parsers.file import File
 from ninjadroid.errors.cert_parsing_error import CertParsingError
@@ -31,8 +31,8 @@ class Cert(File):
     __LABEL_FINGERPRINT_SHA256 = "\t SHA256: "
     __LABEL_FINGERPRINT_SIGNATURE = r"\t?\s?Signature algorithm name: "
     __LABEL_FINGERPRINT_VERSION = r"\t?\s?Version: "
-    __LABEL_OWNER = {
-        "label": "Owner: ",
+    __LABEL_OWNER = "Owner: "
+    __LABEL_OWNER_FIELDS = {
         "name": "CN=",
         "email": "EMAILADDRESS=",
         "unit": "OU=",
@@ -42,8 +42,8 @@ class Cert(File):
         "country": "C=",
         "domain": "DC=",
     }
-    __LABEL_ISSUER = {
-        "label": "Issuer: ",
+    __LABEL_ISSUER = "Issuer: "
+    __LABEL_ISSUER_FIELDS = {
         "name": "CN=",
         "email": "EMAILADDRESS=",
         "unit": "OU=",
@@ -56,21 +56,42 @@ class Cert(File):
 
     def __init__(self, filepath: str, filename: str = ""):
         super().__init__(filepath, filename)
-
-        self._raw = self._extract_decoded_cert_file(self.get_file_path())
-        self._serial_number = self._extract_string_pattern(self._raw, "^" + Cert.__LABEL_SERIAL_NUMBER + "(.*)$")
-        self._extract_and_set_validity()
+        self._raw = self._extract_cert_info(self.get_file_path())
+        self._serial_number = self._extract_string_pattern(
+            self._raw,
+            pattern="^" + Cert.__LABEL_SERIAL_NUMBER + "(.*)$"
+        )
         self._extract_and_set_fingerprint()
-        self._extract_and_set_owner()
-        self._extract_and_set_issuer()
+        self._validity = self._extract_validity(self._raw)
+        self._owner = self._extract_owner(self._raw)
+        self._issuer = self._extract_issuer(self._raw)
+
+    def _extract_and_set_fingerprint(self):
+        self._fingerprint_md5 = self._extract_string_pattern(
+            self._raw,
+            pattern="^" + Cert.__LABEL_FINGERPRINT_MD5 + "(.*)$"
+        )
+        self._fingerprint_sha1 = self._extract_string_pattern(
+            self._raw,
+            pattern="^" + Cert.__LABEL_FINGERPRINT_SHA1 + "(.*)$"
+        )
+        self._fingerprint_sha256 = self._extract_string_pattern(
+            self._raw,
+            pattern="^" + Cert.__LABEL_FINGERPRINT_SHA256 + "(.*)$"
+        )
+        self._fingerprint_signature = self._extract_string_pattern(
+            self._raw,
+            pattern="^" + Cert.__LABEL_FINGERPRINT_SIGNATURE + "(.*)$"
+        )
+        self._fingerprint_version = self._extract_string_pattern(
+            self._raw,
+            pattern="^" + Cert.__LABEL_FINGERPRINT_VERSION + "(.*)$"
+        )
 
     @staticmethod
-    def _extract_decoded_cert_file(file_path) -> str:
+    def _extract_cert_info(file_path) -> str:
         """
         Retrieve decoded (PKCS7) certificate file, using keytool utility.
-
-        :return: The raw decoded file.
-        :raise CertParsingError: If there is a keytool error.
         """
         command = "keytool -printcert -file " + file_path
         process = Popen(command, stdout=PIPE, stderr=None, shell=True)
@@ -79,92 +100,74 @@ class Cert(File):
             raise CertParsingError
         return raw
 
-    def _extract_and_set_validity(self):
-        """
-        Extract the APK certificate validity.
-        """
-        self._validity = {"from": "", "until": ""}
+    @staticmethod
+    def _extract_validity(raw: str) -> Dict:
+        validity = {
+            "from": "",
+            "until": ""
+        }
 
-        cert_validity_pattern = "^" + Cert.__LABEL_VALIDITY["label"] + "(.*)$"
-        validity = self._extract_string_pattern(self._raw, cert_validity_pattern)
-        if validity:
-            cert_validity_from_pattern = "^" + Cert.__LABEL_VALIDITY["from"] + "(.*)" + Cert.__LABEL_VALIDITY["until"]
-            self._validity["from"] = self._extract_string_pattern(validity, cert_validity_from_pattern)
-            cert_validity_until_pattern = Cert.__LABEL_VALIDITY["until"] + "(.*)$"
-            self._validity["until"] = self._extract_string_pattern(validity, cert_validity_until_pattern)
-
-            time_zone = tzlocal.get_localzone()
+        validity_pattern = Cert._extract_string_pattern(raw, pattern="^" + Cert.__LABEL_VALIDITY["label"] + "(.*)$")
+        if validity_pattern:
+            validity["from"] = Cert._extract_string_pattern(
+                validity_pattern,
+                pattern="^" + Cert.__LABEL_VALIDITY["from"] + "(.*)" + Cert.__LABEL_VALIDITY["until"]
+            )
+            validity["until"] = Cert._extract_string_pattern(
+                validity_pattern,
+                pattern=Cert.__LABEL_VALIDITY["until"] + "(.*)$"
+            )
 
             try:
-                dt_from = datetime.strptime(self._validity["from"], "%a %b %d %H:%M:%S %Z %Y")
-                local_dt_from = time_zone.localize(dt_from)
+                time_zone = get_localzone()
+
+                local_dt_from = time_zone.localize(
+                    dt=datetime.strptime(validity["from"], "%a %b %d %H:%M:%S %Z %Y")
+                )
                 utc_dt_from = local_dt_from.astimezone(tzutc())
 
-                dt_until = datetime.strptime(self._validity["until"], "%a %b %d %H:%M:%S %Z %Y")
-                local_dt_until = time_zone.localize(dt_until)
+                local_dt_until = time_zone.localize(
+                    dt=datetime.strptime(validity["until"], "%a %b %d %H:%M:%S %Z %Y")
+                )
                 utc_dt_until = local_dt_until.astimezone(tzutc())
-
             except ValueError:
                 pass
             else:
-                self._validity["from"] = utc_dt_from.strftime("%Y-%m-%d %H:%M:%SZ")
-                self._validity["until"] = utc_dt_until.strftime("%Y-%m-%d %H:%M:%SZ")
+                validity["from"] = utc_dt_from.strftime("%Y-%m-%d %H:%M:%SZ")
+                validity["until"] = utc_dt_until.strftime("%Y-%m-%d %H:%M:%SZ")
 
-    def _extract_and_set_fingerprint(self):
-        """
-        Extract APK certificate fingerprint data, such as MD5, SHA-1, SHA-256, signature and version.
-        """
-        self._fingerprint_md5 = self._extract_fingerprint_info(Cert.__LABEL_FINGERPRINT_MD5)
-        self._fingerprint_sha1 = self._extract_fingerprint_info(Cert.__LABEL_FINGERPRINT_SHA1)
-        self._fingerprint_sha256 = self._extract_fingerprint_info(Cert.__LABEL_FINGERPRINT_SHA256)
-        self._fingerprint_signature = self._extract_fingerprint_info(Cert.__LABEL_FINGERPRINT_SIGNATURE)
-        self._fingerprint_version = self._extract_fingerprint_info(Cert.__LABEL_FINGERPRINT_VERSION)
+        return validity
 
-    def _extract_fingerprint_info(self, info: str) -> str:
-        """
-        Extract a given APK certificate fingerprint information (e.g. MD5, SHA-1, SHA-256, signature and version).
+    @staticmethod
+    def _extract_owner(raw: str) -> Dict:
+        owner = {}  # type: Dict[str, str]
+        owner_pattern = Cert._extract_string_pattern(raw, pattern="^" + Cert.__LABEL_OWNER + "(.*)$")
+        if owner_pattern:
+            owner_pattern = owner_pattern.replace(", ", "\n")
+            for key in Cert.__LABEL_OWNER_FIELDS:
+                owner[key] = Cert._extract_string_pattern(
+                    owner_pattern,
+                    pattern="^" + Cert.__LABEL_OWNER_FIELDS[key] + "(.*)"
+                )
+        return owner
 
-        :param info: The information to be extracted (e.g. Cert.__LABEL_FINGERPRINT_MD5, ...).
-        :return: The extracted fingerprint information.
-        """
-        cert_fingerprint_pattern = "^" + info + "(.*)$"
-        return self._extract_string_pattern(self._raw, cert_fingerprint_pattern)
-
-    def _extract_and_set_owner(self):
-        """
-        Extract the APK certificate owner details (e.g. name, email, ...).
-        """
-        self._owner = {}  # type: Dict[str, str]
-
-        cert_owner_pattern = "^" + Cert.__LABEL_OWNER["label"] + "(.*)$"
-        owner = self._extract_string_pattern(self._raw, cert_owner_pattern)
-        if owner:
-            owner = owner.replace(", ", "\n")
-            for key in Cert.__LABEL_OWNER:
-                cert_owner_key_pattern = "^" + Cert.__LABEL_OWNER[key] + "(.*)"
-                self._owner[key] = self._extract_string_pattern(owner, cert_owner_key_pattern)
-
-    def _extract_and_set_issuer(self):
-        """
-        Extract the APK certificate issuer details (e.g. name, email, ...).
-        """
-        self._issuer = {}  # type: Dict[str, str]
-        cert_issuer_pattern = "^" + Cert.__LABEL_ISSUER["label"] + "(.*)$"
-        issuer = self._extract_string_pattern(self._raw, cert_issuer_pattern)
-        if issuer:
-            issuer = issuer.replace(", ", "\n")
-            for key in Cert.__LABEL_ISSUER:
-                cert_issuer_key_pattern = "^" + Cert.__LABEL_ISSUER[key] + "(.*)"
-                self._issuer[key] = self._extract_string_pattern(issuer, cert_issuer_key_pattern)
+    @staticmethod
+    def _extract_issuer(raw: str) -> Dict:
+        issuer = {}  # type: Dict[str, str]
+        issuer_pattern = Cert._extract_string_pattern(raw, pattern="^" + Cert.__LABEL_ISSUER + "(.*)$")
+        if issuer_pattern:
+            issuer_pattern = issuer_pattern.replace(", ", "\n")
+            for key in Cert.__LABEL_ISSUER_FIELDS:
+                issuer[key] = Cert._extract_string_pattern(
+                    issuer_pattern,
+                    pattern="^" + Cert.__LABEL_ISSUER_FIELDS[key] + "(.*)"
+                )
+        return issuer
 
     @staticmethod
     def _extract_string_pattern(string: str, pattern: str) -> str:
         """
         Extract the value of a given pattern from a given string.
-
-        :param string: The string to be searched.
-        :param pattern: The pattern to extract.
-        :return: The extracted pattern if any is found, an empty string otherwise.
         """
         match = re.search(pattern, string, re.MULTILINE | re.IGNORECASE)
         if match and match.group(1):

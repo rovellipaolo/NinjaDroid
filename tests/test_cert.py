@@ -68,6 +68,7 @@ class TestCert(unittest.TestCase):
                            b"Serial number: 558e7595\n" \
                            b"Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515\n" \
                            b"Certificate fingerprints:\n" \
+                           b"\t MD5: 90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45\n" \
                            b"\t SHA1: 5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6\n" \
                            b"\t SHA256: E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77\n" \
                            b"Signature algorithm name: SHA1withRSA\n" \
@@ -95,6 +96,7 @@ class TestCert(unittest.TestCase):
             },
             cert.get_validity()
         )
+        self.assertEqual("90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45", cert.get_fingerprint_md5())
         self.assertEqual("5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6", cert.get_fingerprint_sha1())
         self.assertEqual("E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77", cert.get_fingerprint_sha256())
         self.assertTrue("SHA1withRSA", cert.get_fingerprint_signature())

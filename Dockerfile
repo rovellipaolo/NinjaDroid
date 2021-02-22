@@ -28,6 +28,7 @@ ENV NINJADROID_HOME=/opt/NinjaDroid
 RUN useradd -ms /bin/bash ninjadroid && \
     mkdir -p ${NINJADROID_HOME}
 
+COPY requirements/ ${NINJADROID_HOME}/requirements/
 COPY requirements.txt ${NINJADROID_HOME}
 COPY ninjadroid.py ${NINJADROID_HOME}
 COPY ninjadroid/ ${NINJADROID_HOME}/ninjadroid/

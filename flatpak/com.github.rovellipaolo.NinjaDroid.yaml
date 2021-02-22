@@ -44,4 +44,8 @@ modules:
       - type: dir
         path: ../
     cleanup:
+      - /app/NinjaDroid/docs
+      - /app/NinjaDroid/flatpak
+      - /app/NinjaDroid/requirements
       - /app/NinjaDroid/requirements.txt
+      - /app/NinjaDroid/tests

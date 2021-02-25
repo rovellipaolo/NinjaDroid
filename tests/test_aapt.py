@@ -1,6 +1,6 @@
 from os.path import join
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 from tests.utils.popen import any_popen, assert_popen_called_once
 
 from ninjadroid.aapt.aapt import Aapt
@@ -14,6 +14,33 @@ class TestAapt(unittest.TestCase):
     """
 
     FILE_NAME = "Example.apk"
+
+    @patch('ninjadroid.aapt.aapt.Popen')
+    def test_execute_dump_badging(self, mock_popen):
+        mock_popen.return_value = any_popen(b"any-result")
+
+        result = Aapt._execute_dump_badging("any-file-path")
+
+        assert_popen_called_once(mock_popen)
+        self.assertEqual("any-result", result)
+
+    @patch('ninjadroid.aapt.aapt.Popen')
+    def test_execute_dump_permissions(self, mock_popen):
+        mock_popen.return_value = any_popen(b"any-result")
+
+        result = Aapt._execute_dump_badging("any-file-path")
+
+        assert_popen_called_once(mock_popen)
+        self.assertEqual("any-result", result)
+
+    @patch('ninjadroid.aapt.aapt.Popen')
+    def test_execute_dump_xmltree(self, mock_popen):
+        mock_popen.return_value = any_popen(b"any-result")
+
+        result = Aapt._execute_dump_xmltree("any-file-path")
+
+        assert_popen_called_once(mock_popen)
+        self.assertEqual("any-result", result)
 
     def test_extract_app_name_when_application_label_is_present(self):
         dump_badging = "application-label:'Example0'\n" \

@@ -30,7 +30,7 @@ class Aapt:
     @classmethod
     def get_app_name(cls, filepath: str) -> Dict:
         try:
-            info = cls._dump_badging(filepath)
+            info = cls._execute_dump_badging(filepath)
         except RuntimeError:
             return ""
         return cls._extract_app_name(info)
@@ -47,7 +47,7 @@ class Aapt:
         }
 
         try:
-            info = cls._dump_badging(filepath)
+            info = cls._execute_dump_badging(filepath)
         except RuntimeError:
             return apk
 
@@ -80,7 +80,7 @@ class Aapt:
         receivers = []  # type: List[Dict[str, str]]
 
         try:
-            xmltree = cls._dump_xmltree(filepath)
+            xmltree = cls._execute_dump_xmltree(filepath)
             xmltree = xmltree[xmltree.index("application"):-1]
             activities = cls._extract_activities(xmltree)
             services = cls._extract_services(xmltree)
@@ -97,7 +97,7 @@ class Aapt:
     @classmethod
     def get_app_permissions(cls, filepath: str) -> List:
         try:
-            dump = cls._dump_permissions(filepath).splitlines()
+            dump = cls._execute_dump_permissions(filepath).splitlines()
         except RuntimeError:
             return []
 
@@ -112,28 +112,22 @@ class Aapt:
         return permissions
 
     @classmethod
-    def _dump_badging(cls, filepath: str) -> str:
-        """
-        Retrieve the aapt dump badging.
-        """
-        command = Aapt.__AAPT_EXEC_PATH + " dump badging " + filepath
-        return Aapt._launch_shell_command_and_get_result(command)
+    def _execute_dump_badging(cls, filepath: str) -> str:
+        return Aapt._launch_shell_command_and_get_result(
+            command=Aapt.__AAPT_EXEC_PATH + " dump badging " + filepath
+        )
 
     @classmethod
-    def _dump_permissions(cls, filepath: str) -> str:
-        """
-        Retrieve the aapt dump permissions.
-        """
-        command = Aapt.__AAPT_EXEC_PATH + " dump permissions " + filepath
-        return Aapt._launch_shell_command_and_get_result(command)
+    def _execute_dump_permissions(cls, filepath: str) -> str:
+        return Aapt._launch_shell_command_and_get_result(
+            command=Aapt.__AAPT_EXEC_PATH + " dump permissions " + filepath
+        )
 
     @classmethod
-    def _dump_xmltree(cls, filepath: str) -> str:
-        """
-        Dump the XML tree of the AndroidManifest.xml file of a given APK package.
-        """
-        command = cls.__AAPT_EXEC_PATH + " dump xmltree " + filepath + " AndroidManifest.xml"
-        return cls._launch_shell_command_and_get_result(command)
+    def _execute_dump_xmltree(cls, filepath: str) -> str:
+        return cls._launch_shell_command_and_get_result(
+            command=cls.__AAPT_EXEC_PATH + " dump xmltree " + filepath + " AndroidManifest.xml"
+        )
 
     @classmethod
     def _launch_shell_command_and_get_result(cls, command: str) -> str:

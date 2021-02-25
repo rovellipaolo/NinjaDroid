@@ -1,7 +1,7 @@
 from os.path import join
 from parameterized import parameterized
 import unittest
-from unittest.mock import call, patch, Mock, mock_open
+from unittest.mock import call, Mock, mock_open, patch
 from tests.utils.popen import any_popen, assert_popen_called_once_with
 
 from ninjadroid.errors.cert_parsing_error import CertParsingError

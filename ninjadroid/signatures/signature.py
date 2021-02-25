@@ -1,13 +1,14 @@
 import os.path
 import json
 import re
-from typing import Dict
+from typing import Dict, Optional
 
 
 class Signature:
     """
     Parser for generic signature.
     """
+
     _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
     _SIGNATURE_KEYS_LIST = ["signatures"]
     _IS_REGEX = None
@@ -25,7 +26,6 @@ class Signature:
         signatures_regex = {}
         with open(cls._CONFIG_FILE, "r") as config_file:
             config = json.load(config_file)
-
             for signature_name in cls._SIGNATURE_KEYS_LIST:
                 signatures_list = config[signature_name]
                 signatures_list.reverse()
@@ -42,8 +42,7 @@ class Signature:
         """
         Compile the Shell commands signature regexes.
 
-        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in
-          _SIGNATURE_KEYS_LIST.
+        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in _SIGNATURE_KEYS_LIST.
         :returns: tuple of compiled regexes
         """
         regex = r'('
@@ -61,21 +60,17 @@ class Signature:
         _is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
         _is_contained_regex = re.compile(regex, re.IGNORECASE)
 
-        return (_is_regex, _is_contained_regex)
+        return _is_regex, _is_contained_regex
 
     def is_valid(self, signature: str) -> bool:
         if signature is None or signature == "":
             return False
+        return self._IS_REGEX.search(signature) is not None
 
-        return self._IS_REGEX.search(signature)
-
-    def get_matches_in_string(self, string: str) -> str:
+    def search(self, string: str) -> Optional[str]:
         if string is None or string == "":
-            return ""
-
+            return None
         match = self._IS_CONTAINED_REGEX.search(string)
-
-        if match is not None and match.group(0) is not None:
-            return str(match.group(0)).strip()
-
-        return ""
+        if match is None or match.group(0) is None:
+            return None
+        return str(match.group(0)).strip()

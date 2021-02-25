@@ -1,11 +1,11 @@
 import logging
 import re
 from subprocess import PIPE, Popen
-from typing import Dict, List, Sequence
+from typing import Dict, Optional, List
 
 from ninjadroid.parsers.file import File
-from ninjadroid.signatures.uri_signature import URISignature
-from ninjadroid.signatures.shell_command_signature import ShellCommandSignature
+from ninjadroid.signatures.uri_signature import UriSignature
+from ninjadroid.signatures.shell_signature import ShellSignature
 from ninjadroid.signatures.signature import Signature
 
 
@@ -31,71 +31,42 @@ class Dex(File):
         self._shell_commands = []  # type: List[str]
         self._custom_signatures = []  # type: List[str]
 
-        self._extract_and_set_strings()
-        self._extract_and_set_urls()
-        self._extract_and_set_shell_commands()
-        # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
-        # self. _extract_and_set_signatures()
-
-    def _extract_and_set_strings(self):
         self.logger.debug("Extracting strings...")
-        command = "strings " + self.get_file_path()
-        process = Popen(command, stdout=PIPE, stderr=None, shell=True)
+        self._strings = self._extract_strings(self.get_file_path())
+        self.logger.debug("%d strings extracted", len(self._strings))
+
+        self.logger.debug("Extracting URLs from strings...")
+        self._urls = self._extract_signatures(signature=UriSignature(), strings=self._strings, min_string_len=6)
+        self.logger.debug("%s URLs extracted from strings", len(self._urls))
+
+        self.logger.debug("Extracting shell commands from strings...")
+        self._shell_commands = self._extract_signatures(signature=ShellSignature(), strings=self._strings)
+        self.logger.debug("%s shell commands extracted from strings", len(self._shell_commands))
+
+        # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
+        # self.logger.debug("Extracting custom signatures from strings...")
+        self._custom_signatures = []
+        # self._custom_signatures = self._extract_signatures(signature=Signature(), strings=self._strings)
+        # self.logger.debug("%s custom signatures extracted from strings", len(self._custom_signatures))
+
+    @staticmethod
+    def _extract_strings(filepath: str) -> List:
+        process = Popen("strings " + filepath, stdout=PIPE, stderr=None, shell=True)
         strings = filter(
             lambda string: string != "",
             (string.strip() for string in process.communicate()[0].decode("utf-8").splitlines())
         )
-        self._strings = sorted(strings)
-        self.logger.debug("%d strings extracted", len(self._strings))
+        return sorted(strings)
 
-    def _extract_and_set_urls(self):
-        self.logger.debug("Extracting URLs from strings...")
-        urls = (url
-                for string in self._strings
-                for url in self._extract_urls_from(string))
-        self._urls = sorted(urls)
-        self.logger.debug("%s URLs extracted from strings", len(self._urls))
-
-    def _extract_and_set_shell_commands(self):
-        self.logger.debug("Extracting shell commands from strings...")
-        shell_commands = (command
-                          for string in self._strings
-                          for command in self._extract_shell_commands_from(string))
-        self._shell_commands = sorted(shell_commands)
-        self.logger.debug("%s shell commands extracted from strings", len(self._shell_commands))
-
-    def _extract_and_set_signatures(self):
-        self.logger.debug("Extracting signatures from strings...")
-        custom_signatures = (signature
-                             for string in self._strings
-                             for signature in self._extract_custom_signature_from(string))
-        self._custom_signatures = sorted(custom_signatures)
-        self.logger.debug("%s signatures extracted from strings", len(self._custom_signatures))
-
-    def _extract_urls_from(self, string: str) -> Sequence[str]:
-        if not hasattr(self, "_uri"):
-            self._uri_signature = URISignature()  # pylint: disable=attribute-defined-outside-init
-        if len(string) > 6:
-            uri = self._uri_signature.get_matches_in_string(string)
-            if uri != "":
-                return [uri]
-        return []
-
-    def _extract_shell_commands_from(self, string: str) -> Sequence[str]:
-        if not hasattr(self, "_shell"):
-            self._shell_signature = ShellCommandSignature()  # pylint: disable=attribute-defined-outside-init
-        command = self._shell_signature.get_matches_in_string(string)
-        if command != "":
-            return [command]
-        return []
-
-    def _extract_custom_signature_from(self, string: str) -> Sequence[str]:
-        if not hasattr(self, "_signatures"):
-            self._generic_signature = Signature()  # pylint: disable=attribute-defined-outside-init
-        signature = self._generic_signature.get_matches_in_string(string)
-        if signature != "":
-            return [signature]
-        return []
+    @staticmethod
+    def _extract_signatures(signature: Signature, strings: List, min_string_len: Optional[bool] = None) -> List:
+        signatures = []
+        for string in strings:
+            if min_string_len is None or len(string) > min_string_len:
+                match = signature.search(string)
+                if match is not None and match != "":
+                    signatures.append(match)
+        return sorted(signatures)
 
     @staticmethod
     def looks_like_a_dex(filename: str) -> bool:

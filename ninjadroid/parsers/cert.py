@@ -90,11 +90,11 @@ class Cert(File):
         )
 
     @staticmethod
-    def _extract_cert_info(file_path) -> str:
+    def _extract_cert_info(filepath: str) -> str:
         """
         Retrieve decoded (PKCS7) certificate file, using keytool utility.
         """
-        command = "keytool -printcert -file " + file_path
+        command = "keytool -printcert -file " + filepath
         process = Popen(command, stdout=PIPE, stderr=None, shell=True)
         raw = process.communicate()[0].decode("utf-8")
         if re.search("^keytool error", raw, re.IGNORECASE):

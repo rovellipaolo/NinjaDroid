@@ -1,98 +1,87 @@
+from parameterized import parameterized
 import unittest
 
-from ninjadroid.signatures.uri_signature import URISignature
+from ninjadroid.signatures.uri_signature import UriSignature
 
 
-class TestURISignature(unittest.TestCase):
+class TestUriSignature(unittest.TestCase):
     """
     UnitTest for URI.py.
 
     RUN: python -m unittest -v tests.test_uri_signature
     """
 
-    valid_urls = [
-        "http://www.domain.com",
-        "https://www.domain.com",
-        "http://domain.com",
-        "http://www.host.domain.com",
-        "http://www.domain.com:80",
-        "ftp://domain.com",
-        "ftp://domain.com:21",
-        "sftp://domain.com",
-        "sftp://domain.com:21",
-        "ftp://ftp.domain.com",
-        "www.domain.com",
-        "domain.com",
-        "http://www.host.domain.org/index.html",
-        "http://www.host.domain.org:80/index.html",
-        "http://www.host.domain.org/path/to/index.html",
-        "http://www.host.domain.org/path/to/index.html#foo",
-        "http://www.host.domain.org/path/to/page.php",
-        "http://www.host.domain.org/path/to/page.php?query=value",
-        "http://www.host.domain.org/path/to/page.php?a=1&b=2",
-        "http://www.host.domain.org/path/to/page.php?a=1&amp;b=2",
-        "http://www.host.domain.org/path/to/page.php?a=1&b=2#foo",
-        "http://www.host.domain.org:8080/path/to/page.php?a=1&b=2&c=3#foo",
-        "www.host.domain.net:8080/path/to/page.php?a=1&b=2&c=3#foo",
-        "http://www.host.domain.net/page",
-        "http://www.host.domain.net/#foo",
-        "http://127.0.0.1",
-        "http://127.0.0.1:80",
-        "http://127.0.0.1:8080",
-        "127.0.0.1",
-        "127.0.0.1:80",
-        "127.0.0.1:8080",
-    ]
+    uri = UriSignature()
 
-    invalid_urls = [
-        "aaaa://www.domain.com",
-        "http:////www.domain.com",
-        "////www.domain.com",
-        "www.domain",
-        "127.0.0.1.1.2.3.4",
-        "aaaa://127.0.0.1",
-        "http:////127.0.0.1",
-        "////127.0.0.1",
-        "VersionConstants.java"
-    ]
+    @parameterized.expand([
+        ["http://www.domain.com", True],
+        ["https://www.domain.com", True],
+        ["http://domain.com", True],
+        ["http://www.host.domain.com", True],
+        ["http://www.domain.com:80", True],
+        ["ftp://domain.com", True],
+        ["ftp://domain.com:21", True],
+        ["sftp://domain.com", True],
+        ["sftp://domain.com:21", True],
+        ["ftp://ftp.domain.com", True],
+        ["www.domain.com", True],
+        ["domain.com", True],
+        ["http://www.host.domain.org/index.html", True],
+        ["http://www.host.domain.org:80/index.html", True],
+        ["http://www.host.domain.org/path/to/index.html", True],
+        ["http://www.host.domain.org/path/to/index.html#foo", True],
+        ["http://www.host.domain.org/path/to/page.php", True],
+        ["http://www.host.domain.org/path/to/page.php?query=value", True],
+        ["http://www.host.domain.org/path/to/page.php?a=1&b=2", True],
+        ["http://www.host.domain.org/path/to/page.php?a=1&amp;b=2", True],
+        ["http://www.host.domain.org/path/to/page.php?a=1&b=2#foo", True],
+        ["http://www.host.domain.org:8080/path/to/page.php?a=1&b=2&c=3#foo", True],
+        ["www.host.domain.net:8080/path/to/page.php?a=1&b=2&c=3#foo", True],
+        ["http://www.host.domain.net/page", True],
+        ["http://www.host.domain.net/#foo", True],
+        ["http://127.0.0.1", True],
+        ["http://127.0.0.1:80", True],
+        ["http://127.0.0.1:8080", True],
+        ["127.0.0.1", True],
+        ["127.0.0.1:80", True],
+        ["127.0.0.1:8080", True],
+        ["aaaa://www.domain.com", False],
+        ["http:////www.domain.com", False],
+        ["////www.domain.com", False],
+        ["www.domain", False],
+        ["127.0.0.1.1.2.3.4", False],
+        ["aaaa://127.0.0.1", False],
+        ["http:////127.0.0.1", False],
+        ["////127.0.0.1", False],
+        ["VersionConstants.java", False],
+    ])
+    def test_is_valid(self, raw_string, expected):
+        result = self.uri.is_valid(raw_string)
 
-    strings_containing_urls = {
-        '  http://www.domain.com  ': "http://www.domain.com",
-        '  www.domain.com  ': "www.domain.com",
-        ' http://www.host.domain.com/index.html': "http://www.host.domain.com/index.html",
-        '  https://www.host.domain.org/path/to/page.php?query=value  ': "https://www.host.domain.org/path/to/page.php?query=value",
-        '  https://www.host.domain.org/path/to/page.php?a=1&b=2#foo  ': "https://www.host.domain.org/path/to/page.php?a=1&b=2#foo",
-        'AB  www.domain.com  YZ': "www.domain.com",
-        ' http https://www.host.domain.com/path/to/page.php?a=1&b=2#foo & & #bar ': "https://www.host.domain.com/path/to/page.php?a=1&b=2#foo",
-        '"http://host.domain.net/path/page': "http://host.domain.net/path/page",
-        '4http://www.host.domain.net/images/pic.png': "http://www.host.domain.net/images/pic.png",
-        '<a href="http://www.host.domain.com" target="_blank">': "http://www.host.domain.com",
-        "#http://schemas.android.com/apk/res/": "http://schemas.android.com/apk/res/",
-        'Publisher ID is not set!  To serve ads you must set your publisher ID assigned from www.admob.com.  Either add it to AndroidManifest.xml under the <application> tag or call': "www.admob.com",
-        'iSETUP ERROR:  Cannot use the sample publisher ID (a1496ced2842262).  Yours is available on www.admob.com.': "www.admob.com",
-    }
+        self.assertEqual(expected, result)
 
-    @classmethod
-    def setUpClass(cls):
-        cls.uri = URISignature()
+    @parameterized.expand([
+        ["  http://www.domain.com  ", "http://www.domain.com"],
+        ["  www.domain.com  ", "www.domain.com"],
+        [" http://www.host.domain.com/index.html", "http://www.host.domain.com/index.html"],
+        ["  https://www.host.domain.org/path/to/page.php?query=value  ", "https://www.host.domain.org/path/to/page.php?query=value"],
+        ["  https://www.host.domain.org/path/to/page.php?a=1&b=2#foo  ", "https://www.host.domain.org/path/to/page.php?a=1&b=2#foo"],
+        ["AB  www.domain.com  YZ", "www.domain.com"],
+        [" http https://www.host.domain.com/path/to/page.php?a=1&b=2#foo & & #bar ", "https://www.host.domain.com/path/to/page.php?a=1&b=2#foo"],
+        ["http://host.domain.net/path/page", "http://host.domain.net/path/page"],
+        ["4http://www.host.domain.net/images/pic.png", "http://www.host.domain.net/images/pic.png"],
+        ["<a href=\"http://www.host.domain.com\" target=\"_blank\">", "http://www.host.domain.com"],
+        ["#http://schemas.android.com/apk/res/", "http://schemas.android.com/apk/res/"],
+        ["Publisher ID is not set!  To serve ads you must set your publisher ID assigned from www.admob.com.  Either add it to AndroidManifest.xml under the <application> tag or call", "www.admob.com"],
+        ["iSETUP ERROR:  Cannot use the sample publisher ID (a1496ced2842262).  Yours is available on www.admob.com.", "www.admob.com"],
+        [" - no match - ", None],
+        ["chmod 777", None],
+        ["Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None],
+    ])
+    def test_search(self, raw_string, expected):
+        match = self.uri.search(raw_string)
 
-    def test_is_valid(self):
-        for url in TestURISignature.valid_urls:
-            is_valid = self.uri.is_valid(url)
-
-            self.assertTrue(is_valid, "URI " + url + " should be valid")
-
-        for url in TestURISignature.invalid_urls:
-            is_valid = self.uri.is_valid(url)
-
-            self.assertFalse(is_valid, "URI " + url + " should not be valid")
-        pass
-
-    def test_get_matches_in_string(self):
-        for string in TestURISignature.strings_containing_urls:
-            matches = self.uri.get_matches_in_string(string)
-
-            self.assertEqual(TestURISignature.strings_containing_urls[string], matches)
+        self.assertEqual(expected, match)
 
 
 if __name__ == '__main__':

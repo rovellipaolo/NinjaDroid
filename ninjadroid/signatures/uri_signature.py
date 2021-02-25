@@ -5,7 +5,7 @@ from typing import Dict
 from ninjadroid.signatures.signature import Signature
 
 
-class URISignature(Signature):
+class UriSignature(Signature):
     """
     Parser for URIs.
     """
@@ -50,4 +50,4 @@ class URISignature(Signature):
         _is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
         _is_contained_regex = re.compile(regex, re.IGNORECASE)
 
-        return (_is_regex, _is_contained_regex)
+        return _is_regex, _is_contained_regex

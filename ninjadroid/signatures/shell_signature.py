@@ -5,7 +5,7 @@ from typing import Dict
 from ninjadroid.signatures.signature import Signature
 
 
-class ShellCommandSignature(Signature):
+class ShellSignature(Signature):
     """
     Parser for shell commands.
     """
@@ -25,7 +25,7 @@ class ShellCommandSignature(Signature):
             regex += r'(am|cat|chmod|chown||exit|iptables|kill|ls|mount|pm|ps|pwd|rm|rmdir|su)'
         regex += r'((?:(?:\s|_)(?:\d|\S)+)*))'
 
-        # Dirs:
+        # Directories:
         regex += r'|(?:\S*'
         if signatures["dirs"] != "":
             regex += r'(?:' + signatures["dirs"] + r')'
@@ -38,4 +38,4 @@ class ShellCommandSignature(Signature):
         _is_regex = re.compile(regex, re.IGNORECASE)
         _is_contained_regex = re.compile(regex, re.IGNORECASE)
 
-        return (_is_regex, _is_contained_regex)
+        return _is_regex, _is_contained_regex

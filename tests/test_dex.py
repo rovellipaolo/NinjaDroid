@@ -1,8 +1,9 @@
 from os.path import join
 from parameterized import parameterized
 import unittest
-from unittest.mock import patch, mock_open
+from unittest.mock import call, Mock, mock_open, patch
 from tests.utils.popen import any_popen, assert_popen_called_once_with
+from typing import List
 
 from ninjadroid.parsers.dex import Dex
 from ninjadroid.errors.parsing_error import ParsingError
@@ -32,6 +33,14 @@ class TestDex(unittest.TestCase):
         mock_sha256.return_value.hexdigest.return_value = TestDex.ANY_FILE_SHA256
         mock_sha512.return_value.hexdigest.return_value = TestDex.ANY_FILE_SHA512
 
+    @staticmethod
+    def any_signature(matches: List):
+        signature = Mock()
+        signature.search.side_effect = matches
+        return signature
+
+    @patch('ninjadroid.parsers.dex.ShellSignature')
+    @patch('ninjadroid.parsers.dex.UriSignature')
     @patch('ninjadroid.parsers.dex.Popen')
     @patch('ninjadroid.parsers.file.sha512')
     @patch('ninjadroid.parsers.file.sha256')
@@ -51,9 +60,13 @@ class TestDex(unittest.TestCase):
             mock_sha1,
             mock_sha256,
             mock_sha512,
-            mock_popen
+            mock_popen,
+            mock_uri_signature,
+            mock_shell_signature
     ):
-        mock_popen.return_value = any_popen(b"")
+        mock_popen.return_value = any_popen(b"any-string\nany-url\nany-command")
+        mock_uri_signature.return_value = self.any_signature(matches=[None, "any-url", None])
+        mock_shell_signature.return_value = self.any_signature(matches=[None, None, "any-command"])
         self.any_file(mock_isfile, mock_access, mock_getsize, mock_md5, mock_sha1, mock_sha256, mock_sha512)
 
         dex = Dex("any-file-path", "any-file-name")
@@ -66,6 +79,10 @@ class TestDex(unittest.TestCase):
         self.assertEqual(TestDex.ANY_FILE_SHA1, dex.get_sha1())
         self.assertEqual(TestDex.ANY_FILE_SHA256, dex.get_sha256())
         self.assertEqual(TestDex.ANY_FILE_SHA512, dex.get_sha512())
+        self.assertEqual(["any-command", "any-string", "any-url"], dex.get_strings())
+        self.assertEqual(["any-url"], dex.get_urls())
+        self.assertEqual(["any-command"], dex.get_shell_commands())
+        self.assertEqual([], dex.get_custom_signatures())
 
     @patch('ninjadroid.parsers.file.access')
     @patch('ninjadroid.parsers.file.isfile')
@@ -88,6 +105,81 @@ class TestDex(unittest.TestCase):
 
         self.assertTrue(dex is not None)
         self.assertTrue(type(dex) is Dex)
+
+    @patch('ninjadroid.parsers.dex.Popen')
+    def test_extract_strings(self, mock_popen):
+        mock_popen.return_value = any_popen(b"1-any-string\n2-any-other-string\n0-yet-another-string")
+
+        strings = Dex._extract_strings("any-file-path")
+
+        assert_popen_called_once_with(mock_popen, "strings any-file-path")
+        # NOTE: the strings are returned alphabetically ordered
+        self.assertEqual(
+            [
+                "0-yet-another-string",
+                "1-any-string",
+                "2-any-other-string",
+            ],
+            strings
+        )
+
+    def test_extract_signatures(self):
+        mock_signature = Mock()
+        mock_signature.search.side_effect = ["any-match-1", None, "", "any-match-2", "any-match-0"]
+
+        urls = Dex._extract_signatures(
+            signature=mock_signature,
+            strings=[
+                "any-match-1",
+                "any-non-match",
+                "any-empty-match",
+                "any-match-2",
+                "any-match-0"
+            ]
+        )
+
+        mock_signature.search.assert_has_calls([
+            call("any-match-1"),
+            call("any-non-match"),
+            call("any-empty-match"),
+            call("any-match-2"),
+            call("any-match-0")
+        ])
+        # NOTE: the signatures are returned alphabetically ordered
+        self.assertEqual(["any-match-0", "any-match-1", "any-match-2"], urls)
+
+    def test_extract_signatures_with_min_string_len(self):
+        mock_signature = Mock()
+        mock_signature.search.return_value = "any-match"
+
+        signatures = Dex._extract_signatures(
+            signature=mock_signature,
+            strings=[
+                "any-match",
+                "nop"  # NOTE: this string is too short and will be filtered before calling Signature.search()
+             ],
+            min_string_len=6
+        )
+
+        mock_signature.search.assert_has_calls([call("any-match")])
+        self.assertEqual(["any-match"], signatures)
+
+    def test_extract_signatures_when_no_match_is_found(self):
+        mock_signature = Mock()
+        mock_signature.search.return_value = None
+
+        signatures = Dex._extract_signatures(signature=mock_signature, strings=["any-non-match"])
+
+        mock_signature.search.assert_called_with("any-non-match")
+        self.assertEqual([], signatures)
+
+    def test_extract_signatures_when_no_string_is_passed(self):
+        mock_signature = Mock()
+
+        urls = Dex._extract_signatures(signature=mock_signature, strings=[])
+
+        mock_signature.search.assert_not_called()
+        self.assertEqual([], urls)
 
     @parameterized.expand([
         ["classes.dex", True],

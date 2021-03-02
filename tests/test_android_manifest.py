@@ -439,6 +439,38 @@ class TestAndroidManifest(unittest.TestCase):
         self.assertEqual(None, manifest.get_services())
         self.assertEqual(None, manifest.get_broadcast_receivers())
 
+    @patch('ninjadroid.parsers.android_manifest.AXMLPrinter')
+    @patch('ninjadroid.parsers.file.sha512')
+    @patch('ninjadroid.parsers.file.sha256')
+    @patch('ninjadroid.parsers.file.sha1')
+    @patch('ninjadroid.parsers.file.md5')
+    @patch('ninjadroid.parsers.file.getsize')
+    @patch('ninjadroid.parsers.file.access')
+    @patch('ninjadroid.parsers.file.isfile')
+    @patch("builtins.open", new_callable=mock_open)
+    def test_init_binary_when_axmlprinter_fails(
+            self,
+            mock_file,
+            mock_isfile,
+            mock_access,
+            mock_getsize,
+            mock_md5,
+            mock_sha1,
+            mock_sha256,
+            mock_sha512,
+            mock_axmlprinter
+    ):
+        mock_axmlprinter.side_effect = IOError()
+        self.any_file(mock_isfile, mock_access, mock_getsize, mock_md5, mock_sha1, mock_sha256, mock_sha512)
+
+        with self.assertRaises(AndroidManifestParsingError):
+            AndroidManifest(
+                filepath="any-file-path",
+                binary = True,
+                apk_path = None,
+                extended_processing = False
+            )
+
     @parameterized.expand([
         [
             AndroidManifest(

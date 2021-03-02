@@ -96,7 +96,7 @@ class TestFile(unittest.TestCase):
 
         result = File.is_a_file("any-file-path")
 
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
     def test_is_a_file_with_empty_path(self):
         result = File.is_a_file("")
@@ -117,7 +117,7 @@ class TestFile(unittest.TestCase):
 
         result = File.is_a_readable_file("any-file-path")
 
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
     def test_is_a_readable_file_with_empty_path(self):
         result = File.is_a_readable_file("")

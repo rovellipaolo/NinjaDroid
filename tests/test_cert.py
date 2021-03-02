@@ -24,7 +24,15 @@ class TestCert(unittest.TestCase):
     ANY_FILE_SHA512 = "e16ce3b471f10043be642472dc4f0156dccb434331c0c1ca19470b7dc0d025d4bb512fc5e77e78011e704b69fe0872e6fd7dee648e87401062f59149695f36f5"
 
     @staticmethod
-    def any_file(mock_isfile, mock_access, mock_getsize, mock_md5, mock_sha1, mock_sha256, mock_sha512):
+    def any_file(
+            mock_isfile: Mock,
+            mock_access: Mock,
+            mock_getsize: Mock,
+            mock_md5: Mock,
+            mock_sha1: Mock,
+            mock_sha256: Mock,
+            mock_sha512: Mock
+    ):
         mock_isfile.return_value = True
         mock_access.return_value = True
         mock_getsize.return_value = TestCert.ANY_FILE_SIZE
@@ -258,6 +266,9 @@ class TestCert(unittest.TestCase):
         ["META-INF/NON_CERT.apk", False],
         ["META-INF/NON_CERT.dex", False],
         ["META-INF/NON_CERT.so", False],
+        ["AndroidManifest.xml", False],
+        ["classes.dex", False],
+        ["Example.apk", False]
     ])
     def test_looks_like_a_cert(self, filename, expected):
         result = Cert.looks_like_a_cert(filename)

@@ -24,7 +24,15 @@ class TestDex(unittest.TestCase):
     ANY_FILE_SHA512 = "0725f961bc1bac47eb8dd045c2f0a0cf5475fd77089af7ddc3098e341a95d8b5624969b6fa47606a05d5a6adf9d74d0c52562ea41a376bd3d7d0aa3695ca2e22"
 
     @staticmethod
-    def any_file(mock_isfile, mock_access, mock_getsize, mock_md5, mock_sha1, mock_sha256, mock_sha512):
+    def any_file(
+            mock_isfile: Mock,
+            mock_access: Mock,
+            mock_getsize: Mock,
+            mock_md5: Mock,
+            mock_sha1: Mock,
+            mock_sha256: Mock,
+            mock_sha512: Mock
+    ):
         mock_isfile.return_value = True
         mock_access.return_value = True
         mock_getsize.return_value = TestDex.ANY_FILE_SIZE

@@ -2,7 +2,7 @@ from xml.dom import minidom
 from xml.parsers.expat import ExpatError
 import json
 import os.path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from pyaxmlparser.axmlprinter import AXMLPrinter
 
 from ninjadroid.aapt.aapt import Aapt
@@ -20,17 +20,19 @@ class AndroidManifest(File):
     __MANIFEST_CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "manifest.json")
 
     # TODO: refactor this code...
-    def __init__(self, filepath: str, binary: bool = False, apk_path: str = "", extended_processing: bool = True):
+    def __init__(
+            self,
+            filepath: str,
+            binary: bool = False,
+            apk_path: Optional[str] = None,
+            extended_processing: bool = True
+    ):
         super().__init__(filepath, "AndroidManifest.xml")
         self._sdk = None
         self._permissions = None
         self._activities = None
         self._services = None
         self._receivers = None
-
-        # Load the AndroidManifest.xml structure:
-        with open(AndroidManifest.__MANIFEST_CONFIG_FILE, 'r') as config:
-            cfg = json.load(config)
 
         with open(filepath, 'rb') as file:
             try:
@@ -40,7 +42,7 @@ class AndroidManifest(File):
                 else:
                     xml = minidom.parse(filepath)
             except ExpatError as error:
-                if apk_path != "":
+                if apk_path is not None and apk_path != "":
                     apk = Aapt.get_apk_info(apk_path)
                     self._package_name = apk["package_name"]
                     self._version = apk["version"]
@@ -59,41 +61,53 @@ class AndroidManifest(File):
                 manifest = xml.documentElement
 
                 # Extract the package info:
-                self._package_name = manifest.getAttribute(cfg['package']['name'])
+                self._package_name = manifest.getAttribute("package")
                 self._version = {"code": "", "name": ""}
                 try:
-                    self._version['code'] = int(manifest.getAttribute(cfg['package']['version']['code']))
+                    self._version['code'] = int(manifest.getAttribute("android:versionCode"))
                 except ValueError:
                     pass
-                self._version['name'] = manifest.getAttribute(cfg['package']['version']['name'])
+                self._version['name'] = manifest.getAttribute("android:versionName")
 
                 if extended_processing:
                     # Extract the SDK info:
-                    sdk = self._parse_element_to_list_of_dict(manifest, cfg['uses-sdk'], "uses-sdk")
+                    sdk = self._parse_element_to_list_of_dict(
+                        root=manifest,
+                        component={
+                            "target": "android:targetSdkVersion",
+                            "min": "android:minSdkVersion",
+                            "max": "android:maxSdkVersion"
+                        },
+                        tag="uses-sdk"
+                    )
                     self._sdk = sdk[0] if len(sdk) > 0 else {}
 
                     # Extract the permissions info:
-                    self._permissions = AndroidManifest._parse_element_to_simple_list(
-                        manifest,
-                        "uses-permission",
-                        cfg['uses-permission'][0]
+                    self._permissions = self._parse_element_to_simple_list(
+                        root=manifest,
+                        tag="uses-permission",
+                        attribute="android:name"
                     )
 
+                    # Load the AndroidManifest.xml structure:
+                    with open(AndroidManifest.__MANIFEST_CONFIG_FILE, 'r') as config:
+                        config = json.load(config)
+
                     # Extract the application info:
-                    application = manifest.getElementsByTagName(cfg['application']['tag'])[0]
-                    self._activities = AndroidManifest._parse_element_to_list_of_dict(
+                    application = manifest.getElementsByTagName("application")[0]
+                    self._activities = self._parse_element_to_list_of_dict(
                         application,
-                        cfg['application']['activity'],
+                        config['application']['activity'],
                         "activity"
                     )
-                    self._services = AndroidManifest._parse_element_to_list_of_dict(
+                    self._services = self._parse_element_to_list_of_dict(
                         application,
-                        cfg['application']['service'],
+                        config['application']['service'],
                         "service"
                     )
-                    self._receivers = AndroidManifest._parse_element_to_list_of_dict(
+                    self._receivers = self._parse_element_to_list_of_dict(
                         application,
-                        cfg['application']['receiver'],
+                        config['application']['receiver'],
                         "receiver"
                     )
     @staticmethod

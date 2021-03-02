@@ -1,22 +1,5 @@
 {
-    "package": {
-        "name": "package",
-        "version": {
-            "code": "android:versionCode",
-            "name": "android:versionName"
-        }
-    },
-    "uses-sdk": {
-        "target":"android:targetSdkVersion",
-        "min":"android:minSdkVersion",
-        "max":"android:maxSdkVersion"
-    },
-    "uses-permission": [
-        "android:name"
-    ],
     "application": {
-        "tag":"application",
-        "label":"android:label",
         "activity": {
             "name":"android:name",
             "allowEmbedded":"android:allowEmbedded",

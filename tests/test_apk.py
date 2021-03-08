@@ -2,19 +2,12 @@ from os import listdir
 from os.path import join
 import unittest
 
-from ninjadroid.errors.apk_parsing_error import APKParsingError
-from ninjadroid.errors.parsing_error import ParsingError
-from ninjadroid.parsers.apk import APK
+from ninjadroid.parsers.file import FileParsingError
+from ninjadroid.parsers.apk import APK, ApkParser, ApkParsingError
 
 
 # TODO: refactor these tests...
 class TestAPK(unittest.TestCase):
-    """
-    UnitTest for apk.py.
-
-    RUN: python -m unittest -v tests.test_apk
-    """
-
     APK_FILES = [
         {
             "name": "res/drawable-hdpi-v4/ic_launcher.png",
@@ -116,11 +109,11 @@ class TestAPK(unittest.TestCase):
 
     def setUp(self):
         self.apks = {
-            "summary": APK(
+            "summary": ApkParser().parse(
                 filepath=join("tests", "data", "Example.apk"),
                 extended_processing=False
             ),
-            "extended": APK(
+            "extended": ApkParser().parse(
                 filepath=join("tests", "data", "Example.apk"),
                 extended_processing=True
             )
@@ -136,20 +129,14 @@ class TestAPK(unittest.TestCase):
             self.assertTrue(type(apk) is APK)
 
     def test_init_with_non_existing_file(self):
-        with self.assertRaises(ParsingError):
-            APK(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
+        with self.assertRaises(FileParsingError):
+            ApkParser().parse(join("tests", "data", "aaa_this_is_a_non_existent_file_xxx"))
 
     def test_init_with_non_apk_file(self):
-        with self.assertRaises(APKParsingError):
-            APK(join("tests", "data", "AndroidManifest.xml"))
-            APK(join("tests", "data", "CERT.RSA"))
-            APK(join("tests", "data", "classes.dex"))
-
-    def test_get_raw_file(self):
-        for filename in self.apks:
-            raw_files = self.apks[filename].get_raw_file()
-
-            self.assertTrue(len(raw_files) > 0)
+        with self.assertRaises(ApkParsingError):
+            ApkParser().parse(join("tests", "data", "AndroidManifest.xml"))
+            ApkParser().parse(join("tests", "data", "CERT.RSA"))
+            ApkParser().parse(join("tests", "data", "classes.dex"))
 
     def test_get_file_name(self):
         for filename in self.apks:
@@ -196,13 +183,13 @@ class TestAPK(unittest.TestCase):
 
             self.assertEqual("Example", name)
 
-    def test_get_files(self):
-        files = self.apks["summary"].get_files()
+    def test_get_other_files(self):
+        files = self.apks["summary"].get_other_files()
 
         self.assertEqual([], files)
 
-    def test_get_files_with_extended_processing(self):
-        files = self.apks["extended"].get_files()
+    def test_get_other_files_with_extended_processing(self):
+        files = self.apks["extended"].get_other_files()
 
         self.assertEqual(len(self.APK_FILES), len(files))
         for i in range(len(files)):
@@ -213,20 +200,20 @@ class TestAPK(unittest.TestCase):
             self.assertEqual(self.APK_FILES[i]["sha256"], files[i].get_sha256())
             self.assertEqual(self.APK_FILES[i]["sha512"], files[i].get_sha512())
 
-    def test_dump(self):
+    def test_as_dict(self):
         for filename in self.apks:
-            dump = self.apks[filename].dump()
+            apk = self.apks[filename].as_dict()
 
-            self.assertEqual("tests/data/Example.apk", dump["file"])
-            self.assertEqual(70058, dump["size"])
-            self.assertEqual("c9504f487c8b51412ba4980bfe3cc15d", dump["md5"])
-            self.assertEqual("482a28812495b996a92191fbb3be1376193ca59b", dump["sha1"])
-            self.assertEqual("8773441a656b60c5e18481fd5ba9c1bf350d98789b975987cb3b2b57ee44ee51", dump["sha256"])
+            self.assertEqual("tests/data/Example.apk", apk["file"])
+            self.assertEqual(70058, apk["size"])
+            self.assertEqual("c9504f487c8b51412ba4980bfe3cc15d", apk["md5"])
+            self.assertEqual("482a28812495b996a92191fbb3be1376193ca59b", apk["sha1"])
+            self.assertEqual("8773441a656b60c5e18481fd5ba9c1bf350d98789b975987cb3b2b57ee44ee51", apk["sha256"])
             self.assertEqual(
                 "559eab9840ff2f8507842605e60bb0730442ddf9ee7ca4ab4f386f715c1a4707766065d6f0b977816886692bf88b400643979e2fd13e6999358a21cabdfb3071",
-                dump["sha512"]
+                apk["sha512"]
             )
-            self.assertEqual("Example", dump["name"])
+            self.assertEqual("Example", apk["name"])
 
 
 if __name__ == "__main__":

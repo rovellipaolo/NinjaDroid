@@ -5,12 +5,6 @@ from ninjadroid.use_cases.extract_dex_file import ExtractDexFile
 
 
 class TestExtractDexFile(unittest.TestCase):
-    """
-    UnitTest for extract_dex_file.py.
-
-    RUN: python -m unittest -v tests.test_extract_dex_file
-    """
-
     ANY_APK_FILE = "any-apk-file"
     ANY_DEX_FILE = "any-dex-file"
     ANY_DEX_PATH = "any-dex-path"

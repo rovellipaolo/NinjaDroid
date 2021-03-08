@@ -5,13 +5,7 @@ from ninjadroid.signatures.shell_signature import ShellSignature
 
 
 class TestShellSignature(unittest.TestCase):
-    """
-    UnitTest for Shell.py.
-
-    RUN: python -m unittest -v tests.test_shell_signature
-    """
-
-    shell = ShellSignature()
+    sut = ShellSignature()
 
     @parameterized.expand([
         ["/bin", True],
@@ -48,33 +42,34 @@ class TestShellSignature(unittest.TestCase):
         ["apk", False],
         ["VersionConstants.java", False],
     ])
-    def test_is_valid(self, raw_string, expected):
-        result = self.shell.is_valid(raw_string)
+    def test_is_valid(self, pattern, expected):
+        result = self.sut.is_valid(pattern)
 
         self.assertEqual(expected, result)
 
     @parameterized.expand([
-        ["chmod 777", "chmod 777"],
-        ["_chmod_777", "_chmod_777"],
-        ["#chmod 777", "#chmod 777"],
-        ["$ chmod 777", "chmod 777"],
-        [" AAA chmod 777 ", "chmod 777"],
-        ["ls /data/local/bin", "ls /data/local/bin"],
-        ["mount -o remount", "mount -o remount"],
-        ["mount -o remount,ro -t", "mount -o remount,ro -t"],
-        ["mount -o remount,rw -t", "mount -o remount,rw -t"],
-        ["su_bin_resid", "su_bin_resid"],
-        ["/system/app/xxx.apk", "/system/app/xxx.apk"],
-        ["ls /system/app/xxx.apk", "ls /system/app/xxx.apk"],
-        [" ### /system/app/xxx.apk", "/system/app/xxx.apk"],
-        [" - no match - ", None],
-        ["http://www.domain.com", None],
-        ["Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None],
+        ["chmod 777", "chmod 777", True],
+        ["_chmod_777", "_chmod_777", True],
+        ["#chmod 777", "#chmod 777", True],
+        ["$ chmod 777", "chmod 777", True],
+        [" AAA chmod 777 ", "chmod 777", True],
+        ["ls /data/local/bin", "ls /data/local/bin", True],
+        ["mount -o remount", "mount -o remount", True],
+        ["mount -o remount,ro -t", "mount -o remount,ro -t", True],
+        ["mount -o remount,rw -t", "mount -o remount,rw -t", True],
+        ["su_bin_resid", "su_bin_resid", True],
+        ["/system/app/xxx.apk", "/system/app/xxx.apk", True],
+        ["ls /system/app/xxx.apk", "ls /system/app/xxx.apk", True],
+        [" ### /system/app/xxx.apk", "/system/app/xxx.apk", True],
+        [" - no match - ", None, False],
+        ["http://www.domain.com", None, False],
+        ["Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None, False],
     ])
-    def test_search(self, raw_string, expected):
-        match = self.shell.search(raw_string)
+    def test_search(self, pattern, expected_match, expected_is_valid):
+        match, is_valid = self.sut.search(pattern)
 
-        self.assertEqual(expected, match)
+        self.assertEqual(match, expected_match)
+        self.assertEqual(is_valid, expected_is_valid)
 
 
 if __name__ == '__main__':

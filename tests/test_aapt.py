@@ -7,12 +7,6 @@ from ninjadroid.aapt.aapt import Aapt
 
 
 class TestAapt(unittest.TestCase):
-    """
-    UnitTest for aapt.py.
-
-    RUN: python -m unittest -v tests.test_aapt
-    """
-
     FILE_NAME = "Example.apk"
 
     @patch('ninjadroid.aapt.aapt.Popen')

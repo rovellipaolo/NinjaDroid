@@ -1,56 +1,114 @@
-import logging
+from logging import getLogger, Logger
 import re
 from subprocess import PIPE, Popen
 from typing import Dict, Optional, List
 
-from ninjadroid.parsers.file import File
+from ninjadroid.parsers.file import File, FileParser
 from ninjadroid.signatures.uri_signature import UriSignature
 from ninjadroid.signatures.shell_signature import ShellSignature
 from ninjadroid.signatures.signature import Signature
 
 
-global_logger = logging.getLogger(__name__)
+default_logger = getLogger(__name__)
 
 
-# pylint: disable=too-many-instance-attributes
 class Dex(File):
     """
-    Parser implementation for Android DEX file.
+    Android dex file information.
     """
 
-    __DEX_FILE_REGEX = ".*\\.dex$"
+    # pylint: disable=too-many-arguments
+    def __init__(
+            self,
+            filename: str,
+            size: str,
+            md5hash: str,
+            sha1hash: str,
+            sha256hash: str,
+            sha512hash: str,
+            strings: List[str],
+            urls: List[str],
+            shell_commands: List[str],
+            custom_signatures: List[str]
+    ):
+        super().__init__(filename, size, md5hash, sha1hash, sha256hash, sha512hash)
+        self.__strings = strings
+        self.__urls = urls
+        self.__commands = shell_commands
+        self.__signatures = custom_signatures
 
-    def __init__(self, filepath: str, filename: str, logger=global_logger):
-        super().__init__(filepath, filename)
+    def get_strings(self) -> List[str]:
+        return self.__strings
+
+    def get_urls(self) -> List[str]:
+        return self.__urls
+
+    def get_shell_commands(self) -> List[str]:
+        return self.__commands
+
+    def get_custom_signatures(self) -> List[str]:
+        return self.__signatures
+
+    def as_dict(self) -> Dict:
+        dump = super().as_dict()
+        dump["strings"] = self.__strings
+        dump["urls"] = self.__urls
+        dump["shell_commands"] = self.__commands
+        # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
+        # dump["custom_signatures"] = self.__signatures
+        return dump
+
+
+class DexParser:
+    """
+    Parser implementation for Android dex files.
+    """
+
+    def __init__(self, logger: Logger = default_logger):
         self.logger = logger
-        self.logger.debug("Dex: %filepath=s, filename=%s", filepath, filename)
 
-        self._filename = filename
-        self._strings = []  # type: List[str]
-        self._urls = []  # type: List[str]
-        self._shell_commands = []  # type: List[str]
-        self._custom_signatures = []  # type: List[str]
+    def parse(self, filepath: str, filename: str) -> Dex:
+        """
+        :param filepath: path of the dex file
+        :param filename: name of the dex file
+        :return: the parsed dex file
+        :raise: FileParsingError if cannot parse the file
+        """
+        self.logger.debug("Parsing dex file: filepath=\"%s\", filename=\"%s\"", filepath, filename)
+        file = FileParser(self.logger).parse(filepath, filename)
 
         self.logger.debug("Extracting strings...")
-        self._strings = self._extract_strings(self.get_file_path())
-        self.logger.debug("%d strings extracted", len(self._strings))
+        strings = self.parse_strings(filepath)
+        self.logger.debug("Strings extracted: %d", len(strings))
 
-        self.logger.debug("Extracting URLs from strings...")
-        self._urls = self._extract_signatures(signature=UriSignature(), strings=self._strings, min_string_len=6)
-        self.logger.debug("%s URLs extracted from strings", len(self._urls))
+        self.logger.debug("Extracting URLs...")
+        urls = self.parse_signatures(signature=UriSignature(), strings=strings, min_string_len=6)
+        self.logger.debug("URLs extracted: %s ", len(urls))
 
-        self.logger.debug("Extracting shell commands from strings...")
-        self._shell_commands = self._extract_signatures(signature=ShellSignature(), strings=self._strings)
-        self.logger.debug("%s shell commands extracted from strings", len(self._shell_commands))
+        self.logger.debug("Extracting shell commands...")
+        shell_commands = self.parse_signatures(signature=ShellSignature(), strings=strings)
+        self.logger.debug("Shell commands extracted: %s", len(shell_commands))
 
         # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
-        # self.logger.debug("Extracting custom signatures from strings...")
-        self._custom_signatures = []
-        # self._custom_signatures = self._extract_signatures(signature=Signature(), strings=self._strings)
-        # self.logger.debug("%s custom signatures extracted from strings", len(self._custom_signatures))
+        # self.logger.debug("Extracting custom signatures...")
+        custom_signatures = []  # self.extract_signatures(signature=Signature(), strings=self._strings)
+        # self.logger.debug("Custom signatures extracted: %s", len(custom_signatures))
+
+        return Dex(
+            filename=file.get_file_name(),
+            size=file.get_size(),
+            md5hash=file.get_md5(),
+            sha1hash=file.get_sha1(),
+            sha256hash=file.get_sha256(),
+            sha512hash=file.get_sha512(),
+            strings=strings,
+            urls=urls,
+            shell_commands=shell_commands,
+            custom_signatures=custom_signatures,
+        )
 
     @staticmethod
-    def _extract_strings(filepath: str) -> List:
+    def parse_strings(filepath: str) -> List:
         process = Popen("strings " + filepath, stdout=PIPE, stderr=None, shell=True)
         strings = filter(
             lambda string: string != "",
@@ -59,36 +117,15 @@ class Dex(File):
         return sorted(strings)
 
     @staticmethod
-    def _extract_signatures(signature: Signature, strings: List, min_string_len: Optional[bool] = None) -> List:
+    def parse_signatures(signature: Signature, strings: List, min_string_len: Optional[bool] = None) -> List:
         signatures = []
         for string in strings:
             if min_string_len is None or len(string) > min_string_len:
-                match = signature.search(string)
-                if match is not None and match != "":
+                match, is_valid = signature.search(string)
+                if is_valid and match is not None and match != "":
                     signatures.append(match)
         return sorted(signatures)
 
     @staticmethod
     def looks_like_a_dex(filename: str) -> bool:
-        return bool(re.search(Dex.__DEX_FILE_REGEX, filename))
-
-    def dump(self) -> Dict:
-        dump = super().dump()
-        dump["urls"] = self._urls
-        dump["shell_commands"] = self._shell_commands
-        # TODO: improve custom signatures parsing performance (commented in the meanwhile because far too slow)
-        # dump["custom_signatures"] = self._custom_signatures
-        dump["strings"] = self.get_strings()
-        return dump
-
-    def get_strings(self) -> List:
-        return self._strings
-
-    def get_urls(self) -> List:
-        return self._urls
-
-    def get_shell_commands(self) -> List:
-        return self._shell_commands
-
-    def get_custom_signatures(self) -> List:
-        return self._custom_signatures
+        return bool(re.search(".*\\.dex$", filename))

@@ -20,9 +20,8 @@ from ninjadroid.use_cases.generate_apk_info_report import GenerateApkInfoReport
 from ninjadroid.use_cases.launch_apk_tool import LaunchApkTool
 from ninjadroid.use_cases.launch_dex2jar import LaunchDex2Jar
 from ninjadroid.use_cases.print_apk_info import PrintApkInfo
-from ninjadroid.errors.apk_parsing_error import APKParsingError
-from ninjadroid.errors.parsing_error import ParsingError
-from ninjadroid.parsers.apk import APK
+from ninjadroid.parsers.file import FileParsingError
+from ninjadroid.parsers.apk import APK, ApkParser, ApkParsingError
 
 
 VERSION = "4.0"
@@ -119,10 +118,10 @@ def read_file(filepath: str, extended_processing: bool) -> Optional[APK]:
     apk = None
     logger.debug("Reading %s...", filepath)
     try:
-        apk = APK(filepath, extended_processing, logger)
-    except APKParsingError:
+        apk = ApkParser(logger).parse(filepath, extended_processing)
+    except ApkParsingError:
         logger.error("The target file ('%s') must be an APK package!", filepath)
-    except ParsingError:
+    except FileParsingError:
         logger.error("The target file ('%s') must be an existing, readable file!", filepath)
     return apk
 

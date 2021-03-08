@@ -1,6 +1,7 @@
 import os.path
 import re
-from typing import Dict
+from re import Pattern
+from typing import Dict, Tuple
 
 from ninjadroid.signatures.signature import Signature
 
@@ -10,11 +11,11 @@ class UriSignature(Signature):
     Parser for URIs.
     """
 
-    _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "uri.json")
-    _SIGNATURE_KEYS_LIST = ["tlds"]
+    CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "uri.json")
+    SIGNATURE_KEYS_LIST = ["tlds"]
 
     @staticmethod
-    def _compile_regex(signatures: Dict):
+    def compile_regex(signatures: Dict) -> Tuple[Pattern, Pattern]:
         regex = r'('
 
         # Scheme (HTTP, HTTPS, FTP and SFTP):
@@ -47,7 +48,7 @@ class UriSignature(Signature):
 
         regex += r')'
 
-        _is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
-        _is_contained_regex = re.compile(regex, re.IGNORECASE)
+        is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
+        is_contained_regex = re.compile(regex, re.IGNORECASE)
 
-        return _is_regex, _is_contained_regex
+        return is_regex, is_contained_regex

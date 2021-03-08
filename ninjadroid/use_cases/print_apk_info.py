@@ -16,10 +16,10 @@ class PrintApkInfo:
 
     def execute(self, apk: APK, as_json: bool):
         if as_json:
-            apk_info = json.dumps(apk.dump(), sort_keys=True, ensure_ascii=False, indent=4)
+            apk_info = json.dumps(apk.as_dict(), sort_keys=True, ensure_ascii=False, indent=4)
             print(apk_info)
         else:
-            self.print_dictionary(apk.dump())
+            self.print_dictionary(apk.as_dict())
 
     @staticmethod
     def print_dictionary(info: dict, depth: int = 0):

@@ -5,12 +5,6 @@ from ninjadroid.use_cases.extract_certificate_file import ExtractCertificateFile
 
 
 class TestExtractCertificateFile(unittest.TestCase):
-    """
-    UnitTest for extract_certificate_file.py.
-
-    RUN: python -m unittest -v tests.test_extract_certificate_file
-    """
-
     ANY_APK_FILE = "any-apk-file"
     ANY_CERT_NAME = "any-cert-name"
     ANY_CERT_FILE = "any-cert-file"

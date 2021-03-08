@@ -67,7 +67,7 @@ run:
 
 .PHONY: run-docker
 run-docker:
-	@docker run --name ${DOCKER_IMAGE} -it --rm -v ${PWD}/apks:/apks ${DOCKER_IMAGE}:${DOCKER_TAG} ninjadroid $(apk) --all --json
+	@docker run --name ${DOCKER_IMAGE} -it --rm -v ${PWD}/apks:/apks ${DOCKER_IMAGE}:${DOCKER_TAG} ninjadroid $(apk)
 
 .PHONY: run-flatpak
 run-flatpak:

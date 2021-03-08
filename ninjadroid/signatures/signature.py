@@ -1,7 +1,8 @@
 import os.path
 import json
 import re
-from typing import Dict, Optional
+from re import Pattern
+from typing import Dict, Optional, Tuple
 
 
 class Signature:
@@ -9,24 +10,24 @@ class Signature:
     Parser for generic signature.
     """
 
-    _CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
-    _SIGNATURE_KEYS_LIST = ["signatures"]
-    _IS_REGEX = None
-    _IS_CONTAINED_REGEX = None
+    CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "config", "signatures.json")
+    SIGNATURE_KEYS_LIST = ["signatures"]
+    IS_REGEX = None
+    IS_CONTAINED_REGEX = None
 
     def __init__(self):
-        # Note: _IS_REGEX and _IS_CONTAINED_REGEX are time-consuming to compile. Since
-        # they don't change at runtime we can do this just once.
-        if self._IS_REGEX is None or self._IS_CONTAINED_REGEX is None:
-            signatures_regex = self._get_signature_regex_from_config()
-            (self._IS_REGEX, self._IS_CONTAINED_REGEX) = self._compile_regex(signatures_regex)  # pylint: disable=invalid-name
+        # NOTE: IS_REGEX and IS_CONTAINED_REGEX are time-consuming to compile.
+        # Since they don't change at runtime we can do this just once.
+        if self.IS_REGEX is None or self.IS_CONTAINED_REGEX is None:
+            signatures_regex = self.get_signature_regex_from_config()
+            (self.IS_REGEX, self.IS_CONTAINED_REGEX) = self.compile_regex(signatures_regex)  # pylint: disable=invalid-name
 
     @classmethod
-    def _get_signature_regex_from_config(cls):
+    def get_signature_regex_from_config(cls) -> Dict:
         signatures_regex = {}
-        with open(cls._CONFIG_FILE, "r") as config_file:
+        with open(cls.CONFIG_FILE, "r") as config_file:
             config = json.load(config_file)
-            for signature_name in cls._SIGNATURE_KEYS_LIST:
+            for signature_name in cls.SIGNATURE_KEYS_LIST:
                 signatures_list = config[signature_name]
                 signatures_list.reverse()
 
@@ -38,11 +39,9 @@ class Signature:
         return signatures_regex
 
     @staticmethod
-    def _compile_regex(signatures: Dict):
+    def compile_regex(signatures: Dict) -> Tuple[Pattern, Pattern]:
         """
-        Compile the Shell commands signature regexes.
-
-        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in _SIGNATURE_KEYS_LIST.
+        :param signatures: Dictionary of the signature regex, whose keys are the ones declared in SIGNATURE_KEYS_LIST.
         :returns: tuple of compiled regexes
         """
         regex = r'('
@@ -57,20 +56,28 @@ class Signature:
 
         regex += r')'
 
-        _is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
-        _is_contained_regex = re.compile(regex, re.IGNORECASE)
+        is_regex = re.compile(r'^' + regex + r'$', re.IGNORECASE)
+        is_contained_regex = re.compile(regex, re.IGNORECASE)
 
-        return _is_regex, _is_contained_regex
+        return is_regex, is_contained_regex
 
-    def is_valid(self, signature: str) -> bool:
-        if signature is None or signature == "":
+    def is_valid(self, pattern: str) -> bool:
+        """
+        :param pattern: The pattern to validate
+        :returns: true if the pattern matches
+        """
+        if pattern is None or pattern == "":
             return False
-        return self._IS_REGEX.search(signature) is not None
+        return self.IS_REGEX.search(pattern) is not None
 
-    def search(self, string: str) -> Optional[str]:
-        if string is None or string == "":
-            return None
-        match = self._IS_CONTAINED_REGEX.search(string)
+    def search(self, pattern: str) -> Tuple[Optional[str], bool]:
+        """
+        :param pattern: The pattern to search
+        :returns: a tuple containing the optional match and a boolean "ok" status (true if the pattern matches)
+        """
+        if pattern is None or pattern == "":
+            return None, False
+        match = self.IS_CONTAINED_REGEX.search(pattern)
         if match is None or match.group(0) is None:
-            return None
-        return str(match.group(0)).strip()
+            return None, False
+        return str(match.group(0)).strip(), True

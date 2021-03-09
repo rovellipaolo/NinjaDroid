@@ -42,7 +42,7 @@ $ git clone https://github.com/rovellipaolo/NinjaDroid
 $ cd NinjaDroid
 ```
 
-NinjaDroid has several ways to be executed: in your local environment, in [Docker](https://www.docker.com/) or as a [Flatpak](https://flatpak.org/).
+NinjaDroid has several ways to be executed: natively in your local environment, in [Docker](https://www.docker.com/) or as a [Flatpak](https://flatpak.org/) (experimental).
 
 ### Native
 To execute NinjaDroid in your local machine, you need to install `Python 3.5` or higher, `Java 8` or higher and `binutils`.
@@ -97,9 +97,7 @@ $ make build-flatpak
 $ flatpak-builder --run flatpak/build flatpak/net.paolorovelli.NinjaDroid.yaml ninjadroid --help
 ```
 
-<div style="padding: 10px; color: #000000; background-color: #ffe4e4; border: 2px solid #f66; border-radius: 5px;">
-    <b>NOTE:</b> Flatpak support is still experimental, and the <i>"-e"</i> or <i>"--extract"</i> option does not work correctly at present.
-</div>
+**NOTE:** Flatpak support is still experimental and the <i>"-e"</i> or <i>"--extract"</i> option does not work correctly at present.
 
 
 

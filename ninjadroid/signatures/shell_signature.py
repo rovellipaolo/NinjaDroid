@@ -1,7 +1,6 @@
 import os.path
 import re
-from re import Pattern
-from typing import Dict, Tuple
+from typing import Dict, Pattern, Tuple
 
 from ninjadroid.signatures.signature import Signature
 

@@ -1,8 +1,7 @@
 import os.path
 import json
 import re
-from re import Pattern
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Pattern, Tuple
 
 
 class Signature:

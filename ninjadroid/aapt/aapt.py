@@ -66,9 +66,9 @@ class Aapt:
 
     @classmethod
     def get_manifest_info(cls, filepath: str) -> Dict:
-        activities = []  # type: List[Dict[str, str]]
-        services = []  # type: List[Dict[str, str]]
-        receivers = []  # type: List[Dict[str, str]]
+        activities = []
+        services = []
+        receivers = []
 
         try:
             xmltree = cls._execute_dump_xmltree(filepath)
@@ -165,30 +165,30 @@ class Aapt:
         return Aapt._extract_string_pattern(info, apk_sdk_min_pattern)
 
     @classmethod
-    def _extract_activities(cls, xmltree: str) -> List:
+    def _extract_activities(cls, xmltree: str) -> List[str]:
         activities = []
         for offs in cls._find_all(xmltree, "activity"):
             activity = xmltree[offs:-1]
             idx = cls._find_between(activity, "android:name(", ")=\"")
-            activities.append({"name": cls._find_between(activity, "android:name(" + idx + ")=\"", "\"")})
+            activities.append(cls._find_between(activity, "android:name(" + idx + ")=\"", "\""))
         return activities
 
     @classmethod
-    def _extract_services(cls, xmltree: str) -> List:
+    def _extract_services(cls, xmltree: str) -> List[str]:
         services = []
         for offs in cls._find_all(xmltree, "service"):
             service = xmltree[offs:-1]
             idx = cls._find_between(service, "android:name(", ")=\"")
-            services.append({"name": cls._find_between(service, "android:name(" + idx + ")=\"", "\"")})
+            services.append(cls._find_between(service, "android:name(" + idx + ")=\"", "\""))
         return services
 
     @classmethod
-    def _extract_broadcast_receivers(cls, xmltree: str) -> List:
+    def _extract_broadcast_receivers(cls, xmltree: str) -> List[str]:
         receivers = []
         for offs in cls._find_all(xmltree, "receiver"):
             receiver = xmltree[offs:-1]
             idx = cls._find_between(receiver, "android:name(", ")=\"")
-            receivers.append({"name": cls._find_between(receiver, "android:name(" + idx + ")=\"", "\"")})
+            receivers.append(cls._find_between(receiver, "android:name(" + idx + ")=\"", "\""))
         return receivers
 
     @staticmethod

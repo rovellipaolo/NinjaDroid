@@ -7,7 +7,7 @@ from tests.utils.file import any_file, any_file_parser, any_file_parser_failure,
 from xml.parsers.expat import ExpatError
 
 from ninjadroid.parsers.file import FileParsingError
-from ninjadroid.parsers.manifest import AndroidManifestParser, AndroidManifestParsingError, AppSdk, AppVersion
+from ninjadroid.parsers.manifest import AndroidManifestParser, AndroidManifestParsingError, AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
 
 
 class TestAndroidManifestParser(unittest.TestCase):
@@ -42,17 +42,11 @@ class TestAndroidManifestParser(unittest.TestCase):
         }
 
     @staticmethod
-    def any_aapt_manifest_info(activity_name: str, service_name: str, receiver_name: str) -> Dict:
+    def any_aapt_manifest_info(activities: List[str], services: List[str], receivers: str) -> Dict:
         return {
-            "activities": [
-                {"name": activity_name}
-            ],
-            "services": [
-                {"name": service_name}
-            ],
-            "receivers": [
-                {"name": receiver_name}
-            ]
+            "activities": activities,
+            "services": services,
+            "receivers": receivers
         }
 
     @staticmethod
@@ -285,9 +279,9 @@ class TestAndroidManifestParser(unittest.TestCase):
         )
         mock_aapt.get_app_permissions.return_value = ["any-permission-0", "any-permission-1", "any-permission-2"]
         mock_aapt.get_manifest_info.return_value = self.any_aapt_manifest_info(
-            activity_name="any-activity-name",
-            service_name="any-service-name",
-            receiver_name="any-broadcast-receiver-name"
+            activities=["any-activity-name"],
+            services=["any-service-name"],
+            receivers=["any-broadcast-receiver-name"]
         )
 
         manifest = self.sut.parse(
@@ -308,9 +302,9 @@ class TestAndroidManifestParser(unittest.TestCase):
         self.assertEqual(AppVersion(code=1, name="any-version-name"), manifest.get_version())
         self.assertEqual(AppSdk(min_version="10", target_version="15", max_version="20"), manifest.get_sdk())
         self.assertEqual(["any-permission-0", "any-permission-1", "any-permission-2"], manifest.get_permissions())
-        self.assertEqual([{"name": "any-activity-name"}], manifest.get_activities())
-        self.assertEqual([{"name": "any-service-name"}], manifest.get_services())
-        self.assertEqual([{"name": "any-broadcast-receiver-name"}], manifest.get_broadcast_receivers())
+        self.assertEqual([AppActivity(name="any-activity-name")], manifest.get_activities())
+        self.assertEqual([AppService(name="any-service-name")], manifest.get_services())
+        self.assertEqual([AppBroadcastReceiver(name="any-broadcast-receiver-name")], manifest.get_broadcast_receivers())
 
     @parameterized.expand([
         ["AndroidManifest.xml", True],

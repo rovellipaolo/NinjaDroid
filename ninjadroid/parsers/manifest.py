@@ -72,6 +72,187 @@ class AppSdk:
         }
 
 
+class AppComponent:
+    """
+    AndroidManifest generic component (i.e. activity, service or broadcast-receiver) information.
+    """
+
+    def __init__(self, name: str, metadata: Optional[List[Dict]] = None, intent_filters: Optional[List[Dict]] = None):
+        self.__name = name
+        self.__metadata = metadata if metadata is not None else []
+        self.__intent_filters = intent_filters if intent_filters is not None else []
+
+    def __eq__(self, other: Any):
+        return isinstance(other, AppComponent) and \
+               self.__name == other.get_name() and \
+               self.__metadata == other.get_metadata() and \
+               self.__intent_filters == other.get_intent_filters()
+
+    def get_name(self) -> str:
+        return self.__name
+
+    def get_metadata(self) -> Dict:
+        return self.__metadata
+
+    def get_intent_filters(self) -> Dict:
+        return self.__intent_filters
+
+    def as_dict(self) -> Dict:
+        dump = {"name": self.__name}
+        if self.__metadata:
+            dump["meta-data"] = self.__metadata
+        if self.__intent_filters:
+            dump["intent-filter"] = self.__intent_filters
+        return dump
+
+
+class AppActivity(AppComponent):
+    """
+    AndroidManifest activity information.
+    """
+
+    # pylint: disable=too-many-arguments
+    def __init__(
+            self,
+            name: str,
+            metadata: Optional[List[Dict]] = None,
+            intent_filters: Optional[List[Dict]] = None,
+            parent_name: Optional[str] = None,
+            launch_mode: Optional[str] = None,
+            no_history: Optional[bool] = None
+    ):
+        super().__init__(name, metadata, intent_filters)
+        self.__parent_name = parent_name
+        self.__launch_mode = launch_mode
+        self.__no_history = no_history
+
+    def __eq__(self, other: Any):
+        return isinstance(other, AppActivity) and \
+               self.get_name() == other.get_name() and \
+               self.get_metadata() == other.get_metadata() and \
+               self.get_intent_filters() == other.get_intent_filters() and \
+               self.__parent_name == other.get_parent_name() and \
+               self.__launch_mode == other.get_launch_mode() and \
+               self.has_history() == other.has_history()
+
+    def get_parent_name(self) -> str:
+        return self.__parent_name
+
+    def get_launch_mode(self) -> Optional[str]:
+        return self.__launch_mode
+
+    def has_history(self) -> bool:
+        return self.__no_history is not None and not self.__no_history
+
+    def as_dict(self) -> Dict:
+        dump = super().as_dict()
+        if self.__parent_name is not None:
+            dump["parentActivityName"] = self.__parent_name
+        if self.__launch_mode is not None:
+            dump["launchMode"] = self.__launch_mode
+        if self.__no_history is not None:
+            dump["noHistory"] = self.__no_history
+        return dump
+
+
+class AppService(AppComponent):
+    """
+    AndroidManifest service information.
+    """
+
+    # pylint: disable=too-many-arguments
+    def __init__(
+            self,
+            name: str,
+            metadata: Optional[List[Dict]] = None,
+            intent_filters: Optional[List[Dict]] = None,
+            enabled: Optional[bool] = None,
+            exported: Optional[bool] = None,
+            process: Optional[str] = None,
+            isolated_process: Optional[bool] = None
+    ):
+        super().__init__(name, metadata, intent_filters)
+        self.__enabled = enabled
+        self.__exported = exported
+        self.__process = process
+        self.__isolated_process = isolated_process
+
+    def __eq__(self, other: Any):
+        return isinstance(other, AppService) and \
+               self.get_name() == other.get_name() and \
+               self.get_metadata() == other.get_metadata() and \
+               self.get_intent_filters() == other.get_intent_filters() and \
+               self.is_enabled() == other.is_enabled() and \
+               self.is_exported() == other.is_exported() and \
+               self.__process == other.get_process() and \
+               self.is_isolated_process() == other.is_isolated_process()
+
+    def is_enabled(self) -> bool:
+        return self.__enabled is not None and self.__enabled
+
+    def is_exported(self) -> bool:
+        return self.__exported is not None and self.__exported
+
+    def get_process(self) -> Optional[str]:
+        return self.__process
+
+    def is_isolated_process(self) -> bool:
+        return self.__isolated_process is not None and self.__isolated_process
+
+    def as_dict(self) -> Dict:
+        dump = super().as_dict()
+        if self.__enabled is not None:
+            dump["enabled"] = self.__enabled
+        if self.__exported is not None:
+            dump["exported"] = self.__exported
+        if self.__process is not None:
+            dump["process"] = self.__process
+        if self.__isolated_process is not None:
+            dump["isolatedProcess"] = self.__isolated_process
+        return dump
+
+
+class AppBroadcastReceiver(AppComponent):
+    """
+    AndroidManifest broadcast-receiver information.
+    """
+
+    # pylint: disable=too-many-arguments
+    def __init__(
+            self,
+            name: str,
+            metadata: Optional[List[Dict]] = None,
+            intent_filters: Optional[List[Dict]] = None,
+            enabled: Optional[bool] = None,
+            exported: Optional[bool] = None
+    ):
+        super().__init__(name, metadata, intent_filters)
+        self.__enabled = enabled
+        self.__exported = exported
+
+    def __eq__(self, other: Any):
+        return isinstance(other, AppBroadcastReceiver) and \
+               self.get_name() == other.get_name() and \
+               self.get_metadata() == other.get_metadata() and \
+               self.get_intent_filters() == other.get_intent_filters() and \
+               self.is_enabled() == other.is_enabled() and \
+               self.is_exported() == other.is_exported()
+
+    def is_enabled(self) -> bool:
+        return self.__enabled is not None and self.__enabled
+
+    def is_exported(self) -> bool:
+        return self.__exported is not None and self.__exported
+
+    def as_dict(self) -> Dict:
+        dump = super().as_dict()
+        if self.__enabled is not None:
+            dump["enabled"] = self.__enabled
+        if self.__exported is not None:
+            dump["exported"] = self.__exported
+        return dump
+
+
 class AndroidManifest(File):
     """
     AndroidManifest.xml file information.
@@ -90,9 +271,9 @@ class AndroidManifest(File):
             version: AppVersion,
             sdk: AppSdk,
             permissions: List[str],
-            activities: List[Dict],
-            services: List[Dict],
-            receivers: List[Dict],
+            activities: List[AppActivity],
+            services: List[AppService],
+            receivers: List[AppBroadcastReceiver],
     ):
         super().__init__(filename, size, md5hash, sha1hash, sha256hash, sha512hash)
         self.__package_name = package_name
@@ -115,13 +296,13 @@ class AndroidManifest(File):
     def get_permissions(self) -> List[str]:
         return self.__permissions
 
-    def get_activities(self) -> List[Dict]:
+    def get_activities(self) -> List[AppActivity]:
         return self.__activities
 
-    def get_services(self) -> List[Dict]:
+    def get_services(self) -> List[AppService]:
         return self.__services
 
-    def get_broadcast_receivers(self) -> List[Dict]:
+    def get_broadcast_receivers(self) -> List[AppBroadcastReceiver]:
         return self.__receivers
 
     def as_dict(self) -> Dict:
@@ -131,11 +312,11 @@ class AndroidManifest(File):
         dump["sdk"] = self.__sdk.as_dict()
         dump["permissions"] = self.__permissions
         if self.__activities:
-            dump["activities"] = self.__activities
+            dump["activities"] = [activity.as_dict() for activity in self.__activities]
         if self.__services:
-            dump["services"] = self.__services
+            dump["services"] = [service.as_dict() for service in self.__services]
         if self.__receivers:
-            dump["receivers"] = self.__receivers
+            dump["receivers"] = [receiver.as_dict() for receiver in self.__receivers]
         return dump
 
 
@@ -239,15 +420,14 @@ class AndroidManifestParser:
     @staticmethod
     def build_manifest_from_apk(file: File, extended_processing: bool, apk_path: str) -> AndroidManifest:
         apk = Aapt.get_apk_info(apk_path)
+        activities = []
+        services = []
+        receivers = []
         if extended_processing:
             manifest = Aapt.get_manifest_info(apk_path)
-            activities = manifest["activities"]
-            services = manifest["services"]
-            receivers = manifest["receivers"]
-        else:
-            activities = []
-            services = []
-            receivers = []
+            activities = [AppActivity(name=activity) for activity in manifest["activities"]]
+            services = [AppService(name=service) for service in manifest["services"]]
+            receivers = [AppBroadcastReceiver(name=receiver) for receiver in manifest["receivers"]]
         return AndroidManifest(
             filename=file.get_file_name(),
             size=file.get_size(),
@@ -287,10 +467,8 @@ class AndroidManifestParser:
         for element in dom.getElementsByTagName("uses-sdk"):
             if element.hasAttribute("android:minSdkVersion"):
                 min_version = element.getAttribute("android:minSdkVersion")
-            if element.hasAttribute("android:targetSdkVersion"):
-                target_version = element.getAttribute("android:targetSdkVersion")
-            if element.hasAttribute("android:maxSdkVersion"):
-                max_version = element.getAttribute("android:maxSdkVersion")
+            target_version = AndroidManifestParser.__parse_str_from_dom(element, "android:targetSdkVersion")
+            max_version = AndroidManifestParser.__parse_str_from_dom(element, "android:maxSdkVersion")
             break
         return AppSdk(
             min_version=min_version,
@@ -299,85 +477,71 @@ class AndroidManifestParser:
         )
 
     @staticmethod
-    def parse_activities_from_dom(dom: Element) -> List[Dict]:
-        return AndroidManifestParser.__parse_list_of_dict_from_dom(
-            dom,
-            tag="activity",
-            attributes={
-                "name": "android:name",
-                "launchMode": "android:launchMode",
-                "multiprocess":"android:multiprocess",
-                "noHistory":"android:noHistory",
-                "parentActivityName":"android:parentActivityName",
-                "meta-data": {
-                    "name": "android:name",
-                    "value": "android:value"
-                },
-                "intent-filter": {
-                    "label": "android:label",
-                    "priority": "android:priority",
-                    "action": [
-                        "android:name"
-                    ],
-                    "category": [
-                        "android:name"
-                    ],
-                    "data": {
-                        "scheme": "android:scheme",
-                        "mimeType": "android:mimeType"
-                    }
-                }
-            }
-        )
+    def parse_activities_from_dom(dom: Element) -> List[AppActivity]:
+        activities = []
+        for element in dom.getElementsByTagName("activity"):
+            activity = AppActivity(
+                name=element.getAttribute("android:name"),
+                metadata=AndroidManifestParser.__parse_metadata_from_dom(element),
+                intent_filters=AndroidManifestParser.__parse_intent_filters_from_dom(element),
+                parent_name=AndroidManifestParser.__parse_str_from_dom(element, "android:parentActivityName"),
+                launch_mode=AndroidManifestParser.__parse_str_from_dom(element, "android:launchMode"),
+                no_history=AndroidManifestParser.__parse_str_from_dom(element, "android:noHistory")
+            )
+            activities.append(activity)
+        return activities
 
     @staticmethod
     def parse_services_from_dom(dom: Element) -> List[Dict]:
-        return AndroidManifestParser.__parse_list_of_dict_from_dom(
-            dom,
-            tag="service",
-            attributes = {
-                "name": "android:name",
-                "enabled":"android:enabled",
-                "exported":"android:exported",
-                "process":"android:process",
-                "isolatedProcess":"android:isolatedProcess",
-                "meta-data": {
-                    "name": "android:name",
-                    "value": "android:value"
-                },
-                "intent-filter": {
-                    "label": "android:label",
-                    "priority": "android:priority",
-                    "action": [
-                        "android:name"
-                    ],
-                    "category": [
-                        "android:name"
-                    ],
-                    "data": {
-                        "scheme": "android:scheme",
-                        "mimeType": "android:mimeType"
-                    }
-                }
-            }
-        )
+        services = []
+        for element in dom.getElementsByTagName("service"):
+            service = AppService(
+                name=element.getAttribute("android:name"),
+                metadata=AndroidManifestParser.__parse_metadata_from_dom(element),
+                intent_filters=AndroidManifestParser.__parse_intent_filters_from_dom(element),
+                enabled=AndroidManifestParser.__parse_bool_from_dom(element, "android:enabled"),
+                exported=AndroidManifestParser.__parse_bool_from_dom(element, "android:exported"),
+                process=AndroidManifestParser.__parse_str_from_dom(element, "android:process"),
+                isolated_process=AndroidManifestParser.__parse_bool_from_dom(element, "android:isolatedProcess")
+            )
+            services.append(service)
+        return services
 
     @staticmethod
     def parse_broadcast_receivers_from_dom(dom: Element) -> List[Dict]:
-        return AndroidManifestParser.__parse_list_of_dict_from_dom(
-            dom,
-            tag="receiver",
-            attributes = {
-                "name": "android:name",
-                "enabled":"android:enabled",
-                "exported":"android:exported",
-                "process":"android:process",
-                "meta-data": {
+        receivers = []
+        for element in dom.getElementsByTagName("receiver"):
+            receiver = AppBroadcastReceiver(
+                name=element.getAttribute("android:name"),
+                metadata=AndroidManifestParser.__parse_metadata_from_dom(element),
+                intent_filters=AndroidManifestParser.__parse_intent_filters_from_dom(element),
+                enabled=AndroidManifestParser.__parse_bool_from_dom(element, "android:enabled"),
+                exported=AndroidManifestParser.__parse_bool_from_dom(element, "android:exported")
+            )
+            receivers.append(receiver)
+        return receivers
+
+    @staticmethod
+    def __parse_metadata_from_dom(dom: Element) -> List[Dict]:
+        metadata = []
+        for element in dom.getElementsByTagName("meta-data"):
+            data = AndroidManifestParser.__parse_dict_from_dom(
+                element,
+                attributes={
                     "name": "android:name",
                     "value": "android:value"
-                },
-                "intent-filter": {
-                    "label": "android:label",
+                }
+            )
+            metadata.append(data)
+        return metadata
+
+    @staticmethod
+    def __parse_intent_filters_from_dom(dom: Element) -> List[Dict]:
+        intent_filters = []
+        for element in dom.getElementsByTagName("intent-filter"):
+            intent_filter = AndroidManifestParser.__parse_dict_from_dom(
+                element,
+                attributes={
                     "priority": "android:priority",
                     "action": [
                         "android:name"
@@ -390,35 +554,46 @@ class AndroidManifestParser:
                         "mimeType": "android:mimeType"
                     }
                 }
-            }
-        )
+            )
+            intent_filters.append(intent_filter)
+        return intent_filters
 
     @staticmethod
-    def __parse_list_from_dom(dom: Element, tag: str, attribute: str) -> List[Any]:
+    def __parse_str_from_dom(dom: Element, attribute: str) -> Optional[str]:
+        if dom.hasAttribute(attribute):
+            return dom.getAttribute(attribute)
+        return None
+
+    @staticmethod
+    def __parse_bool_from_dom(dom: Element, attribute: str) -> Optional[str]:
+        attribute = AndroidManifestParser.__parse_str_from_dom(dom, attribute)
+        return attribute == "true" if attribute is not None else None
+
+    @staticmethod
+    def __parse_dict_from_dom(dom: Element, attributes: Dict[str, Any]) -> Dict:
+        res = {}
+        for key, value in attributes.items():
+            if isinstance(value, dict):
+                tmp = []
+                for element in dom.getElementsByTagName(key):
+                    tmp.append(AndroidManifestParser.__parse_dict_from_dom(element, attributes[key]))
+                if tmp:
+                    res[key] = tmp
+            elif isinstance(value, list):
+                tmp = AndroidManifestParser.__parse_list_from_dom(dom, key, value[0])
+                if tmp:
+                    res[key] = tmp
+            else:
+                if dom.hasAttribute(attributes[key]):
+                    res[key] = dom.getAttribute(attributes[key])
+        return res
+
+    @staticmethod
+    def __parse_list_from_dom(dom: Element, tag: str, attribute: str) -> List[str]:
         res = []
         for element in dom.getElementsByTagName(tag):
             res.append(element.getAttribute(attribute))
         return sorted(res)
-
-    @staticmethod
-    def __parse_list_of_dict_from_dom(dom: Element, tag: str, attributes: Dict[str, Any]) -> List[Any]:
-        res = []
-        for element in dom.getElementsByTagName(tag):
-            data = {}
-            for key, value in attributes.items():
-                if isinstance(value, dict):
-                    tmp = AndroidManifestParser.__parse_list_of_dict_from_dom(element, key, attributes[key])
-                    if len(tmp) > 0:
-                        data[key] = tmp
-                elif isinstance(value, list):
-                    tmp = AndroidManifestParser.__parse_list_from_dom(element, key, value[0])
-                    if len(tmp) > 0:
-                        data[key] = tmp
-                else:  # isinstance(value, str)
-                    if element.hasAttribute(attributes[key]):
-                        data[key] = element.getAttribute(attributes[key])
-            res.append(data)
-        return res
 
     @staticmethod
     def looks_like_a_manifest(filename: str) -> bool:

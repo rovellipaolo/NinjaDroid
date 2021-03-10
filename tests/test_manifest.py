@@ -1,6 +1,6 @@
 import unittest
 
-from ninjadroid.parsers.manifest import AndroidManifest, AppSdk, AppVersion
+from ninjadroid.parsers.manifest import AndroidManifest, AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
 
 
 class TestAndroidManifest(unittest.TestCase):
@@ -16,9 +16,84 @@ class TestAndroidManifest(unittest.TestCase):
             version=AppVersion(code=1, name="any-version-name"),
             sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
             permissions=["any-permission-1", "any-permission-2"],
-            activities=[{"name": "any-activity-name-1"}, {"name": "any-activity-name-2"}],
-            services=[{"name": "any-service-name-1"}, {"name": "any-service-name-2"}],
-            receivers=[{"name": "any-broadcast-receiver-name-1"}, {"name": "any-broadcast-receiver-name-2"}]
+            activities=[
+                AppActivity(
+                    name="any-activity-name-1",
+                    metadata=[
+                        {
+                            "name": "any-activity-metadata-name",
+                            "value": "any-activity-metadata-value"
+                        }
+                    ],
+                    intent_filters=[
+                        {
+                            "priority": "100",
+                            "action": ["any-activity-intent-filter-action"],
+                            "category": ["any-activity-intent-filter-category"],
+                            "data": [
+                                {"scheme": "any-activity-intent-filter-data-scheme"},
+                                {"mimeType": "any-activity-intent-filter-data-mimetype"}
+                            ]
+                        }
+                    ],
+                    parent_name="any-activity-parent-name",
+                    launch_mode="1",
+                    no_history="true",
+                ),
+                AppActivity(name="any-activity-name-2")
+            ],
+            services=[
+                AppService(
+                    name="any-service-name-1",
+                    metadata=[
+                        {
+                            "name": "any-service-metadata-name",
+                            "value": "any-service-metadata-value"
+                        }
+                    ],
+                    intent_filters=[
+                        {
+                            "priority": "100",
+                            "action": ["any-service-intent-filter-action"],
+                            "category": ["any-service-intent-filter-category"],
+                            "data": [
+                                {"scheme": "any-service-intent-filter-data-scheme"},
+                                {"mimeType": "any-service-intent-filter-data-mimetype"}
+                            ]
+                        }
+                    ],
+                    enabled=False,
+                    exported=True,
+                    process="any-service-process",
+                    isolated_process=True
+                ),
+                AppService(name="any-service-name-2")
+            ],
+            receivers=[
+                AppBroadcastReceiver(
+                    name="any-broadcast-receiver-name-1",
+                    metadata=[
+                        {
+                            "name": "any-broadcast-receiver-metadata-name",
+                            "value": "any-broadcast-receiver-metadata-value"
+                        }
+                    ],
+                    intent_filters=[
+                        {
+                            "priority": "100",
+                            "action": ["any-broadcast-receiver-intent-filter-action"],
+                            "category": ["any-broadcast-receiver-intent-filter-category"],
+                            "data": [
+                                {"scheme": "any-broadcast-receiver-intent-filter-data-scheme"},
+                                {"mimeType": "any-broadcast-receiver-intent-filter-data-mimetype"}
+                            ]
+                        }
+                    ],
+                    enabled=True,
+                    exported=False
+                ),
+                AppBroadcastReceiver(name="any-broadcast-receiver-name-2")
+            ]
         )
 
         result = manifest.as_dict()
@@ -47,7 +122,31 @@ class TestAndroidManifest(unittest.TestCase):
                 ],
                 "activities": [
                     {
-                        "name": "any-activity-name-1"
+                        "name": "any-activity-name-1",
+                        "meta-data": [
+                            {
+                                "name": "any-activity-metadata-name",
+                                "value": "any-activity-metadata-value"
+                            }
+                        ],
+                        "intent-filter": [
+                            {
+                                "priority": "100",
+                                "action": ["any-activity-intent-filter-action"],
+                                "category": ["any-activity-intent-filter-category"],
+                                "data": [
+                                    {
+                                        "scheme": "any-activity-intent-filter-data-scheme"
+                                    },
+                                    {
+                                        "mimeType": "any-activity-intent-filter-data-mimetype"
+                                    }
+                                ]
+                            }
+                        ],
+                        "parentActivityName": "any-activity-parent-name",
+                        "launchMode": "1",
+                        "noHistory": "true"
                     },
                     {
                         "name": "any-activity-name-2"
@@ -55,7 +154,32 @@ class TestAndroidManifest(unittest.TestCase):
                 ],
                 "services": [
                     {
-                        "name": "any-service-name-1"
+                        "name": "any-service-name-1",
+                        "meta-data": [
+                            {
+                                "name": "any-service-metadata-name",
+                                "value": "any-service-metadata-value"
+                            }
+                        ],
+                        "intent-filter": [
+                            {
+                                "priority": "100",
+                                "action": ["any-service-intent-filter-action"],
+                                "category": ["any-service-intent-filter-category"],
+                                "data": [
+                                    {
+                                        "scheme": "any-service-intent-filter-data-scheme"
+                                    },
+                                    {
+                                        "mimeType": "any-service-intent-filter-data-mimetype"
+                                    }
+                                ]
+                            }
+                        ],
+                        "enabled": False,
+                        "exported": True,
+                        "process": "any-service-process",
+                        "isolatedProcess": True
                     },
                     {
                         "name": "any-service-name-2"
@@ -63,7 +187,30 @@ class TestAndroidManifest(unittest.TestCase):
                 ],
                 "receivers": [
                     {
-                        "name": "any-broadcast-receiver-name-1"
+                        "name": "any-broadcast-receiver-name-1",
+                        "meta-data": [
+                            {
+                                "name": "any-broadcast-receiver-metadata-name",
+                                "value": "any-broadcast-receiver-metadata-value"
+                            }
+                        ],
+                        "intent-filter": [
+                            {
+                                "priority": "100",
+                                "action": ["any-broadcast-receiver-intent-filter-action"],
+                                "category": ["any-broadcast-receiver-intent-filter-category"],
+                                "data": [
+                                    {
+                                        "scheme": "any-broadcast-receiver-intent-filter-data-scheme"
+                                    },
+                                    {
+                                        "mimeType": "any-broadcast-receiver-intent-filter-data-mimetype"
+                                    }
+                                ]
+                            }
+                        ],
+                        "enabled": True,
+                        "exported": False
                     },
                     {
                         "name": "any-broadcast-receiver-name-2"

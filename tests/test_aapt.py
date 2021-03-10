@@ -134,13 +134,7 @@ class TestAapt(unittest.TestCase):
 
         activities = Aapt._extract_activities(dump_badging)
 
-        self.assertEqual(
-            [
-                {"name": "com.example.app.HomeActivity"},
-                {"name": "com.example.app.OtherActivity"}
-            ],
-            activities
-        )
+        self.assertEqual(["com.example.app.HomeActivity", "com.example.app.OtherActivity"], activities)
 
     def test_extract_activities_when_missing(self):
         activities = Aapt._extract_activities("")
@@ -159,13 +153,7 @@ class TestAapt(unittest.TestCase):
 
         services = Aapt._extract_services(dump_badging)
 
-        self.assertEqual(
-            [
-                {"name": "com.example.app.ExampleService"},
-                {"name": "com.example.app.OtherService"}
-            ],
-            services
-        )
+        self.assertEqual(["com.example.app.ExampleService", "com.example.app.OtherService"], services)
 
     def test_extract_services_when_missing(self):
         services = Aapt._extract_services("")
@@ -185,10 +173,7 @@ class TestAapt(unittest.TestCase):
         receivers = Aapt._extract_broadcast_receivers(dump_badging)
 
         self.assertEqual(
-            [
-                {"name": "com.example.app.ExampleBrodcastReceiver"},
-                {"name": "com.example.app.OtherBrodcastReceiver"}
-            ],
+            ["com.example.app.ExampleBrodcastReceiver", "com.example.app.OtherBrodcastReceiver"],
             receivers
         )
 
@@ -300,19 +285,19 @@ class TestAapt(unittest.TestCase):
         self.assertEqual(
             {
                 "activities": [
-                    {"name": "com.example.app.HomeActivity"},
-                    {"name": "com.example.app.OtherActivity"}
+                    "com.example.app.HomeActivity",
+                    "com.example.app.OtherActivity"
                 ],
                 "services": [
-                    {"name": "com.example.app.ExampleService"},
-                    {"name": "com.example.app.ExampleService2"},
-                    {"name": "com.example.app.ExampleService3"}
+                    "com.example.app.ExampleService",
+                    "com.example.app.ExampleService2",
+                    "com.example.app.ExampleService3"
                 ],
                 "receivers": [
-                    {"name": "com.example.app.ExampleBrodcastReceiver"},
-                    {"name": "com.example.app.ExampleBrodcastReceiver2"},
-                    {"name": "com.example.app.ExampleBrodcastReceiver3"},
-                    {"name": "com.example.app.ExampleBrodcastReceiver4"}
+                    "com.example.app.ExampleBrodcastReceiver",
+                    "com.example.app.ExampleBrodcastReceiver2",
+                    "com.example.app.ExampleBrodcastReceiver3",
+                    "com.example.app.ExampleBrodcastReceiver4"
                 ]
             },
             manifest

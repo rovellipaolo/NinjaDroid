@@ -24,7 +24,7 @@ from ninjadroid.parsers.file import FileParsingError
 from ninjadroid.parsers.apk import APK, ApkParser, ApkParsingError
 
 
-VERSION = "4.0"
+VERSION = "4.5"
 
 
 logging.basicConfig(

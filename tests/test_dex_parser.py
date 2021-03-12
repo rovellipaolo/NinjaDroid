@@ -157,8 +157,8 @@ class TestDexParser(unittest.TestCase):
         ["META-INF/CERT.RSA", False],
         ["Example.apk", False]
     ])
-    def test_looks_like_a_dex(self, filename, expected):
-        result = DexParser.looks_like_a_dex(filename)
+    def test_looks_like_dex(self, filename, expected):
+        result = DexParser.looks_like_dex(filename)
 
         self.assertEqual(expected, result)
 

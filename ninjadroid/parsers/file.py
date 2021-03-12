@@ -3,6 +3,7 @@ from hashlib import md5, sha1, sha256, sha512
 from os import access, R_OK
 from os.path import getsize, isfile, isdir
 from typing import Dict
+from zipfile import is_zipfile
 
 
 default_logger = getLogger(__name__)
@@ -78,7 +79,7 @@ class FileParser:
         :return: the parsed file
         :raise: FileParsingError if cannot parse the file
         """
-        if not self.is_a_readable_file(filepath):
+        if not self.is_readable_file(filepath):
             raise FileParsingError
 
         with open(filepath, "rb") as file:
@@ -95,13 +96,17 @@ class FileParser:
         )
 
     @staticmethod
-    def is_a_file(path: str) -> bool:
+    def is_file(path: str) -> bool:
         return path != "" and isfile(path)
 
     @staticmethod
-    def is_a_readable_file(path: str) -> bool:
-        return FileParser.is_a_file(path) and access(path, R_OK)
+    def is_readable_file(path: str) -> bool:
+        return FileParser.is_file(path) and access(path, R_OK)
 
     @staticmethod
-    def is_a_directory(path: str) -> bool:
+    def is_zip_file(path: str) -> bool:
+        return FileParser.is_file(path) and is_zipfile(path)
+
+    @staticmethod
+    def is_directory(path: str) -> bool:
         return path != "" and isdir(path)

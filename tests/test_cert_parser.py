@@ -196,8 +196,8 @@ class TestCertParser(unittest.TestCase):
         ["classes.dex", False],
         ["Example.apk", False]
     ])
-    def test_looks_like_a_cert(self, filename, expected):
-        result = CertParser.looks_like_a_cert(filename)
+    def test_looks_like_cert(self, filename, expected):
+        result = CertParser.looks_like_cert(filename)
 
         self.assertEqual(expected, result)
 

@@ -596,5 +596,5 @@ class AndroidManifestParser:
         return sorted(res)
 
     @staticmethod
-    def looks_like_a_manifest(filename: str) -> bool:
+    def looks_like_manifest(filename: str) -> bool:
         return filename == "AndroidManifest.xml"

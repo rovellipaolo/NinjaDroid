@@ -309,10 +309,13 @@ class TestAndroidManifestParser(unittest.TestCase):
     @parameterized.expand([
         ["AndroidManifest.xml", True],
         ["AndroidManifest", False],
-        ["Whatever.xml", False]
+        ["Whatever.xml", False],
+        ["META-INF/CERT.RSA", False],
+        ["classes.dex", False],
+        ["Example.apk", False]
     ])
-    def test_looks_like_a_cert(self, filename, expected):
-        result = AndroidManifestParser.looks_like_a_manifest(filename)
+    def test_looks_like_manifest(self, filename, expected):
+        result = AndroidManifestParser.looks_like_manifest(filename)
 
         self.assertEqual(expected, result)
 

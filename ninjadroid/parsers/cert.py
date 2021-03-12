@@ -335,7 +335,7 @@ class CertParser:
         return ""
 
     @staticmethod
-    def looks_like_a_cert(filename: str) -> bool:
+    def looks_like_cert(filename: str) -> bool:
         return filename == "META-INF/CERT.RSA" or \
             filename == "META-INF/CERT.DSA" or \
             fnmatch(filename, "META-INF/*.RSA")

@@ -137,15 +137,15 @@ class TestFileParser(unittest.TestCase):
         [False]
     ])
     @patch('ninjadroid.parsers.file.isfile')
-    def test_is_a_file(self, expected, mock_isfile):
+    def test_is_file(self, expected, mock_isfile):
         mock_isfile.return_value = expected
 
-        result = self.sut.is_a_file("any-path")
+        result = self.sut.is_file("any-path")
 
         self.assertEqual(expected, result)
 
-    def test_is_a_file_with_empty_path(self):
-        result = self.sut.is_a_file("")
+    def test_is_file_with_empty_path(self):
+        result = self.sut.is_file("")
 
         self.assertFalse(result)
 
@@ -157,16 +157,37 @@ class TestFileParser(unittest.TestCase):
     ])
     @patch('ninjadroid.parsers.file.access')
     @patch('ninjadroid.parsers.file.isfile')
-    def test_is_a_readable_file(self, is_file, is_readable, expected, mock_isfile, mock_access):
+    def test_is_readable_file(self, is_file, is_readable, expected, mock_isfile, mock_access):
         mock_isfile.return_value = is_file
         mock_access.return_value = is_readable
 
-        result = self.sut.is_a_readable_file("any-path")
+        result = self.sut.is_readable_file("any-path")
 
         self.assertEqual(expected, result)
 
-    def test_is_a_readable_file_with_empty_path(self):
-        result = self.sut.is_a_readable_file("")
+    def test_is_readable_file_with_empty_path(self):
+        result = self.sut.is_readable_file("")
+
+        self.assertFalse(result)
+
+    @parameterized.expand([
+        [True, True, True],
+        [True, False, False],
+        [False, True, False],
+        [False, False, False]
+    ])
+    @patch('ninjadroid.parsers.file.is_zipfile')
+    @patch('ninjadroid.parsers.file.isfile')
+    def test_is_zip_file(self, is_file, is_zip, expected, mock_isfile, mock_is_zipfile):
+        mock_isfile.return_value = is_file
+        mock_is_zipfile.return_value = is_zip
+
+        result = self.sut.is_zip_file("any-path")
+
+        self.assertEqual(expected, result)
+
+    def test_is_zip_file_with_empty_path(self):
+        result = self.sut.is_zip_file("")
 
         self.assertFalse(result)
 
@@ -175,15 +196,15 @@ class TestFileParser(unittest.TestCase):
         [False]
     ])
     @patch('ninjadroid.parsers.file.isdir')
-    def test_is_a_directory(self, expected, mock_isdir):
+    def test_is_directory(self, expected, mock_isdir):
         mock_isdir.return_value = expected
 
-        result = self.sut.is_a_directory("any-path")
+        result = self.sut.is_directory("any-path")
 
         self.assertEqual(expected, result)
 
-    def test_is_a_directory_with_empty_path(self):
-        result = self.sut.is_a_directory("")
+    def test_is_directory_with_empty_path(self):
+        result = self.sut.is_directory("")
 
         self.assertFalse(result)
 

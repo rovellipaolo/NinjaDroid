@@ -127,5 +127,5 @@ class DexParser:
         return sorted(signatures)
 
     @staticmethod
-    def looks_like_a_dex(filename: str) -> bool:
+    def looks_like_dex(filename: str) -> bool:
         return bool(re.search(".*\\.dex$", filename))

@@ -348,7 +348,7 @@ $ ninjadroid tests/data/Example.apk --all --json
                 "name": "com.example.app.ExampleBrodcastReceiver"
             },
             {
-                "exported": "false",
+                "exported": false,
                 "intent-filter": [
                     {
                         "action": [
@@ -361,8 +361,8 @@ $ ninjadroid tests/data/Example.apk --all --json
                 "name": "com.example.app.ExampleBrodcastReceiver2"
             },
             {
-                "enabled": "true",
-                "exported": "false",
+                "enabled": true,
+                "exported": false,
                 "intent-filter": [
                     {
                         "action": [
@@ -381,8 +381,8 @@ $ ninjadroid tests/data/Example.apk --all --json
                 "name": "com.example.app.ExampleBrodcastReceiver3"
             },
             {
-                "enabled": "false",
-                "exported": "true",
+                "enabled": false,
+                "exported": true,
                 "name": "com.example.app.ExampleBrodcastReceiver4"
             }
         ],
@@ -396,15 +396,15 @@ $ ninjadroid tests/data/Example.apk --all --json
                 "name": "com.example.app.ExampleService"
             },
             {
-                "enabled": "false",
-                "exported": "true",
-                "isolatedProcess": "true",
+                "enabled": false,
+                "exported": true,
+                "isolatedProcess": true,
                 "name": "com.example.app.ExampleService2"
             },
             {
-                "enabled": "true",
-                "exported": "false",
-                "isolatedProcess": "false",
+                "enabled": true,
+                "exported": false,
+                "isolatedProcess": false,
                 "name": "com.example.app.ExampleService3"
             }
         ],

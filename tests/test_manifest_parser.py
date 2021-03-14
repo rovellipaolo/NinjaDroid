@@ -7,7 +7,7 @@ from tests.utils.file import any_file, any_file_parser, any_file_parser_failure,
 from xml.parsers.expat import ExpatError
 
 from ninjadroid.parsers.file import FileParsingError
-from ninjadroid.parsers.manifest import AndroidManifestParser, AndroidManifestParsingError, AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
+from ninjadroid.parsers.manifest import AndroidManifest, AndroidManifestParser, AndroidManifestParsingError, AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
 
 
 class TestAndroidManifestParser(unittest.TestCase):
@@ -80,6 +80,78 @@ class TestAndroidManifestParser(unittest.TestCase):
         ]
         return xml
 
+    @staticmethod
+    def any_axmlprinter_xml_with_extended_processing(
+            package_name: str,
+            version_code: str,
+            version_name: str,
+            sdk_min: str,
+            sdk_target: str,
+            sdk_max: str,
+            permissions: List[str],
+            activities: List[str],
+            services: List[str],
+            receivers: List[str]
+    ) -> Mock:
+        xml = Mock()
+        xml.documentElement.getAttribute.side_effect = [
+            package_name,
+            version_code,
+            version_name
+        ]
+        sdk_xml = Mock()
+        sdk_xml.hasAttribute.return_value = True
+        sdk_xml.getAttribute.side_effect = [
+            sdk_min,
+            sdk_target,
+            sdk_max
+        ]
+        permissions_xml = Mock()
+        permissions_xml.getAttribute.side_effect = permissions
+        application_xml = Mock()
+        activity_xml = Mock()
+        activity_xml.getAttribute.side_effect = activities
+        activity_xml.hasAttribute.return_value = False
+        activity_xml.getElementsByTagName.return_value = []
+        service_xml = Mock()
+        service_xml.getAttribute.side_effect = services
+        service_xml.hasAttribute.return_value = False
+        service_xml.getElementsByTagName.return_value = []
+        receiver_xml = Mock()
+        receiver_xml.getAttribute.side_effect = receivers
+        receiver_xml.hasAttribute.return_value = False
+        receiver_xml.getElementsByTagName.return_value = []
+        application_xml.getElementsByTagName.side_effect = [
+            [activity_xml],
+            [service_xml],
+            [receiver_xml]
+        ]
+        xml.documentElement.getElementsByTagName.side_effect = [
+            [application_xml],
+            [sdk_xml],
+            [permissions_xml, permissions_xml, permissions_xml]
+        ]
+        return xml
+
+    def assert_manifest_equal(
+            self,
+            manifest: AndroidManifest,
+            package_name: str,
+            version: AppVersion,
+            sdk: AppSdk,
+            permissions: List[str],
+            activities: List[AppActivity],
+            services: List[AppService],
+            receivers: List[AppBroadcastReceiver]
+    ):
+        self.assertEqual(package_name, manifest.get_package_name())
+        self.assertEqual(version, manifest.get_version())
+        self.assertEqual(sdk, manifest.get_sdk())
+        self.assertEqual(permissions, manifest.get_permissions())
+        self.assertEqual(activities, manifest.get_activities())
+        self.assertEqual(services, manifest.get_services())
+        self.assertEqual(receivers, manifest.get_broadcast_receivers())
+
     @patch('ninjadroid.parsers.manifest.minidom')
     @patch('ninjadroid.parsers.manifest.FileParser')
     @patch("builtins.open", new_callable=mock_open)
@@ -108,13 +180,58 @@ class TestAndroidManifestParser(unittest.TestCase):
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
         assert_file_equal(self, expected=file, actual=manifest)
-        self.assertEqual("any-package-name", manifest.get_package_name())
-        self.assertEqual(AppVersion(code=1, name="any-version-name"), manifest.get_version())
-        self.assertEqual(AppSdk(min_version="10", target_version="15", max_version="20"), manifest.get_sdk())
-        self.assertEqual(["any-permission-0", "any-permission-1", "any-permission-2"], manifest.get_permissions())
-        self.assertEqual([], manifest.get_activities())
-        self.assertEqual([], manifest.get_services())
-        self.assertEqual([], manifest.get_broadcast_receivers())
+        self.assert_manifest_equal(
+            manifest=manifest,
+            package_name="any-package-name",
+            version=AppVersion(code=1, name="any-version-name"),
+            sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
+            permissions=["any-permission-0", "any-permission-1", "any-permission-2"],
+            activities=[],
+            services=[],
+            receivers=[]
+        )
+
+    @patch('ninjadroid.parsers.manifest.minidom')
+    @patch('ninjadroid.parsers.manifest.FileParser')
+    @patch("builtins.open", new_callable=mock_open)
+    def test_parse_with_extended_processing(self, mock_file, mock_file_parser, mock_minidom):
+        file = any_file(filename="AndroidManifest.xml")
+        mock_parser_instance = any_file_parser(file=file)
+        mock_file_parser.return_value = mock_parser_instance
+        mock_minidom.parse.return_value = self.any_axmlprinter_xml_with_extended_processing(
+            package_name="any-package-name",
+            version_code="1",
+            version_name="any-version-name",
+            sdk_max="20",
+            sdk_min="10",
+            sdk_target="15",
+            permissions=["any-permission-1", "any-permission-2", "any-permission-0"],
+            activities=["any-activity-name"],
+            services=["any-service-name"],
+            receivers=["any-broadcast-receiver-name"]
+        )
+
+        manifest = self.sut.parse(
+            filepath="any-file-path",
+            binary = False,
+            apk_path = "any_apk_path",
+            extended_processing = True
+        )
+
+        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        mock_file.assert_called_with("any-file-path", "rb")
+        mock_minidom.parse.assert_called_with("any-file-path")
+        assert_file_equal(self, expected=file, actual=manifest)
+        self.assert_manifest_equal(
+            manifest=manifest,
+            package_name="any-package-name",
+            version=AppVersion(code=1, name="any-version-name"),
+            sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
+            permissions=["any-permission-0", "any-permission-1", "any-permission-2"],
+            activities=[AppActivity(name="any-activity-name")],
+            services=[AppService(name="any-service-name")],
+            receivers=[AppBroadcastReceiver(name="any-broadcast-receiver-name")]
+        )
 
     @patch('ninjadroid.parsers.manifest.minidom')
     @patch('ninjadroid.parsers.manifest.FileParser')
@@ -143,8 +260,17 @@ class TestAndroidManifestParser(unittest.TestCase):
         assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
-        # NOTE: no version code is returned
-        self.assertEqual(AppVersion(code=None, name="any-version-name"), manifest.get_version())
+        self.assert_manifest_equal(
+            manifest=manifest,
+            package_name="any-package-name",
+            # NOTE: no version code is returned
+            version=AppVersion(code=None, name="any-version-name"),
+            sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
+            permissions=["any-permission-0", "any-permission-1", "any-permission-2"],
+            activities=[],
+            services=[],
+            receivers=[]
+        )
 
     @patch('ninjadroid.parsers.manifest.minidom')
     @patch('ninjadroid.parsers.manifest.AXMLPrinter')
@@ -177,13 +303,16 @@ class TestAndroidManifestParser(unittest.TestCase):
         mock_axmlprinter.assert_called_with(ANY)
         mock_minidom.parseString.assert_called_with("any-axml-raw-value")
         assert_file_equal(self, expected=file, actual=manifest)
-        self.assertEqual("any-package-name", manifest.get_package_name())
-        self.assertEqual(AppVersion(code=1, name="any-version-name"), manifest.get_version())
-        self.assertEqual(AppSdk(min_version="10", target_version="15", max_version="20"), manifest.get_sdk())
-        self.assertEqual(["any-permission-0", "any-permission-1", "any-permission-2"], manifest.get_permissions())
-        self.assertEqual([], manifest.get_activities())
-        self.assertEqual([], manifest.get_services())
-        self.assertEqual([], manifest.get_broadcast_receivers())
+        self.assert_manifest_equal(
+            manifest=manifest,
+            package_name="any-package-name",
+            version=AppVersion(code=1, name="any-version-name"),
+            sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
+            permissions=["any-permission-0", "any-permission-1", "any-permission-2"],
+            activities=[],
+            services=[],
+            receivers=[]
+        )
 
     @patch('ninjadroid.parsers.manifest.minidom')
     @patch('ninjadroid.parsers.manifest.AXMLPrinter')
@@ -252,13 +381,16 @@ class TestAndroidManifestParser(unittest.TestCase):
         mock_aapt.get_apk_info.assert_called_with("any_apk_path")
         mock_aapt.get_app_permissions.assert_called_with("any_apk_path")
         assert_file_equal(self, expected=file, actual=manifest)
-        self.assertEqual("any-package-name", manifest.get_package_name())
-        self.assertEqual(AppVersion(code=1, name="any-version-name"), manifest.get_version())
-        self.assertEqual(AppSdk(min_version="10", target_version="15", max_version="20"), manifest.get_sdk())
-        self.assertEqual(["any-permission-0", "any-permission-1", "any-permission-2"], manifest.get_permissions())
-        self.assertEqual([], manifest.get_activities())
-        self.assertEqual([], manifest.get_services())
-        self.assertEqual([], manifest.get_broadcast_receivers())
+        self.assert_manifest_equal(
+            manifest=manifest,
+            package_name="any-package-name",
+            version=AppVersion(code=1, name="any-version-name"),
+            sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
+            permissions=["any-permission-0", "any-permission-1", "any-permission-2"],
+            activities=[],
+            services=[],
+            receivers=[]
+        )
 
     @patch('ninjadroid.parsers.manifest.Aapt')
     @patch('ninjadroid.parsers.manifest.minidom')
@@ -298,13 +430,16 @@ class TestAndroidManifestParser(unittest.TestCase):
         mock_aapt.get_app_permissions.assert_called_with("any_apk_path")
         mock_aapt.get_manifest_info.assert_called_with("any_apk_path")
         assert_file_equal(self, expected=file, actual=manifest)
-        self.assertEqual("any-package-name", manifest.get_package_name())
-        self.assertEqual(AppVersion(code=1, name="any-version-name"), manifest.get_version())
-        self.assertEqual(AppSdk(min_version="10", target_version="15", max_version="20"), manifest.get_sdk())
-        self.assertEqual(["any-permission-0", "any-permission-1", "any-permission-2"], manifest.get_permissions())
-        self.assertEqual([AppActivity(name="any-activity-name")], manifest.get_activities())
-        self.assertEqual([AppService(name="any-service-name")], manifest.get_services())
-        self.assertEqual([AppBroadcastReceiver(name="any-broadcast-receiver-name")], manifest.get_broadcast_receivers())
+        self.assert_manifest_equal(
+            manifest=manifest,
+            package_name="any-package-name",
+            version=AppVersion(code=1, name="any-version-name"),
+            sdk=AppSdk(min_version="10", target_version="15", max_version="20"),
+            permissions=["any-permission-0", "any-permission-1", "any-permission-2"],
+            activities=[AppActivity(name="any-activity-name")],
+            services=[AppService(name="any-service-name")],
+            receivers=[AppBroadcastReceiver(name="any-broadcast-receiver-name")]
+        )
 
     @parameterized.expand([
         ["AndroidManifest.xml", True],

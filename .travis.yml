@@ -1,7 +1,5 @@
 language: python
 jobs:
-  allow_failures:
-    - osx_image: xcode12
   include:
     # Docker: checkstyle and tests (without coverage)
     - name: "Docker"

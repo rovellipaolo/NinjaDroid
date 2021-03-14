@@ -167,28 +167,28 @@ class Aapt:
     @classmethod
     def _extract_activities(cls, xmltree: str) -> List[str]:
         activities = []
-        for offs in cls._find_all(xmltree, "activity"):
+        for offs in cls._find_all(xmltree, "E: activity"):
             activity = xmltree[offs:-1]
-            idx = cls._find_between(activity, "android:name(", ")=\"")
-            activities.append(cls._find_between(activity, "android:name(" + idx + ")=\"", "\""))
+            idx = cls._find_between(activity, "A: android:name(", ")=\"")
+            activities.append(cls._find_between(activity, "A: android:name(" + idx + ")=\"", "\""))
         return activities
 
     @classmethod
     def _extract_services(cls, xmltree: str) -> List[str]:
         services = []
-        for offs in cls._find_all(xmltree, "service"):
+        for offs in cls._find_all(xmltree, "E: service"):
             service = xmltree[offs:-1]
-            idx = cls._find_between(service, "android:name(", ")=\"")
-            services.append(cls._find_between(service, "android:name(" + idx + ")=\"", "\""))
+            idx = cls._find_between(service, "A: android:name(", ")=\"")
+            services.append(cls._find_between(service, "A: android:name(" + idx + ")=\"", "\""))
         return services
 
     @classmethod
     def _extract_broadcast_receivers(cls, xmltree: str) -> List[str]:
         receivers = []
-        for offs in cls._find_all(xmltree, "receiver"):
+        for offs in cls._find_all(xmltree, "E: receiver"):
             receiver = xmltree[offs:-1]
-            idx = cls._find_between(receiver, "android:name(", ")=\"")
-            receivers.append(cls._find_between(receiver, "android:name(" + idx + ")=\"", "\""))
+            idx = cls._find_between(receiver, "A: android:name(", ")=\"")
+            receivers.append(cls._find_between(receiver, "A: android:name(" + idx + ")=\"", "\""))
         return receivers
 
     @staticmethod

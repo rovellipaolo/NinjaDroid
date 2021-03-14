@@ -168,7 +168,7 @@ class ApkParser:
             try:
                 return self.file_parser.parse(filepath, filename)
             except FileParsingError:
-                pass
+                self.logger.error("Could not parse file '%s'!", filename)
         return None
 
     @staticmethod

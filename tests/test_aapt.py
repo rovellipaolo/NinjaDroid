@@ -262,6 +262,47 @@ class TestAapt(unittest.TestCase):
         )
 
     @patch('ninjadroid.aapt.aapt.Popen')
+    def test_get_manifest_info(self, mock_popen):
+        self.maxDiff = None
+        dump_xmltree = b"N: android=http://schemas.android.com/apk/res/android\n" \
+                       b"  E: manifest (line=2)\n" \
+                       b"    E: application (line=8)\n" \
+                       b"      E: activity (line=9)\n" \
+                       b"        A: android:name(0x01010003)=\"any-activity\" (Raw: \"any-activity\")\n" \
+                       b"      E: activity (line=15)\n" \
+                       b"        A: android:name(0x01010003)=\"any-other-activity\" (Raw: \"any-other-activity\")\n" \
+                       b"      E: service (line=25)\n" \
+                       b"        A: android:name(0x01010003)=\"any-service\" (Raw: \"any-service\")\n" \
+                       b"      E: service (line=26)\n" \
+                       b"        A: android:name(0x01010003)=\"any-other-service\" (Raw: \"any-other-service\")\n" \
+                       b"      E: receiver (line=28)\n" \
+                       b"        A: android:name(0x01010003)=\"any-broadcast-receiver\" (Raw: \"any-broadcast-receiver\")\n" \
+                       b"      E: receiver (line=29)\n" \
+                       b"        A: android:name(0x01010003)=\"any-other-broadcast-receiver\" (Raw: \"any-other-broadcast-receiver\")"
+        mock_popen.return_value = any_popen(dump_xmltree)
+
+        manifest = Aapt.get_manifest_info("any-file-path")
+
+        assert_popen_called_once(mock_popen)
+        self.assertEqual(
+            {
+                "activities": [
+                    "any-activity",
+                    "any-other-activity"
+                ],
+                "services": [
+                    "any-service",
+                    "any-other-service"
+                ],
+                "receivers": [
+                    "any-broadcast-receiver",
+                    "any-other-broadcast-receiver"
+                ]
+            },
+            manifest
+        )
+
+    @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_manifest_info_when_dumb_xmltree_fails(self, mock_popen):
         mock_popen.side_effect = RuntimeError()
 
@@ -273,32 +314,6 @@ class TestAapt(unittest.TestCase):
                 "activities": [],
                 "services": [],
                 "receivers": []
-            },
-            manifest
-        )
-
-    def test_integration_get_manifest_info(self):
-        file = join("tests", "data", TestAapt.FILE_NAME)
-
-        manifest = Aapt.get_manifest_info(file)
-
-        self.assertEqual(
-            {
-                "activities": [
-                    "com.example.app.HomeActivity",
-                    "com.example.app.OtherActivity"
-                ],
-                "services": [
-                    "com.example.app.ExampleService",
-                    "com.example.app.ExampleService2",
-                    "com.example.app.ExampleService3"
-                ],
-                "receivers": [
-                    "com.example.app.ExampleBrodcastReceiver",
-                    "com.example.app.ExampleBrodcastReceiver2",
-                    "com.example.app.ExampleBrodcastReceiver3",
-                    "com.example.app.ExampleBrodcastReceiver4"
-                ]
             },
             manifest
         )

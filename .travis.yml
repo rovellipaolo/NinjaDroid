@@ -1,7 +1,7 @@
 language: python
 jobs:
   include:
-    # Docker: checkstyle and tests (without coverage)
+    # Docker: checkstyle, unit tests (without coverage) and regression tests
     - name: "Docker"
       services:
         - docker
@@ -10,9 +10,10 @@ jobs:
       script:  # NOTE: needed to override the generic "script" section
         - make checkstyle-docker
         - make test-docker
+        - make regression-docker
       after_success:  # NOTE: needed to override the generic "after_success" section (i.e. coveralls report)
         - docker ps -a
-    # Linux: checkstyle and tests (with coverage)
+    # Linux: checkstyle, unit tests (with coverage) and regression tests
     - name: "Python 3.5 on Linux"
       python: 3.5
       install:
@@ -23,7 +24,7 @@ jobs:
       install:
         - make build-linux
         - pip install coveralls
-    # MacOS: checkstyle and tests (with coverage)
+    # MacOS: checkstyle, unit tests (with coverage) and regression tests
     - name: "Python 3.7.4 on macOS"
       os: osx
       osx_image: xcode11.2  # macOS 10.14.6
@@ -38,8 +39,12 @@ jobs:
       install:
         - make build-macos
         - pip3 install coveralls
+      script:  # NOTE: no regression tests!
+        - make checkstyle
+        - make test-coverage
 script:
   - make checkstyle
   - make test-coverage
+  - make regression
 after_success:
   - coveralls

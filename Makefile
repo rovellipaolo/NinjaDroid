@@ -90,10 +90,22 @@ test-coverage:
 test-docker:
 	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/tests:/opt/NinjaDroid/tests ${DOCKER_IMAGE}:${DOCKER_TAG} python3 -m unittest
 
+.PHONY: regression
+regression:
+	@python3 regression/native.py
+
+.PHONY: regression-docker
+regression-docker:
+	@python3 regression/docker.py
+
+.PHONY: regression-flatpak
+regression-flatpak:
+	@python3 regression/flatpak.py
+
 .PHONY: checkstyle
 checkstyle:
-	pylint ninjadroid.py ninjadroid/
+	pylint ninjadroid.py ninjadroid/ regression/
 
 .PHONY: checkstyle-docker
 checkstyle-docker:
-	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/ regression/

@@ -1,16 +1,20 @@
-from os.path import join
-from parameterized import parameterized
 from typing import Dict, List
 import unittest
-from unittest.mock import ANY, call, Mock, mock_open, patch
-from tests.utils.file import any_file, any_file_parser, any_file_parser_failure, assert_file_equal, assert_file_parser_called_once_with
+from unittest.mock import ANY, Mock, mock_open, patch
 from xml.parsers.expat import ExpatError
+from parameterized import parameterized
+from tests.utils.file import any_file, any_file_parser, assert_file_equal, assert_file_parser_called_once_with
 
-from ninjadroid.parsers.file import FileParsingError
-from ninjadroid.parsers.manifest import AndroidManifest, AndroidManifestParser, AndroidManifestParsingError, AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
+from ninjadroid.parsers.manifest import AndroidManifest, AndroidManifestParser, AndroidManifestParsingError, \
+    AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
 
 
+# pylint: disable=too-many-arguments,too-many-locals,unused-argument
 class TestAndroidManifestParser(unittest.TestCase):
+    """
+    Test AndroidManifest parser.
+    """
+
     sut = AndroidManifestParser()
 
     @staticmethod
@@ -176,7 +180,11 @@ class TestAndroidManifestParser(unittest.TestCase):
             extended_processing = False
         )
 
-        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        assert_file_parser_called_once_with(
+            mock_parser_instance,
+            filepath="any-file-path",
+            filename="AndroidManifest.xml"
+        )
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
         assert_file_equal(self, expected=file, actual=manifest)
@@ -218,7 +226,11 @@ class TestAndroidManifestParser(unittest.TestCase):
             extended_processing = True
         )
 
-        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        assert_file_parser_called_once_with(
+            mock_parser_instance,
+            filepath="any-file-path",
+            filename="AndroidManifest.xml"
+        )
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
         assert_file_equal(self, expected=file, actual=manifest)
@@ -257,7 +269,11 @@ class TestAndroidManifestParser(unittest.TestCase):
             extended_processing = False
         )
 
-        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        assert_file_parser_called_once_with(
+            mock_parser_instance,
+            filepath="any-file-path",
+            filename="AndroidManifest.xml"
+        )
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
         self.assert_manifest_equal(
@@ -298,7 +314,11 @@ class TestAndroidManifestParser(unittest.TestCase):
             extended_processing = False
         )
 
-        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        assert_file_parser_called_once_with(
+            mock_parser_instance,
+            filepath="any-file-path",
+            filename="AndroidManifest.xml"
+        )
         mock_file.assert_called_with("any-file-path", "rb")
         mock_axmlprinter.assert_called_with(ANY)
         mock_minidom.parseString.assert_called_with("any-axml-raw-value")
@@ -375,7 +395,11 @@ class TestAndroidManifestParser(unittest.TestCase):
             extended_processing = False
         )
 
-        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        assert_file_parser_called_once_with(
+            mock_parser_instance,
+            filepath="any-file-path",
+            filename="AndroidManifest.xml"
+        )
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
         mock_aapt.get_apk_info.assert_called_with("any_apk_path")
@@ -396,7 +420,13 @@ class TestAndroidManifestParser(unittest.TestCase):
     @patch('ninjadroid.parsers.manifest.minidom')
     @patch('ninjadroid.parsers.manifest.FileParser')
     @patch("builtins.open", new_callable=mock_open)
-    def test_parse_when_minidom_fails_with_apk_path_and_extended_processing(self, mock_file, mock_file_parser, mock_minidom, mock_aapt):
+    def test_parse_when_minidom_fails_with_apk_path_and_extended_processing(
+            self,
+            mock_file,
+            mock_file_parser,
+            mock_minidom,
+            mock_aapt
+    ):
         file = any_file(filename="AndroidManifest.xml")
         mock_parser_instance = any_file_parser(file=file)
         mock_file_parser.return_value = mock_parser_instance
@@ -423,7 +453,11 @@ class TestAndroidManifestParser(unittest.TestCase):
             extended_processing = True
         )
 
-        assert_file_parser_called_once_with(mock_parser_instance, filepath="any-file-path", filename="AndroidManifest.xml")
+        assert_file_parser_called_once_with(
+            mock_parser_instance,
+            filepath="any-file-path",
+            filename="AndroidManifest.xml"
+        )
         mock_file.assert_called_with("any-file-path", "rb")
         mock_minidom.parse.assert_called_with("any-file-path")
         mock_aapt.get_apk_info.assert_called_with("any_apk_path")

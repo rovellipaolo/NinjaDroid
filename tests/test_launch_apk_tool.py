@@ -5,6 +5,10 @@ from ninjadroid.use_cases.launch_apk_tool import LaunchApkTool
 
 
 class TestLaunchApkTool(unittest.TestCase):
+    """
+    Test LaunchApkTool use case.
+    """
+
     ANY_PATH = "any-path"
     ANY_DIRECTORY = "any-directory"
     ANY_APKTOOL = "apktool/apktool.jar"

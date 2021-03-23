@@ -1,10 +1,14 @@
-from parameterized import parameterized
 import unittest
+from parameterized import parameterized
 
 from ninjadroid.signatures.shell_signature import ShellSignature
 
 
 class TestShellSignature(unittest.TestCase):
+    """
+    Test ShellSignature parser.
+    """
+
     sut = ShellSignature()
 
     @parameterized.expand([
@@ -63,7 +67,7 @@ class TestShellSignature(unittest.TestCase):
         [" ### /system/app/xxx.apk", "/system/app/xxx.apk", True],
         [" - no match - ", None, False],
         ["http://www.domain.com", None, False],
-        ["Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None, False],
+        ["Mozilla/5.0 (Linux; U; Android %s) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None, False],
     ])
     def test_search(self, pattern, expected_match, expected_is_valid):
         match, is_valid = self.sut.search(pattern)

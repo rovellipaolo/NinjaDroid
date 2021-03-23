@@ -1,15 +1,20 @@
-from os.path import join
-from parameterized import parameterized
 import unittest
 from unittest.mock import call, Mock, patch
-from tests.utils.file import any_file, any_file_parser, any_file_parser_failure, assert_file_equal, assert_file_parser_called_once_with
+from parameterized import parameterized
+from tests.utils.file import any_file, any_file_parser, any_file_parser_failure, assert_file_equal, \
+    assert_file_parser_called_once_with
 from tests.utils.popen import any_popen, assert_popen_called_once_with
 
 from ninjadroid.parsers.cert import CertFingerprint, CertParticipant, CertParser, CertParsingError, CertValidity
 from ninjadroid.parsers.file import FileParsingError
 
 
+# pylint: disable=line-too-long
 class TestCertParser(unittest.TestCase):
+    """
+    Test Cert parser.
+    """
+
     sut = CertParser()
 
     @patch('ninjadroid.parsers.cert.Popen')
@@ -119,7 +124,9 @@ class TestCertParser(unittest.TestCase):
         mock_astimezone.strftime.side_effect = ["2015-06-27 10:06:13Z", "2515-02-26 10:06:13Z"]
         mock_datetime.strptime.return_value = Mock()
 
-        validity = CertParser.parse_validity("Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515")
+        validity = CertParser.parse_validity(
+            "Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515"
+        )
 
         mock_datetime.strptime.assert_has_calls([
             call("Sat Jun 27 12:06:13 CEST 2015", "%a %b %d %H:%M:%S %Z %Y"),
@@ -136,7 +143,9 @@ class TestCertParser(unittest.TestCase):
     def test_parse_validity_when_localize_fails(self, mock_get_localzone):
         mock_get_localzone.return_value.localize.side_effect = ValueError()
 
-        validity = CertParser.parse_validity("Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515")
+        validity = CertParser.parse_validity(
+            "Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515"
+        )
 
         self.assertEqual(
             CertValidity(valid_from="Sat Jun 27 12:06:13 CEST 2015", valid_to="Tue Feb 26 11:06:13 CET 2515"),

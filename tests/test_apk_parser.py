@@ -1,10 +1,9 @@
-from parameterized import parameterized
 from typing import List
 import unittest
 from unittest.mock import Mock, patch
 from zipfile import BadZipFile
+from parameterized import parameterized
 
-from ninjadroid.parsers.file import FileParsingError
 from ninjadroid.parsers.apk import APK, ApkParser, ApkParsingError
 from ninjadroid.parsers.cert import CertParsingError
 from ninjadroid.parsers.manifest import AndroidManifestParsingError
@@ -12,7 +11,12 @@ from ninjadroid.parsers.file import File, FileParsingError
 from tests.utils.file import any_file, assert_file_equal
 
 
+# pylint: disable=too-many-arguments,too-many-locals
 class TestApkParser(unittest.TestCase):
+    """
+    Test APK parser.
+    """
+
     def assert_apk_equal(
             self,
             apk: APK,

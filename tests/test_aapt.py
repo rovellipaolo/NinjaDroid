@@ -1,12 +1,16 @@
-from os.path import join
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from tests.utils.popen import any_popen, assert_popen_called_once
 
 from ninjadroid.aapt.aapt import Aapt
 
 
+# pylint: disable=too-many-public-methods,protected-access
 class TestAapt(unittest.TestCase):
+    """
+    Test Aapt class.
+    """
+
     FILE_NAME = "Example.apk"
 
     @patch('ninjadroid.aapt.aapt.Popen')
@@ -46,7 +50,7 @@ class TestAapt(unittest.TestCase):
         self.assertEqual("Example1", app_name)
 
     def test_extract_app_name_when_application_label_is_not_present_but_launchable_activity_label_is(self):
-        app_name = Aapt._extract_app_name("launchable-activity: name='com.example.app.HomeActivity'  label='Example2' icon=''")
+        app_name = Aapt._extract_app_name("launchable-activity: name='com.example.app.HomeActivity'  label='Example2'")
 
         self.assertEqual("Example2", app_name)
 
@@ -56,22 +60,22 @@ class TestAapt(unittest.TestCase):
         self.assertEqual("", app_name)
 
     def test_extract_package_name(self):
-        package_name = Aapt._extract_package_name("package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'")
+        package_name = Aapt._extract_package_name("package: name='com.example.app' versionCode='1' versionName='1.0'")
 
         self.assertEqual("com.example.app", package_name)
 
     def test_extract_version_name(self):
-        version_name = Aapt._extract_version_name("package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'")
+        version_name = Aapt._extract_version_name("package: name='com.example.app' versionCode='1' versionName='1.0'")
 
         self.assertEqual("1.0", version_name)
 
     def _extract_version_code_when_present(self):
-        version_code = Aapt._extract_version_code("package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'")
+        version_code = Aapt._extract_version_code("package: name='com.example.app' versionCode='1' versionName='1.0'")
 
         self.assertEqual(1, version_code)
 
     def _extract_version_code_when_invalid(self):
-        version_code = Aapt._extract_version_code("package: name='com.example.app' versionCode='A' versionName='1.0' platformBuildVersionName='4'")
+        version_code = Aapt._extract_version_code("package: name='com.example.app' versionCode='A' versionName='1.0'")
 
         self.assertIsNone(version_code)
 
@@ -202,7 +206,7 @@ class TestAapt(unittest.TestCase):
 
     @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_apk_info(self, mock_popen):
-        dump_badging = b"package: name='com.example.app' versionCode='1' versionName='1.0' platformBuildVersionName='4'\n" \
+        dump_badging = b"package: name='com.example.app' versionCode='1' versionName='1.0'\n" \
                        b"sdkVersion:'10'\n" \
                        b"maxSdkVersion:'20'\n" \
                        b"targetSdkVersion:'15'"
@@ -263,7 +267,6 @@ class TestAapt(unittest.TestCase):
 
     @patch('ninjadroid.aapt.aapt.Popen')
     def test_get_manifest_info(self, mock_popen):
-        self.maxDiff = None
         dump_xmltree = b"N: android=http://schemas.android.com/apk/res/android\n" \
                        b"  E: manifest (line=2)\n" \
                        b"    E: application (line=8)\n" \
@@ -276,9 +279,9 @@ class TestAapt(unittest.TestCase):
                        b"      E: service (line=26)\n" \
                        b"        A: android:name(0x01010003)=\"any-other-service\" (Raw: \"any-other-service\")\n" \
                        b"      E: receiver (line=28)\n" \
-                       b"        A: android:name(0x01010003)=\"any-broadcast-receiver\" (Raw: \"any-broadcast-receiver\")\n" \
+                       b"        A: android:name(0x01010003)=\"any-receiver\" (Raw: \"any-receiver\")\n" \
                        b"      E: receiver (line=29)\n" \
-                       b"        A: android:name(0x01010003)=\"any-other-broadcast-receiver\" (Raw: \"any-other-broadcast-receiver\")"
+                       b"        A: android:name(0x01010003)=\"any-other-receiver\" (Raw: \"any-other-receiver\")"
         mock_popen.return_value = any_popen(dump_xmltree)
 
         manifest = Aapt.get_manifest_info("any-file-path")
@@ -295,8 +298,8 @@ class TestAapt(unittest.TestCase):
                     "any-other-service"
                 ],
                 "receivers": [
-                    "any-broadcast-receiver",
-                    "any-other-broadcast-receiver"
+                    "any-receiver",
+                    "any-other-receiver"
                 ]
             },
             manifest

@@ -8,6 +8,10 @@ from tests.utils.file import any_file
 
 
 class TestAPK(unittest.TestCase):
+    """
+    Test APK class.
+    """
+
     def test_apk_as_dict(self):
         apk = APK(
             filename="any-apk-file-name",

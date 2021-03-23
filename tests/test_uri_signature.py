@@ -1,10 +1,14 @@
-from parameterized import parameterized
 import unittest
+from parameterized import parameterized
 
 from ninjadroid.signatures.uri_signature import UriSignature
 
 
 class TestUriSignature(unittest.TestCase):
+    """
+    Test UriSignature parser.
+    """
+
     sut = UriSignature()
 
     @parameterized.expand([
@@ -58,19 +62,39 @@ class TestUriSignature(unittest.TestCase):
         ["  http://www.domain.com  ", "http://www.domain.com", True],
         ["  www.domain.com  ", "www.domain.com", True],
         [" http://www.host.domain.com/index.html", "http://www.host.domain.com/index.html", True],
-        ["  https://www.host.domain.org/path/to/page.php?query=value  ", "https://www.host.domain.org/path/to/page.php?query=value", True],
-        ["  https://www.host.domain.org/path/to/page.php?a=1&b=2#foo  ", "https://www.host.domain.org/path/to/page.php?a=1&b=2#foo", True],
+        [
+            "  https://www.host.domain.org/path/to/page.php?query=value  ",
+            "https://www.host.domain.org/path/to/page.php?query=value",
+            True
+        ],
+        [
+            "  https://www.host.domain.org/path/to/page.php?a=1&b=2#foo  ",
+            "https://www.host.domain.org/path/to/page.php?a=1&b=2#foo",
+            True
+        ],
         ["AB  www.domain.com  YZ", "www.domain.com", True],
-        [" http https://www.host.domain.com/path/to/page.php?a=1&b=2#foo & & #bar ", "https://www.host.domain.com/path/to/page.php?a=1&b=2#foo", True],
+        [
+            " http https://www.host.domain.com/path/to/page.php?a=1&b=2#foo & & #bar ",
+            "https://www.host.domain.com/path/to/page.php?a=1&b=2#foo",
+            True
+        ],
         ["http://host.domain.net/path/page", "http://host.domain.net/path/page", True],
         ["4http://www.host.domain.net/images/pic.png", "http://www.host.domain.net/images/pic.png", True],
         ["<a href=\"http://www.host.domain.com\" target=\"_blank\">", "http://www.host.domain.com", True],
         ["#http://schemas.android.com/apk/res/", "http://schemas.android.com/apk/res/", True],
-        ["Publisher ID is not set!  To serve ads you must set your publisher ID assigned from www.admob.com.  Either add it to AndroidManifest.xml under the <application> tag or call", "www.admob.com", True],
-        ["iSETUP ERROR:  Cannot use the sample publisher ID (a1496ced2842262).  Yours is available on www.admob.com.", "www.admob.com", True],
+        [
+            "Publisher ID is not set! To serve ads you must set your publisher ID assigned from www.admob.com.",
+            "www.admob.com",
+            True
+        ],
+        [
+            "Cannot use the sample publisher ID (a1496ced2842262). Yours is available on www.admob.com.",
+            "www.admob.com",
+            True
+        ],
         [" - no match - ", None, False],
         ["chmod 777", None, False],
-        ["Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None, False],
+        ["Mozilla/5.0 (Linux; U; Android %s) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", None, False],
     ])
     def test_search(self, pattern, expected_match, expected_is_valid):
         match, is_valid = self.sut.search(pattern)

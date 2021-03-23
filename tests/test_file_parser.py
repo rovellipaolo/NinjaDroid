@@ -1,14 +1,17 @@
-from os import listdir
-from os.path import join
-from parameterized import parameterized
 import unittest
 from unittest.mock import patch, mock_open
+from parameterized import parameterized
 from tests.utils.file import any_file, assert_file_equal
 
 from ninjadroid.parsers.file import FileParser, FileParsingError
 
 
+# pylint: disable=too-many-arguments,line-too-long
 class TestFileParser(unittest.TestCase):
+    """
+    Test File parser.
+    """
+
     ANY_FILE_SIZE = 70058
     ANY_FILE_MD5 = "c9504f487c8b51412ba4980bfe3cc15d"
     ANY_FILE_SHA1 = "482a28812495b996a92191fbb3be1376193ca59b"

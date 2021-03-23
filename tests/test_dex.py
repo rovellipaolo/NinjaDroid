@@ -4,6 +4,10 @@ from ninjadroid.parsers.dex import Dex
 
 
 class TestDex(unittest.TestCase):
+    """
+    Test Dex class.
+    """
+
     def test_dex_as_dict(self):
         dex = Dex(
             filename="any-file-name",

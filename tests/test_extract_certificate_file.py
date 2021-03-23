@@ -4,7 +4,12 @@ from unittest.mock import Mock, mock_open, patch
 from ninjadroid.use_cases.extract_certificate_file import ExtractCertificateFile
 
 
+# pylint: disable=too-many-arguments
 class TestExtractCertificateFile(unittest.TestCase):
+    """
+    Test ExtractCertificateFile use case.
+    """
+
     ANY_APK_FILE = "any-apk-file"
     ANY_CERT_NAME = "any-cert-name"
     ANY_CERT_FILE = "any-cert-file"

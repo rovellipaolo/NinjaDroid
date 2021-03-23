@@ -6,6 +6,10 @@ from ninjadroid.use_cases.print_apk_info import PrintApkInfo
 
 
 class TestPrintApkInfo(unittest.TestCase):
+    """
+    Test PrintApkInfo use case.
+    """
+
     ANY_JSON_REPORT = "any-json-report"
     ANY_APK_DUMP = {
         "any-key": "any-value",

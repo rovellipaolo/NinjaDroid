@@ -1,9 +1,14 @@
 import unittest
 
-from ninjadroid.parsers.manifest import AndroidManifest, AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
+from ninjadroid.parsers.manifest import AndroidManifest, AppActivity, AppBroadcastReceiver, AppService, AppSdk, \
+    AppVersion
 
 
 class TestAndroidManifest(unittest.TestCase):
+    """
+    Test AndroidManifest class.
+    """
+
     def test_manifest_as_dict(self):
         manifest = AndroidManifest(
             filename="any-file-name",

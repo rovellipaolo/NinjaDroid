@@ -5,14 +5,15 @@ fail-under=10.0
 
 # Disable some rules.
 # For example: C0114 (missing-module-docstring), C0115 (missing-class-docstring), C0116 (missing-function-docstring).
-disable=C0114, C0116, E0611, R0801
+disable=missing-module-docstring,missing-function-docstring,no-name-in-module,duplicate-code
 
 # Add files or directories to the blacklist. They should be base names, not paths.
 ignore=CVS
 
 # Add files or directories matching the regex patterns to the blacklist.
 # The regex matches against base names, not paths.
-ignore-patterns=^test_.+.py
+#ignore-patterns=^test_.+.py
+ignore-patterns=
 
 # Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the number of processors available to use.
 jobs=1

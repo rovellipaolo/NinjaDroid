@@ -1,10 +1,14 @@
-from parameterized import parameterized
 import unittest
+from parameterized import parameterized
 
 from ninjadroid.signatures.signature import Signature
 
 
 class TestSignature(unittest.TestCase):
+    """
+    Test Signature parser.
+    """
+
     sut = Signature()
 
     @parameterized.expand([
@@ -31,8 +35,16 @@ class TestSignature(unittest.TestCase):
         ["tattoo_hack_g6561203.ko", "tattoo_hack_g6561203.ko", True],
         ["6ixxx", "6ixxx", True],
         ["#preserveType: %b, type: %s, obj: %s", "#preserveType: %b, type: %s, obj: %s", True],
-        ["Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", "Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)", True],
-        ["8Lcom/corner23/android/universalandroot/UniversalAndroot;", "8Lcom/corner23/android/universalandroot/UniversalAndroot;", True],
+        [
+            "Mozilla/5.0 (Linux; U; Android %s) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)",
+            "Mozilla/5.0 (Linux; U; Android %s) Version/3.0.4 Mobile Safari/523.12.2 (AdMob-ANDROID-%s)",
+            True
+        ],
+        [
+            "8Lcom/corner23/android/universalandroot/UniversalAndroot;",
+            "8Lcom/corner23/android/universalandroot/UniversalAndroot;",
+            True
+        ],
         [" - no match - ", None, False],
         ["http://www.domain.com", None, False],
         ["chmod 777", None, False],

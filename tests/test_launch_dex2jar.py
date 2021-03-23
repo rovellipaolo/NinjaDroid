@@ -5,6 +5,10 @@ from ninjadroid.use_cases.launch_dex2jar import LaunchDex2Jar
 
 
 class TestLaunchDex2Jar(unittest.TestCase):
+    """
+    Test LaunchDex2Jar use case.
+    """
+
     ANY_PATH = "any-path"
     ANY_FILE = "any-file"
     ANY_DIRECTORY = "any-directory"

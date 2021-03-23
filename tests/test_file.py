@@ -4,6 +4,10 @@ from tests.utils.file import any_file
 
 
 class TestFile(unittest.TestCase):
+    """
+    Test File class.
+    """
+
     def test_file_as_dict(self):
         file = any_file(
             filename="any-file-name",

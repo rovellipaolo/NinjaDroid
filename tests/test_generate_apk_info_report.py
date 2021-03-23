@@ -5,6 +5,10 @@ from ninjadroid.use_cases.generate_apk_info_report import GenerateApkInfoReport
 
 
 class TestGenerateApkInfoReport(unittest.TestCase):
+    """
+    Test GenerateApkInfoReport use case.
+    """
+
     ANY_FILE = "any-file"
     ANY_DIRECTORY = "any-directory"
     ANY_JSON_PATH = "any-json-path"

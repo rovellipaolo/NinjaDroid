@@ -1,16 +1,20 @@
-from os.path import join
-from parameterized import parameterized
 import unittest
 from unittest.mock import call, Mock, patch
-from tests.utils.file import any_file, any_file_parser, any_file_parser_failure, assert_file_equal, assert_file_parser_called_once_with
-from tests.utils.popen import any_popen, assert_popen_called_once_with
 from typing import List
+from parameterized import parameterized
+from tests.utils.file import any_file, any_file_parser, any_file_parser_failure, assert_file_equal, \
+    assert_file_parser_called_once_with
+from tests.utils.popen import any_popen, assert_popen_called_once_with
 
 from ninjadroid.parsers.dex import DexParser
 from ninjadroid.parsers.file import FileParsingError
 
 
 class TestDexParser(unittest.TestCase):
+    """
+    Test Dex parser.
+    """
+
     sut = DexParser()
 
     @staticmethod

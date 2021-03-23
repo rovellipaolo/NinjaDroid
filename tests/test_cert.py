@@ -4,6 +4,10 @@ from ninjadroid.parsers.cert import Cert, CertFingerprint, CertParticipant, Cert
 
 
 class TestCert(unittest.TestCase):
+    """
+    Test Cert class.
+    """
+
     def test_cert_as_dict(self):
         cert = Cert(
             filename="any-file-name",

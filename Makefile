@@ -83,7 +83,7 @@ test:
 
 .PHONY: test-coverage
 test-coverage:
-	@coverage3 run --source=. -m unittest
+	@coverage3 run --source=. --omit="tests/*,regression/*" -m unittest
 	@coverage3 report
 
 .PHONY: test-docker

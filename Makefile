@@ -108,4 +108,4 @@ checkstyle:
 
 .PHONY: checkstyle-docker
 checkstyle-docker:
-	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/ regression/
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc -v ${NINJADROID_HOME}/tests:/opt/NinjaDroid/tests -v ${NINJADROID_HOME}/regression:/opt/NinjaDroid/regression ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/ regression/

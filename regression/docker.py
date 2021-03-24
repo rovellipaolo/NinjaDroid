@@ -6,7 +6,7 @@ class DockerRegressionSuite(RegressionSuite):
     Docker regression tests.
     """
 
-    BASE_COMMAND = "docker run --name ninjadroid -it --rm -v ${PWD}/apks:/apks ninjadroid:latest "
+    BASE_COMMAND = "docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest "
 
     def set_up(self):
         # self.execute_command("make build-docker")

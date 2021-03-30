@@ -82,9 +82,10 @@ $ mkdir apks
 $ cp /path/to/your/package.apk apks/package.apk
 $ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest ninjadroid /apks/package.apk -aj
 ```
-And the same applies also to the output directory when using the _"-e"_ or _"--extract"_ option:
+And the same applies also to the output directory when using the _"-e"_ or _"--extract"_ option, to which you also need to grant permissions:
 ```shell
 $ mkdir output
+$ chmod 777
 $ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid /apks/package.apk -ae /output
 ```
 
@@ -97,7 +98,7 @@ $ make build-flatpak
 $ flatpak-builder --run flatpak/build flatpak/net.paolorovelli.NinjaDroid.yaml ninjadroid --help
 ```
 
-**NOTE:** Flatpak support is still experimental and the <i>"-e"</i> or <i>"--extract"</i> option does not work correctly at present.
+**NOTE:** Flatpak support is still experimental and the _"-e"_ or _"--extract"_ option does not work correctly at present.
 
 
 

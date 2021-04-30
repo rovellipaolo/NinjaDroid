@@ -42,7 +42,7 @@ $ git clone https://github.com/rovellipaolo/NinjaDroid
 $ cd NinjaDroid
 ```
 
-NinjaDroid has several ways to be executed: natively in your local environment, in [Docker](https://www.docker.com/) or as a [Flatpak](https://flatpak.org/) (experimental).
+NinjaDroid has several ways to be executed: natively in your local environment, in [Docker](https://www.docker.com/), as a [Flatpak](https://flatpak.org/) (experimental) and as a [Snap](https://snapcraft.io/) (experimental).
 
 ### Native
 To execute NinjaDroid in your local machine, you need to install `Python 3.5` or higher, `Java 8` or higher and `binutils`.
@@ -90,7 +90,7 @@ $ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/outpu
 ```
 
 ### Flatpak
-To execute NinjaDroid as a Flatpak, you need `Flatpak` installed.
+To execute NinjaDroid as a Flatpak, you need `Flatpak` and `flatpak-builder` installed.
 
 Just launch the following commands, which will install all the needed Flatpak dependencies:
 ```shell
@@ -99,6 +99,19 @@ $ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid
 ```
 
 **NOTE:** Flatpak support is still experimental and the _"-e"_ or _"--extract"_ option does not work correctly at present.
+
+
+### Snap
+To execute NinjaDroid as a Snap, you need `Snap` and `snapcraft` installed.
+
+Just launch the following commands, which will install all the needed Snap dependencies:
+```shell
+$ make build-snap
+$ make install-snap
+$ ninjadroid --help
+```
+
+**NOTE:** Snap support is still experimental.
 
 
 

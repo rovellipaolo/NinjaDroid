@@ -43,6 +43,11 @@ build-flatpak:
 	@flatpak install flathub org.freedesktop.Sdk.Extension.toolchain-i386//20.08 --user
 	@flatpak-builder flatpak/build ${FLATPAK_MANIFEST} --force-clean
 
+.PHONY: build-snap
+build-snap:
+	@snapcraft clean
+	@snapcraft
+
 
 # Install:
 .PHONY: install
@@ -52,6 +57,14 @@ install:
 .PHONY: uninstall
 uninstall:
 	sudo unlink /usr/local/bin/ninjadroid
+
+.PHONY: install-snap
+install-snap:
+	snap install --devmode ninjadroid_4.5_amd64.snap
+
+.PHONY: uninstall-snap
+uninstall-snap:
+	snap remove ninjadroid
 
 .PHONY: install-githooks
 install-githooks:
@@ -102,6 +115,10 @@ regression-docker:
 .PHONY: regression-flatpak
 regression-flatpak:
 	@python3 regression/flatpak.py
+
+.PHONY: regression-snap
+regression-snap:
+	@python3 regression/snap.py
 
 .PHONY: checkstyle
 checkstyle:

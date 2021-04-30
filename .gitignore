@@ -7,3 +7,4 @@ output/*
 apks/*
 flatpak/build/*
 .flatpak-builder/*
+ninjadroid_*.snap

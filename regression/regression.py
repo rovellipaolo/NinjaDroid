@@ -61,8 +61,8 @@ class RegressionSuite:
 
     @staticmethod
     def execute_command(command: str) -> str:
-        process = Popen(command, stdout=PIPE, stderr=None, shell=True)
-        return process.communicate()[0].decode("utf-8")
+        with Popen(command, stdout=PIPE, stderr=None, shell=True) as process:
+            return process.communicate()[0].decode("utf-8")
 
     @staticmethod
     def assert_plain_text_equal(expected: str, actual: str, multiline: bool = True):

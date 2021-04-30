@@ -109,12 +109,12 @@ class DexParser:
 
     @staticmethod
     def parse_strings(filepath: str) -> List:
-        process = Popen("strings " + filepath, stdout=PIPE, stderr=None, shell=True)
-        strings = filter(
-            lambda string: string != "",
-            (string.strip() for string in process.communicate()[0].decode("utf-8").splitlines())
-        )
-        return sorted(strings)
+        with Popen("strings " + filepath, stdout=PIPE, stderr=None, shell=True) as process:
+            strings = filter(
+                lambda string: string != "",
+                (string.strip() for string in process.communicate()[0].decode("utf-8").splitlines())
+            )
+            return sorted(strings)
 
     @staticmethod
     def parse_signatures(signature: Signature, strings: List, min_string_len: Optional[bool] = None) -> List:

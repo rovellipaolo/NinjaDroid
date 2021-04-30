@@ -8,6 +8,7 @@ class NativeRegressionSuite(RegressionSuite):
 
     def set_up(self):
         # self.execute_command("make build")
+        # self.execute_command("make install")
         pass
 
     def tear_down(self):

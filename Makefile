@@ -19,12 +19,12 @@ build-macos:
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod -R 755 ninjadroid/dex2jar/
-	@pip3 install coverage
-	@pip3 install parameterized
-	@pip3 install pylint
-	@pip3 install python-dateutil
-	@pip3 install typing
-	@pip3 install tzlocal
+	@pip3 install coverage==5.5
+	@pip3 install parameterized==0.8.1
+	@pip3 install pylint==2.8.2
+	@pip3 install python-dateutil==2.8.1
+	@pip3 install typing==3.7.4
+	@pip3 install tzlocal==2.1
 	@pip3 install pyaxmlparser --user
 	mv -f ninjadroid/aapt/aapt_macos ninjadroid/aapt/aapt
 

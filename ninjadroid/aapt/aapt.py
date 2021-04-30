@@ -121,8 +121,8 @@ class Aapt:
 
     @classmethod
     def _launch_shell_command_and_get_result(cls, command: str) -> str:
-        process = Popen(command, stdout=PIPE, stderr=None, shell=True)
-        return process.communicate()[0].decode("utf-8")
+        with Popen(command, stdout=PIPE, stderr=None, shell=True) as process:
+            return process.communicate()[0].decode("utf-8")
 
     @classmethod
     def _extract_app_name(cls, info: str) -> str:

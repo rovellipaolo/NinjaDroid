@@ -7,10 +7,10 @@ jobs:
         - docker
       install:
         - make build-docker
-      script:  # NOTE: needed to override the generic "script" section
+      script:  # NOTE: needed to override the generic "script" section (no coverage)
         - make checkstyle-docker
         - make test-docker
-      after_success:  # NOTE: needed to override the generic "after_success" section (i.e. coveralls report)
+      after_success:  # NOTE: needed to override the generic "after_success" section (no coveralls)
         - docker ps -a
     # Linux: checkstyle and unit tests (with coverage)
     - name: "Python 3.5 on Linux"
@@ -18,11 +18,18 @@ jobs:
       install:
         - make build-linux
         - pip install coveralls
-    - name: "Python 3.8 on Linux"
-      python: 3.8
+    - name: "Python 3.6 on Linux"
+      python: 3.6
       install:
         - make build-linux
         - pip install coveralls
+    - name: "Python 3.9 on Linux"
+      python: 3.9
+      install:
+        - make build-linux
+        - pip install coveralls
+      script:  # NOTE: needed to override the generic "script" section (no checkstyle)
+        - make test-coverage
     # MacOS: checkstyle and unit tests (with coverage)
     - name: "Python 3.7.4 on macOS"
       os: osx

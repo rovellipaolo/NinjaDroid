@@ -30,7 +30,6 @@ modules:
         - --share=network
     build-commands:
       - mkdir /app/NinjaDroid
-      - cp requirements.txt /app/NinjaDroid/requirements.txt
       - cp ninjadroid.py /app/NinjaDroid/ninjadroid.py
       - cp -r ninjadroid /app/NinjaDroid/ninjadroid
       - pip3 install -r requirements/prod.txt

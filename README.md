@@ -95,7 +95,7 @@ To execute NinjaDroid as a Flatpak, you need `Flatpak` installed.
 Just launch the following commands, which will install all the needed Flatpak dependencies:
 ```shell
 $ make build-flatpak
-$ flatpak-builder --run flatpak/build flatpak/net.paolorovelli.NinjaDroid.yaml ninjadroid --help
+$ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid --help
 ```
 
 **NOTE:** Flatpak support is still experimental and the _"-e"_ or _"--extract"_ option does not work correctly at present.

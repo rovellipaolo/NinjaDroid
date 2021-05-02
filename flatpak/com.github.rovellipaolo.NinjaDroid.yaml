@@ -48,7 +48,9 @@ modules:
       - /app/NinjaDroid/requirements
       - /app/NinjaDroid/requirements.txt
       - /app/NinjaDroid/flatpak
+      - /app/NinjaDroid/snap
       - /app/NinjaDroid/tests
+      - /app/NinjaDroid/regression
       - /app/NinjaDroid/Makefile
       - /app/NinjaDroid/Dockerfile
       - /app/NinjaDroid/.dockerignore

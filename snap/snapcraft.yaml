@@ -5,8 +5,12 @@ summary: Ninja Reverse Engineering on Android APK packages
 description: |
   NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
-grade: devel  # NOTE: must be 'stable' to release into candidate/stable channels
-confinement: devmode  # NOTE: use 'strict' once stable
+architectures:
+  - build-on: amd64
+    run-on: amd64
+
+grade: stable
+confinement: strict
 
 parts:
   ninjadroid:
@@ -15,6 +19,8 @@ parts:
     requirements:
       - "requirements/prod.txt"
     source: .
+    build-packages:
+      - openjdk-11-jdk
     stage-packages:
       - binutils
       - openjdk-11-jdk

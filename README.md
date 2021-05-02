@@ -111,7 +111,7 @@ $ make install-snap
 $ ninjadroid --help
 ```
 
-**NOTE:** Snap support is still experimental.
+**NOTE:** Snap support is still experimental and does not work correctly at present.
 
 
 

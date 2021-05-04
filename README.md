@@ -3,6 +3,11 @@ NinjaDroid
 
 NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
+Published at: [https://snapcraft.io/ninjadroid](https://snapcraft.io/ninjadroid)
+```shell
+$ snap install ninjadroid --channel=beta
+```
+
 [![Build Status: TravisCI](https://travis-ci.org/rovellipaolo/NinjaDroid.svg?branch=master)](https://travis-ci.org/rovellipaolo/NinjaDroid)
 [![Test Coverage: Coveralls](https://coveralls.io/repos/github/rovellipaolo/NinjaDroid/badge.svg?branch=master)](https://coveralls.io/github/rovellipaolo/NinjaDroid?branch=master)
 [![Language Grade: LGTM.com](https://img.shields.io/lgtm/grade/python/g/rovellipaolo/NinjaDroid.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rovellipaolo/NinjaDroid/context:python)
@@ -111,7 +116,7 @@ $ make install-snap
 $ ninjadroid --help
 ```
 
-**NOTE:** Snap support is still experimental and does not work correctly at present.
+**NOTE:** Snap support is still experimental.
 
 
 

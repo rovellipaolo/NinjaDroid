@@ -6,6 +6,8 @@ class SnapRegressionSuite(RegressionSuite):
     Snap regression tests.
     """
 
+    BASE_PATH = "/snap/bin/"  # NOTE: to avoid collision with native install/regression...
+
     def set_up(self):
         # self.execute_command("make build-snap")
         # self.execute_command("make install-snap")
@@ -18,7 +20,7 @@ class SnapRegressionSuite(RegressionSuite):
     def show_summary(self):
         expected = self.read_plain_text_file("regression/expected/summary.txt")
 
-        result = self.execute_command("/snap/bin/ninjadroid regression/data/Example.apk")
+        result = self.execute_command(self.BASE_PATH + "ninjadroid regression/data/Example.apk")
 
         self.assert_plain_text_equal(expected, result)
 
@@ -31,7 +33,7 @@ class SnapRegressionSuite(RegressionSuite):
             }
         )
 
-        result = self.execute_command("/snap/bin/ninjadroid regression/data/Example.apk --all")
+        result = self.execute_command(self.BASE_PATH + "ninjadroid regression/data/Example.apk --all")
 
         self.assert_plain_text_equal(expected, result)
 
@@ -39,7 +41,7 @@ class SnapRegressionSuite(RegressionSuite):
     def show_json_summary(self):
         expected = self.read_json_file("regression/expected/summary.json")
 
-        result = self.execute_command("/snap/bin/ninjadroid regression/data/Example.apk --json")
+        result = self.execute_command(self.BASE_PATH + "ninjadroid regression/data/Example.apk --json")
 
         self.assert_json_equal(expected, result)
 
@@ -57,7 +59,7 @@ class SnapRegressionSuite(RegressionSuite):
             }
         )
 
-        result = self.execute_command("/snap/bin/ninjadroid regression/data/Example.apk --all --json")
+        result = self.execute_command(self.BASE_PATH + "ninjadroid regression/data/Example.apk --all --json")
 
         self.assert_json_equal(expected, result)
 
@@ -70,7 +72,7 @@ class SnapRegressionSuite(RegressionSuite):
             }
         )
 
-        self.execute_command("/snap/bin/ninjadroid regression/data/Example.apk --all --extract output/")
+        self.execute_command(self.BASE_PATH + "ninjadroid regression/data/Example.apk --all --extract output/")
         # NOTE: the .jar file checksum changes at every run...
         result = self.execute_command("find output/ -type f -exec md5sum '{}' + | grep -v Example.jar")
 

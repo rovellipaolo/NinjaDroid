@@ -13,21 +13,32 @@ grade: stable
 confinement: strict
 
 parts:
-  ninjadroid:
+  dependencies:
     plugin: python
     python-version: python3
     requirements:
       - "requirements/prod.txt"
     source: .
     build-packages:
+      # NOTE: the following dependency is needed to be able to upload the snap to snapcraft.io...
+      # (see: https://forum.snapcraft.io/t/resolve-package-contains-external-symlinks-error-when-trying-to-snap/2963/2)
       - openjdk-11-jdk
     stage-packages:
       - binutils
       - openjdk-11-jdk
+  ninjadroid:
+    after:
+      - dependencies
+    plugin: nil
+    source: .
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -av ninjadroid.py $SNAPCRAFT_PART_INSTALL/bin/ninjadroid.py
+      cp -avr ninjadroid $SNAPCRAFT_PART_INSTALL/bin/ninjadroid
 
 apps:
   ninjadroid:
-    command: usr/bin/python3 ninjadroid.py
+    command: usr/bin/python3 $SNAP/bin/ninjadroid.py
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-amd64
       PATH: $JAVA_HOME/bin:$PATH

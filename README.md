@@ -105,7 +105,7 @@ $ make build-flatpak
 $ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid --help
 ```
 
-**NOTE:** The `-e`/`--extract` option does not work correctly at present.
+**NOTE:** The `-e`/`--extract` option does not work correctly at present (see: https://github.com/rovellipaolo/NinjaDroid/issues/21).
 
 
 ### Snap (experimental)
@@ -118,7 +118,7 @@ $ make install-snap
 $ ninjadroid --help
 ```
 
-**NOTE:** The `-e`/`--extract` option is currently supported only in _devmode_, that is by installing the snap using the `--devmode` option.
+**NOTE:** The `-e`/`--extract` option does not work correctly when the snap is installed without using the `--devmode` option (see: https://github.com/rovellipaolo/NinjaDroid/issues/20).
 
 
 

@@ -12,6 +12,9 @@ class FlatpakRegressionSuite(RegressionSuite):
         # self.execute_command("make build-flatpak")
         pass
 
+    def tear_down(self):
+        self.execute_command("rm -r output/")
+
     @RegressionSuite.test
     def show_summary(self):
         expected = self.read_plain_text_file("regression/expected/summary.txt")
@@ -43,6 +46,22 @@ class FlatpakRegressionSuite(RegressionSuite):
         result = self.execute_command(self.BASE_COMMAND + "ninjadroid regression/data/Example.apk --all --json")
 
         self.assert_json_equal(expected, result)
+
+    @RegressionSuite.test
+    def extract_extended(self):
+        expected = self.read_plain_text_file(
+            "regression/expected/extract.txt",
+            overrides={
+                18: "6479d0295f183b10a9760990ee3d054a  output/report-Example.json"
+            }
+        )
+
+        self.execute_command(self.BASE_COMMAND + "ninjadroid regression/data/Example.apk --all --extract output/")
+        # NOTE: flatpak is currently failing to extract the .jar file...
+        # (see: https://github.com/rovellipaolo/NinjaDroid/issues/21)
+        result = self.execute_command("find output/ -type f -exec md5sum '{}' + | grep -v Example.jar")
+
+        self.assert_plain_text_equal(expected, result)
 
 
 if __name__ == "__main__":

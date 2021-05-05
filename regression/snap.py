@@ -65,6 +65,8 @@ class SnapRegressionSuite(RegressionSuite):
 
     @RegressionSuite.test
     def extract_extended(self):
+        # NOTE: this test will pass if and only if the snap has been installed in using the --devmode option...
+        # (see: https://github.com/rovellipaolo/NinjaDroid/issues/20)
         expected = self.read_plain_text_file(
             "regression/expected/extract.txt",
             overrides={

@@ -45,6 +45,8 @@ build-flatpak:
 
 .PHONY: build-snap
 build-snap:
+	find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf
+	rm -f ninjadroid_*.snap
 	@snapcraft clean
 	@snapcraft
 
@@ -60,7 +62,7 @@ uninstall:
 
 .PHONY: install-snap
 install-snap:
-	snap install --devmode ninjadroid_4.5_amd64.snap
+	snap install ninjadroid_4.5_amd64.snap --devmode
 
 .PHONY: uninstall-snap
 uninstall-snap:

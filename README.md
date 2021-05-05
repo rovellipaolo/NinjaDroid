@@ -13,6 +13,8 @@ $ snap install ninjadroid --channel=beta
 [![Language Grade: LGTM.com](https://img.shields.io/lgtm/grade/python/g/rovellipaolo/NinjaDroid.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rovellipaolo/NinjaDroid/context:python)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ninjadroid)
+
 ![NinjaDroid](docs/images/ninjadroid.gif "Screencast of NinjaDroid")
 
 
@@ -87,7 +89,7 @@ $ mkdir apks
 $ cp /path/to/your/package.apk apks/package.apk
 $ docker run --name ninjadroid -it --rm -v $(pwd)/apks:/apks ninjadroid:latest ninjadroid /apks/package.apk -aj
 ```
-And the same applies also to the output directory when using the _"-e"_ or _"--extract"_ option, to which you also need to grant permissions:
+And the same applies also to the output directory when using the `-e`/`--extract` option, to which you also need to grant permissions:
 ```shell
 $ mkdir output
 $ chmod 777
@@ -103,7 +105,7 @@ $ make build-flatpak
 $ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid --help
 ```
 
-**NOTE:** Flatpak support is still experimental and the _"-e"_ or _"--extract"_ option does not work correctly at present.
+**NOTE:** Flatpak support is still experimental and the `-e`/`--extract` option does not work correctly at present.
 
 
 ### Snap
@@ -116,7 +118,7 @@ $ make install-snap
 $ ninjadroid --help
 ```
 
-**NOTE:** Snap support is still experimental.
+**NOTE:** Snap support is still experimental and the `-e`/`--extract` option is currently supported only in _devmode_, that is by installing the snap using the `--devmode` option.
 
 
 
@@ -171,6 +173,12 @@ $ make regression-docker
 To run regression tests in Flatpak, launch the following command:
 ```shell
 $ make regression-flatpak
+```
+
+### Snap
+To run regression tests in Snap, launch the following command:
+```shell
+$ make regression-snap
 ```
 
 

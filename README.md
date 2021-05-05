@@ -96,7 +96,7 @@ $ chmod 777
 $ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/output ninjadroid:latest ninjadroid /apks/package.apk -ae /output
 ```
 
-### Flatpak
+### Flatpak (experimental)
 To execute NinjaDroid as a Flatpak, you need `Flatpak` and `flatpak-builder` installed.
 
 Just launch the following commands, which will install all the needed Flatpak dependencies:
@@ -105,10 +105,10 @@ $ make build-flatpak
 $ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid.yaml ninjadroid --help
 ```
 
-**NOTE:** Flatpak support is still experimental and the `-e`/`--extract` option does not work correctly at present.
+**NOTE:** The `-e`/`--extract` option does not work correctly at present.
 
 
-### Snap
+### Snap (experimental)
 To execute NinjaDroid as a Snap, you need `Snap` and `snapcraft` installed.
 
 Just launch the following commands, which will install all the needed Snap dependencies:
@@ -118,7 +118,7 @@ $ make install-snap
 $ ninjadroid --help
 ```
 
-**NOTE:** Snap support is still experimental and the `-e`/`--extract` option is currently supported only in _devmode_, that is by installing the snap using the `--devmode` option.
+**NOTE:** The `-e`/`--extract` option is currently supported only in _devmode_, that is by installing the snap using the `--devmode` option.
 
 
 

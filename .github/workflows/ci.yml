@@ -1,0 +1,37 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.5"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          make build
+          pip install coveralls
+      - name: Checkstyle
+        run: |
+          make checkstyle
+      - name: Tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          make test-coverage
+          coveralls --service=github

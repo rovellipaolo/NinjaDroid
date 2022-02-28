@@ -35,6 +35,3 @@ jobs:
         run: |
           make test-coverage
           coveralls --service=github
-      - name: Regression
-        run: |
-          make regression

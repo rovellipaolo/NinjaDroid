@@ -76,7 +76,6 @@ $ ninjadroid --help
 
 ### Docker
 To execute NinjaDroid in Docker, you need `Docker` installed.
-
 To build the Docker image, launch the following commands:
 ```shell
 $ make build-docker
@@ -98,7 +97,6 @@ $ docker run --name ninjadroid --rm -v $(pwd)/apks:/apks -v $(pwd)/output:/outpu
 
 ### Flatpak (experimental)
 To execute NinjaDroid as a Flatpak, you need `Flatpak` and `flatpak-builder` installed.
-
 Just launch the following commands, which will install all the needed Flatpak dependencies:
 ```shell
 $ make build-flatpak
@@ -110,7 +108,6 @@ $ flatpak-builder --run flatpak/build flatpak/com.github.rovellipaolo.NinjaDroid
 
 ### Snap (experimental)
 To execute NinjaDroid as a Snap, you need `Snap` and `snapcraft` installed.
-
 Just launch the following commands, which will install all the needed Snap dependencies:
 ```shell
 $ make build-snap

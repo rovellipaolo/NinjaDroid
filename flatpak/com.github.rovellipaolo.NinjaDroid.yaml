@@ -47,14 +47,14 @@ modules:
       - /app/NinjaDroid/README.md
       - /app/NinjaDroid/requirements
       - /app/NinjaDroid/requirements.txt
+      - /app/NinjaDroid/docker
       - /app/NinjaDroid/flatpak
       - /app/NinjaDroid/snap
       - /app/NinjaDroid/tests
       - /app/NinjaDroid/regression
       - /app/NinjaDroid/Makefile
-      - /app/NinjaDroid/Dockerfile
       - /app/NinjaDroid/.dockerignore
+      - /app/NinjaUri/.github
       - /app/NinjaDroid/.gitignore
-      - /app/NinjaDroid/.pylintrc.yaml
+      - /app/NinjaDroid/.pylintrc
       - /app/NinjaDroid/.pre-commit-config.yaml
-      - /app/NinjaDroid/.travis.yaml

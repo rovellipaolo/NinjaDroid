@@ -54,7 +54,7 @@ build-snap:
 # Install:
 .PHONY: install
 install:
-	sudo ln -s $(NINJADROID_HOME)/ninjadroid.py /usr/local/bin/ninjadroid
+	sudo ln -s ${NINJADROID_HOME}/ninjadroid.py /usr/local/bin/ninjadroid
 
 .PHONY: uninstall
 uninstall:

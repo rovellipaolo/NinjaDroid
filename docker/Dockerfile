@@ -1,17 +1,20 @@
 FROM openjdk:11-slim-buster
 
-# Install general dependencies
-
-RUN apt update \
-    && apt install -qy python3 python3-pip unzip wget binutils
-
-# Install Android SDK
+ENV NINJADROID_HOME=/opt/NinjaDroid
+ENV NINJADROID_USER=ninjadroid
 
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_SDK_TOOLS_VERSION=25.2.5
 ENV ANDROID_SDK_API_LEVELS=android-29
 ENV ANDROID_SDK_BUILD_TOOLS_VERSION=29.0.3
 ENV ANDROID_SDK_EXTRAS=""
+
+# Install general dependencies
+
+RUN apt update \
+    && apt install -qy python3 python3-pip unzip wget binutils
+
+# Install Android SDK
 
 ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}
 
@@ -23,9 +26,7 @@ RUN mkdir -p /opt/android-sdk && cd /opt \
 
 # Install NinjaDroid
 
-ENV NINJADROID_HOME=/opt/NinjaDroid
-
-RUN useradd -ms /bin/bash ninjadroid && \
+RUN useradd -ms /bin/bash ${NINJADROID_USER} && \
     mkdir -p ${NINJADROID_HOME}
 
 COPY requirements/ ${NINJADROID_HOME}/requirements/

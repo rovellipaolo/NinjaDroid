@@ -28,7 +28,7 @@ class RegressionSuite:
 
     @staticmethod
     def read_plain_text_file(path: str, overrides: Dict[int, str] = None) -> str:
-        with open(path, "r") as file:
+        with open(path, "r") as file:  # pylint: disable=unspecified-encoding
             plain_text = file.read()
             if overrides:
                 plain_text = RegressionSuite.__get_overridden_plain_text(plain_text, overrides)

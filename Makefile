@@ -19,11 +19,11 @@ build-macos:
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod -R 755 ninjadroid/dex2jar/
-	@pip3 install coverage==5.5
-	@pip3 install parameterized==0.8.1
-	@pip3 install pylint==2.6.2
-	@pip3 install python-dateutil==2.8.1
-	@pip3 install typing==3.7.4
+	@pip3 install coverage==6.*
+	@pip3 install parameterized==0.*
+	@pip3 install pylint==2.*
+	@pip3 install python-dateutil==2.8.*
+	@pip3 install typing==3.7.*
 	@pip3 install tzlocal==2.1
 	@pip3 install pyaxmlparser==0.3.24 --user
 	mv -f ninjadroid/aapt/aapt_macos ninjadroid/aapt/aapt
@@ -49,6 +49,10 @@ build-snap:
 	rm -f ninjadroid_*.snap
 	@snapcraft clean
 	@snapcraft
+
+.PHONY: generate-checkstyle-config
+generate-checkstyle-config:
+	pylint --generate-rcfile > .pylintrc
 
 
 # Install:

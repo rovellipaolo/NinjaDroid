@@ -24,7 +24,7 @@ class Signature:
     @classmethod
     def get_signature_regex_from_config(cls) -> Dict:
         signatures_regex = {}
-        with open(cls.CONFIG_FILE, "r") as config_file:  # pylint: disable=unspecified-encoding
+        with open(cls.CONFIG_FILE, "r") as config_file:
             config = json.load(config_file)
             for signature_name in cls.SIGNATURE_KEYS_LIST:
                 signatures_list = config[signature_name]

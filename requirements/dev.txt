@@ -1,4 +1,4 @@
 -r prod.txt
-coverage==5.*
+coverage==6.*
 parameterized==0.*
 pylint==2.*

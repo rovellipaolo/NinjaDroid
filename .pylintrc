@@ -5,7 +5,13 @@ fail-under=10.0
 
 # Disable some rules.
 # For example: C0114 (missing-module-docstring), C0115 (missing-class-docstring), C0116 (missing-function-docstring).
-disable=missing-module-docstring,missing-function-docstring,no-name-in-module,duplicate-code
+disable=missing-module-docstring,
+    missing-function-docstring,
+    no-name-in-module,
+    duplicate-code,
+    logging-fstring-interpolation,
+    consider-using-f-string,
+    unsubscriptable-object  # incompatible with Python 3.9 and 3.10
 
 # Add files or directories to the blacklist. They should be base names, not paths.
 ignore=CVS
@@ -107,9 +113,6 @@ ignored-argument-names=_.*|^ignored_|^unused_
 
 
 [LOGGING]
-
-# Allow usage of f-strings for logging.
-disable=logging-fstring-interpolation
 
 # The type of string formatting that logging methods do. `old` means using % formatting, `new` is for `{}` formatting.
 logging-format-style=old

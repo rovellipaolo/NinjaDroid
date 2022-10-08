@@ -50,6 +50,10 @@ build-snap:
 	@snapcraft clean
 	@snapcraft
 
+.PHONY: generate-checkstyle-config
+generate-checkstyle-config:
+	pylint --generate-rcfile > .pylintrc
+
 
 # Install:
 .PHONY: install

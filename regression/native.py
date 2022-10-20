@@ -58,4 +58,4 @@ class NativeRegressionSuite(RegressionSuite):
 
 
 if __name__ == "__main__":
-    run(suite = NativeRegressionSuite())
+    run(suite=NativeRegressionSuite())

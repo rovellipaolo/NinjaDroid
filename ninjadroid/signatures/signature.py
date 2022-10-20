@@ -14,12 +14,13 @@ class Signature:
     IS_REGEX = None
     IS_CONTAINED_REGEX = None
 
+    # pylint: disable=invalid-name
     def __init__(self):
         # NOTE: IS_REGEX and IS_CONTAINED_REGEX are time-consuming to compile.
         # Since they don't change at runtime we can do this just once.
         if self.IS_REGEX is None or self.IS_CONTAINED_REGEX is None:
             signatures_regex = self.get_signature_regex_from_config()
-            (self.IS_REGEX, self.IS_CONTAINED_REGEX) = self.compile_regex(signatures_regex)  # pylint: disable=invalid-name
+            (self.IS_REGEX, self.IS_CONTAINED_REGEX) = self.compile_regex(signatures_regex)
 
     @classmethod
     def get_signature_regex_from_config(cls) -> Dict:

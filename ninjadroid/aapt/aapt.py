@@ -127,7 +127,7 @@ class Aapt:
     @classmethod
     def _extract_app_name(cls, info: str) -> str:
         app_name = cls._extract_string_pattern(info, r"^application: .*label='([^']*)' .*")
-        if app_name is None or app_name  == "":
+        if app_name is None or app_name == "":
             app_name = cls._extract_string_pattern(info, r"^launchable-activity: .*label='([^']*)'.*")
         return app_name
 

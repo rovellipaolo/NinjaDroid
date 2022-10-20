@@ -18,7 +18,7 @@ class AppVersion:
     """
 
     def __init__(self, code: Optional[int], name: str):
-        self.__code= code
+        self.__code = code
         self.__name = name
 
     def __eq__(self, other: Any):
@@ -461,9 +461,9 @@ class AndroidManifestParser:
 
     @staticmethod
     def parse_sdk_from_dom(dom: Element) -> Optional[AppVersion]:
-        min_version =  "1"
-        target_version =  None
-        max_version =  None
+        min_version = "1"
+        target_version = None
+        max_version = None
         for element in dom.getElementsByTagName("uses-sdk"):
             if element.hasAttribute("android:minSdkVersion"):
                 min_version = element.getAttribute("android:minSdkVersion")

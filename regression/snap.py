@@ -82,4 +82,4 @@ class SnapRegressionSuite(RegressionSuite):
 
 
 if __name__ == "__main__":
-    run(suite = SnapRegressionSuite())
+    run(suite=SnapRegressionSuite())

@@ -175,9 +175,9 @@ class TestAndroidManifestParser(unittest.TestCase):
 
         manifest = self.sut.parse(
             filepath="any-file-path",
-            binary = False,
-            apk_path = "any_apk_path",
-            extended_processing = False
+            binary=False,
+            apk_path="any_apk_path",
+            extended_processing=False
         )
 
         assert_file_parser_called_once_with(
@@ -221,9 +221,9 @@ class TestAndroidManifestParser(unittest.TestCase):
 
         manifest = self.sut.parse(
             filepath="any-file-path",
-            binary = False,
-            apk_path = "any_apk_path",
-            extended_processing = True
+            binary=False,
+            apk_path="any_apk_path",
+            extended_processing=True
         )
 
         assert_file_parser_called_once_with(
@@ -264,9 +264,9 @@ class TestAndroidManifestParser(unittest.TestCase):
 
         manifest = self.sut.parse(
             filepath="any-file-path",
-            binary = False,
-            apk_path = "any_apk_path",
-            extended_processing = False
+            binary=False,
+            apk_path="any_apk_path",
+            extended_processing=False
         )
 
         assert_file_parser_called_once_with(
@@ -309,9 +309,9 @@ class TestAndroidManifestParser(unittest.TestCase):
 
         manifest = self.sut.parse(
             filepath="any-file-path",
-            binary = True,
-            apk_path = None,
-            extended_processing = False
+            binary=True,
+            apk_path=None,
+            extended_processing=False
         )
 
         assert_file_parser_called_once_with(
@@ -347,9 +347,9 @@ class TestAndroidManifestParser(unittest.TestCase):
         with self.assertRaises(AndroidManifestParsingError):
             self.sut.parse(
                 filepath="any-file-path",
-                binary = True,
-                apk_path = None,
-                extended_processing = False
+                binary=True,
+                apk_path=None,
+                extended_processing=False
             )
 
     @patch('ninjadroid.parsers.manifest.minidom')
@@ -364,9 +364,9 @@ class TestAndroidManifestParser(unittest.TestCase):
         with self.assertRaises(AndroidManifestParsingError):
             self.sut.parse(
                 filepath="any-file-path",
-                binary = False,
-                apk_path = None,
-                extended_processing = False
+                binary=False,
+                apk_path=None,
+                extended_processing=False
             )
 
     @patch('ninjadroid.parsers.manifest.Aapt')
@@ -390,9 +390,9 @@ class TestAndroidManifestParser(unittest.TestCase):
 
         manifest = self.sut.parse(
             filepath="any-file-path",
-            binary = False,
-            apk_path = "any_apk_path",
-            extended_processing = False
+            binary=False,
+            apk_path="any_apk_path",
+            extended_processing=False
         )
 
         assert_file_parser_called_once_with(
@@ -448,9 +448,9 @@ class TestAndroidManifestParser(unittest.TestCase):
 
         manifest = self.sut.parse(
             filepath="any-file-path",
-            binary = False,
-            apk_path = "any_apk_path",
-            extended_processing = True
+            binary=False,
+            apk_path="any_apk_path",
+            extended_processing=True
         )
 
         assert_file_parser_called_once_with(

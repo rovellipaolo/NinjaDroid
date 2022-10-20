@@ -96,4 +96,4 @@ class DockerRegressionSuite(RegressionSuite):
 
 
 if __name__ == "__main__":
-    run(suite = DockerRegressionSuite())
+    run(suite=DockerRegressionSuite())

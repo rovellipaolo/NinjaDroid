@@ -128,8 +128,9 @@ regression-snap:
 
 .PHONY: checkstyle
 checkstyle:
+	pycodestyle --max-line-length=120 ninjadroid.py ninjadroid/ tests/ regression/
 	pylint ninjadroid.py ninjadroid/ tests/ regression/
 
 .PHONY: checkstyle-docker
 checkstyle-docker:
-	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc -v ${NINJADROID_HOME}/tests:/opt/NinjaDroid/tests -v ${NINJADROID_HOME}/regression:/opt/NinjaDroid/regression ${DOCKER_IMAGE}:${DOCKER_TAG} pylint ninjadroid.py ninjadroid/ tests/ regression/
+	@docker run --name ${DOCKER_IMAGE} --rm -w /opt/NinjaDroid -v ${NINJADROID_HOME}/.pylintrc:/opt/NinjaDroid/.pylintrc -v ${NINJADROID_HOME}/tests:/opt/NinjaDroid/tests -v ${NINJADROID_HOME}/regression:/opt/NinjaDroid/regression ${DOCKER_IMAGE}:${DOCKER_TAG} pycodestyle --max-line-length=120 ninjadroid.py ninjadroid/ tests/ regression/ && pylint ninjadroid.py ninjadroid/ tests/ regression/

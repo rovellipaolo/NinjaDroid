@@ -71,9 +71,9 @@ class RegressionSuite:
             actual = " ".join(actual.split())
         equal = expected == actual
         if equal:
-            print(".", end ="")
+            print(".", end="")
             return
-        print("E", end ="")
+        print("E", end="")
         RegressionSuite.print_diff(expected, actual)
         sys.exit(1)
 
@@ -82,9 +82,9 @@ class RegressionSuite:
         expected_json = json.loads(expected)
         actual_json = json.loads(actual)
         if expected_json == actual_json:
-            print(".", end ="")
+            print(".", end="")
             return
-        print("E", end ="")
+        print("E", end="")
         # Update expected and actual by sorting the JSON keys (needed for the diff below):
         expected = json.dumps(expected_json, indent=4, sort_keys=True)
         actual = json.dumps(actual_json, indent=4, sort_keys=True)

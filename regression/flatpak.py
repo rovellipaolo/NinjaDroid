@@ -65,4 +65,4 @@ class FlatpakRegressionSuite(RegressionSuite):
 
 
 if __name__ == "__main__":
-    run(suite = FlatpakRegressionSuite())
+    run(suite=FlatpakRegressionSuite())

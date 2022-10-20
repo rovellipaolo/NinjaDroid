@@ -22,18 +22,22 @@ def any_file(
         sha512hash=sha512
     )
 
+
 def any_file_parser(file: File = any_file()) -> Mock:
     parser = Mock()
     parser.parse.return_value = file
     return parser
+
 
 def any_file_parser_failure() -> Mock:
     parser = Mock()
     parser.parse.side_effect = FileParsingError()
     return parser
 
+
 def assert_file_parser_called_once_with(parser: Mock, filepath: str, filename: str = "any-file-name"):
     parser.parse.assert_called_once_with(filepath, filename)
+
 
 def assert_file_equal(self: unittest.TestCase, expected: File, actual: File):
     self.assertEqual(expected.get_file_name(), actual.get_file_name())

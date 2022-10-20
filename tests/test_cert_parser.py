@@ -25,16 +25,19 @@ class TestCertParser(unittest.TestCase):
         mock_parser_instance = any_file_parser(file=file)
         mock_file_parser.return_value = mock_parser_instance
         mock_popen.return_value = any_popen(
-            response=b"Owner: CN=OwnerName, OU=OwnerUnit, O=OwnerOrganization, L=OwnerCity, ST=OwnerState, C=OwnerCountry\n" \
-                     b"Issuer: CN=IssuerName, OU=IssuerUnit, O=IssuerOrganization, L=IssuerCity, ST=IssuerState, C=IssuerCountry\n" \
-                     b"Serial number: 558e7595\n" \
-                     b"Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515\n" \
-                     b"Certificate fingerprints:\n" \
-                     b"\t MD5: 90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45\n" \
-                     b"\t SHA1: 5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6\n" \
-                     b"\t SHA256: E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77\n" \
-                     b"Signature algorithm name: SHA1withRSA\n" \
-                     b"Subject Public Key Algorithm: 1024-bit RSA key\n" \
+            response=b"Owner: CN=OwnerName, OU=OwnerUnit, O=OwnerOrganization, L=OwnerCity, ST=OwnerState, "
+                     b"C=OwnerCountry\n"
+                     b"Issuer: CN=IssuerName, OU=IssuerUnit, O=IssuerOrganization, L=IssuerCity, ST=IssuerState, "
+                     b"C=IssuerCountry\n"
+                     b"Serial number: 558e7595\n"
+                     b"Valid from: Sat Jun 27 12:06:13 CEST 2015 until: Tue Feb 26 11:06:13 CET 2515\n"
+                     b"Certificate fingerprints:\n"
+                     b"\t MD5: 90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45\n"
+                     b"\t SHA1: 5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6\n"
+                     b"\t SHA256: E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:"
+                     b"64:4A:CF:77\n"
+                     b"Signature algorithm name: SHA1withRSA\n"
+                     b"Subject Public Key Algorithm: 1024-bit RSA key\n"
                      b"Version: 3"
         )
         mock_get_localzone.return_value.localize.side_effect = ValueError()
@@ -53,7 +56,8 @@ class TestCertParser(unittest.TestCase):
             CertFingerprint(
                 md5="90:22:EF:0C:DB:C3:78:87:7B:C3:A3:6C:5A:68:E6:45",
                 sha1="5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6",
-                sha256="E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77",
+                sha256="E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:"
+                       "77",
                 signature="SHA1withRSA",
                 version="3"
             ),
@@ -137,7 +141,6 @@ class TestCertParser(unittest.TestCase):
             call("%Y-%m-%d %H:%M:%SZ")
         ])
         self.assertEqual(CertValidity(valid_from="2015-06-27 10:06:13Z", valid_to="2515-02-26 10:06:13Z"), validity)
-
 
     @patch('ninjadroid.parsers.cert.get_localzone')
     def test_parse_validity_when_localize_fails(self, mock_get_localzone):

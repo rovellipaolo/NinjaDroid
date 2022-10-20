@@ -13,7 +13,7 @@ class TestGenerateApkInfoReport(unittest.TestCase):
     ANY_DIRECTORY = "any-directory"
     ANY_JSON_PATH = "any-json-path"
     ANY_JSON_REPORT = "any-json-report"
-    ANY_APK_DUMP = { "any-key": "any-value" }
+    ANY_APK_DUMP = {"any-key": "any-value"}
 
     sut = GenerateApkInfoReport()
 

@@ -44,13 +44,13 @@ class APK(File):
     def get_app_name(self) -> str:
         return self.__app_name
 
-    def get_cert(self) -> Union[Cert,File]:
+    def get_cert(self) -> Union[Cert, File]:
         return self.__cert
 
-    def get_manifest(self) -> Union[AndroidManifest,File]:
+    def get_manifest(self) -> Union[AndroidManifest, File]:
         return self.__manifest
 
-    def get_dex_files(self) -> List[Union[Dex,File]]:
+    def get_dex_files(self) -> List[Union[Dex, File]]:
         return self.__dex
 
     def get_other_files(self) -> List[File]:
@@ -64,7 +64,6 @@ class APK(File):
         dump["dex"] = [dex.as_dict() for dex in self.__dex]
         dump["other"] = [file.as_dict() for file in self.__other]
         return dump
-
 
 
 class ApkParsingError(FileParsingError):
@@ -153,12 +152,12 @@ class ApkParser:
             other_files=other_files
         )
 
-    def __parse_cert(self, filepath: str, filename: str, extended_processing: bool) -> Union[Cert,File]:
+    def __parse_cert(self, filepath: str, filename: str, extended_processing: bool) -> Union[Cert, File]:
         if extended_processing:
             return self.cert_parser.parse(filepath, filename)
         return self.file_parser.parse(filepath, filename)
 
-    def __parse_dex(self, filepath: str, filename: str, extended_processing: bool) -> Union[Dex,File]:
+    def __parse_dex(self, filepath: str, filename: str, extended_processing: bool) -> Union[Dex, File]:
         if extended_processing:
             return self.dex_parser.parse(filepath, filename)
         return self.file_parser.parse(filepath, filename)

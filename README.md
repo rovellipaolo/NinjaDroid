@@ -10,7 +10,6 @@ $ snap install ninjadroid --channel=beta
 
 [![Build Status: GitHub Actions](https://github.com/rovellipaolo/NinjaDroid/actions/workflows/ci.yml/badge.svg)](https://github.com/rovellipaolo/NinjaDroid/actions)
 [![Test Coverage: Coveralls](https://coveralls.io/repos/github/rovellipaolo/NinjaDroid/badge.svg)](https://coveralls.io/github/rovellipaolo/NinjaDroid)
-[![Language Grade: LGTM.com](https://img.shields.io/lgtm/grade/python/g/rovellipaolo/NinjaDroid.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rovellipaolo/NinjaDroid/context:python)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ninjadroid)

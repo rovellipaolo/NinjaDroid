@@ -20,7 +20,7 @@ cert:
 		md5:   
 		sha1:  5A:C0:6C:32:63:7F:5D:BE:CA:F9:38:38:4C:FA:FF:ED:20:52:43:B6
 		sha256: E5:15:CC:BC:5E:BF:B2:9D:A6:13:03:63:CF:19:33:FA:CE:AF:DC:ED:5D:2F:F5:98:7C:CE:37:13:64:4A:CF:77
-		signature: SHA1withRSA
+		signature: SHA1withRSA (weak)
 		version: 3
 	owner:
 		name:  Name

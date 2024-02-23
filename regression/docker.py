@@ -39,8 +39,7 @@ class DockerRegressionSuite(RegressionSuite):
         expected = self.read_plain_text_file(
             "regression/expected/extended.txt",
             overrides={
-                0: "file:    /apks/Example.apk",
-                22: "signature: SHA1withRSA (weak)"
+                0: "file:    /apks/Example.apk"
             }
         )
 
@@ -63,13 +62,7 @@ class DockerRegressionSuite(RegressionSuite):
         expected = self.read_json_file(
             "regression/expected/extended.json",
             overrides={
-                "file": "/apks/Example.apk",
-                "cert": {
-                    "fingerprint": {
-                        "signature": "SHA1withRSA (weak)"
-                    }
-                },
-
+                "file": "/apks/Example.apk"
             }
         )
 
@@ -84,7 +77,7 @@ class DockerRegressionSuite(RegressionSuite):
         expected = self.read_plain_text_file(
             "regression/expected/extract.txt",
             overrides={
-                18: "7ab36f88adf38f96df05c9e024d548ab  output/report-Example.json"
+                22: "7ab36f88adf38f96df05c9e024d548ab  output/report-Example.json"
             }
         )
 

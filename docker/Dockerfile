@@ -1,4 +1,4 @@
-FROM openjdk:11-slim-buster
+FROM openjdk:21-slim-bookworm
 
 ENV NINJADROID_HOME=/opt/NinjaDroid
 ENV NINJADROID_USER=ninjadroid
@@ -35,7 +35,7 @@ COPY ninjadroid.py ${NINJADROID_HOME}
 COPY ninjadroid/ ${NINJADROID_HOME}/ninjadroid/
 
 #RUN pip3 install -r ${NINJADROID_HOME}/requirements/prod.txt \
-RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt \
+RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt --break-system-packages \
     && ln -s ${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}/aapt ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_HOME}/ninjadroid/apktool/apktool.jar \

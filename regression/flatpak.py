@@ -49,12 +49,7 @@ class FlatpakRegressionSuite(RegressionSuite):
 
     @RegressionSuite.test
     def extract_extended(self):
-        expected = self.read_plain_text_file(
-            "regression/expected/extract.txt",
-            overrides={
-                18: "6479d0295f183b10a9760990ee3d054a  output/report-Example.json"
-            }
-        )
+        expected = self.read_plain_text_file("regression/expected/extract.txt")
 
         self.execute_command(self.BASE_COMMAND + "ninjadroid regression/data/Example.apk --all --extract output/")
         # NOTE: flatpak is currently failing to extract the .jar file...

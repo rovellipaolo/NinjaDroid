@@ -38,9 +38,9 @@ build-docker:
 
 .PHONY: build-flatpak
 build-flatpak:
-	@flatpak install flathub org.freedesktop.Platform//20.08 org.freedesktop.Sdk//20.08 --user
-	@flatpak install flathub org.freedesktop.Sdk.Extension.openjdk11//20.08 --user
-	@flatpak install flathub org.freedesktop.Sdk.Extension.toolchain-i386//20.08 --user
+	@flatpak install flathub org.freedesktop.Platform//22.08 org.freedesktop.Sdk//22.08 --user
+	@flatpak install flathub org.freedesktop.Sdk.Extension.openjdk21//22.08 --user
+	@flatpak install flathub org.freedesktop.Sdk.Extension.toolchain-i386//22.08 --user
 	@flatpak-builder flatpak/build ${FLATPAK_MANIFEST} --force-clean
 
 .PHONY: build-snap

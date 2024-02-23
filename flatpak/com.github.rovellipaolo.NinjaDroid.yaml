@@ -1,9 +1,9 @@
 app-id: org.paolorovelli.NinjaDroid
 runtime: org.freedesktop.Platform
-runtime-version: "20.08"
+runtime-version: "22.08"
 sdk: org.freedesktop.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.openjdk11
+  - org.freedesktop.Sdk.Extension.openjdk21
   - org.freedesktop.Sdk.Extension.toolchain-i386
 command: ninjadroid
 finish-args:
@@ -13,7 +13,7 @@ modules:
   - name: openjdk
     buildsystem: simple
     build-commands:
-      - /usr/lib/sdk/openjdk11/install.sh
+      - /usr/lib/sdk/openjdk21/install.sh
   - name: python3
     sources:
       - type: archive

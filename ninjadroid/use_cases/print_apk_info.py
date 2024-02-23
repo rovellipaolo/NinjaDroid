@@ -58,5 +58,5 @@ class PrintApkInfo:
             if value is None:
                 output = key
             else:
-                output = "{0:8} {1}".format(key, value)
+                output = f"{key:8} {value}"
         return output

@@ -30,11 +30,6 @@ class LaunchDex2Jar:
         self.logger.info("Executing dex2jar...")
         self.logger.info("Creating %s/%s...", output_directory, jarfile)
 
-        command = "{} -f {} -o {}/{}".format(
-            self.dex2jar,
-            input_filepath,
-            output_directory,
-            jarfile
-        )
+        command = f"{self.dex2jar} -f {input_filepath} -o {output_directory}/{jarfile}"
         self.logger.debug("dex2jar command: `%s`", command)
         return os.system(command)

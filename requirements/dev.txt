@@ -1,5 +1,5 @@
 -r prod.txt
-coverage==5.5
-parameterized==0.8.*
+coverage==7.*
+parameterized==0.9.*
 pycodestyle==2.*
-pylint==2.6.*
+pylint==3.*

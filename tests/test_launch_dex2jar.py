@@ -27,12 +27,8 @@ class TestLaunchDex2Jar(unittest.TestCase):
         )
 
         mock_os.system.assert_called_once_with(
-            "{} -f {} -o {}/{}.jar".format(
-                TestLaunchDex2Jar.ANY_DEX2JAR,
-                TestLaunchDex2Jar.ANY_PATH,
-                TestLaunchDex2Jar.ANY_DIRECTORY,
-                TestLaunchDex2Jar.ANY_FILE
-            )
+            f"{TestLaunchDex2Jar.ANY_DEX2JAR} -f {TestLaunchDex2Jar.ANY_PATH} "
+            f"-o {TestLaunchDex2Jar.ANY_DIRECTORY}/{TestLaunchDex2Jar.ANY_FILE}.jar"
         )
 
 

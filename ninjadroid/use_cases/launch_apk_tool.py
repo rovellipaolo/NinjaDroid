@@ -32,10 +32,6 @@ class LaunchApkTool:
         self.logger.info("Creating %s/res/...", output_directory)
         self.logger.info("Creating %s/assets/...", output_directory)
 
-        command = "java -jar {} -q decode -f {} -o {}".format(
-            self.apktool,
-            input_filepath,
-            output_directory
-        )
+        command = f"java -jar {self.apktool} -q decode -f {input_filepath} -o {output_directory}"
         self.logger.debug("apktool command: `%s`", command)
         return os.system(command)

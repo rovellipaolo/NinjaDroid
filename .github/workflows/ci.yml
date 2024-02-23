@@ -10,12 +10,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-latest, macos-latest]
-        python-version: ["3.5", "3.8", "3.10"]
+        python-version: ["3.5", "3.10", "3.12"]
         exclude:
           - os: ubuntu-20.04
-            python-version: "3.8"
-          - os: ubuntu-20.04
             python-version: "3.10"
+          - os: ubuntu-20.04
+            python-version: "3.12"
           - os: ubuntu-latest
             python-version: "3.5"
           - os: macos-latest
@@ -24,9 +24,9 @@ jobs:
             python-version: "3.10"
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
@@ -43,3 +43,4 @@ jobs:
         run: |
           make test-coverage
           coveralls --service=github
+          echo "$(coverage3 report)" >> $GITHUB_STEP_SUMMARY

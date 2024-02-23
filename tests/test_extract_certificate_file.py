@@ -39,6 +39,7 @@ class TestExtractCertificateFile(unittest.TestCase):
             TestExtractCertificateFile.ANY_CERT_NAME
         )
         mock_file.assert_called_with(TestExtractCertificateFile.ANY_CERT_PATH, "wb")
+        # pylint: disable-next=unnecessary-dunder-call
         mock_shutil.copyfileobj.assert_called_once_with(mock_zip().__enter__().open().__enter__(), mock_file())
 
     @staticmethod

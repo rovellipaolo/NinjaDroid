@@ -25,7 +25,7 @@ class Signature:
     @classmethod
     def get_signature_regex_from_config(cls) -> Dict:
         signatures_regex = {}
-        with open(cls.CONFIG_FILE, "r") as config_file:
+        with open(cls.CONFIG_FILE, "r", encoding="utf-8") as config_file:
             config = json.load(config_file)
             for signature_name in cls.SIGNATURE_KEYS_LIST:
                 signatures_list = config[signature_name]

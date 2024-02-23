@@ -108,7 +108,7 @@ def get_args() -> Namespace:
         "-v",
         "--version",
         action="version",
-        version="NinjaDroid {0}".format(VERSION),
+        version=f"NinjaDroid {VERSION}",
         help="show version"
     )
     return parser.parse_args()

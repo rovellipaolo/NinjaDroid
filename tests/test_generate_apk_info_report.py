@@ -39,7 +39,7 @@ class TestGenerateApkInfoReport(unittest.TestCase):
             ensure_ascii=False,
             indent=4
         )
-        mock_file.assert_called_with(TestGenerateApkInfoReport.ANY_JSON_PATH, "w")
+        mock_file.assert_called_with(TestGenerateApkInfoReport.ANY_JSON_PATH, "w", encoding="utf-8")
         mock_file().write.assert_called_once_with(TestGenerateApkInfoReport.ANY_JSON_REPORT)
 
 

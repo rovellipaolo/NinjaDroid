@@ -22,11 +22,8 @@ class TestLaunchApkTool(unittest.TestCase):
         self.sut.execute(input_filepath=TestLaunchApkTool.ANY_PATH, output_directory=TestLaunchApkTool.ANY_DIRECTORY)
 
         mock_os.system.assert_called_once_with(
-            "java -jar {} -q decode -f {} -o {}".format(
-                TestLaunchApkTool.ANY_APKTOOL,
-                TestLaunchApkTool.ANY_PATH,
-                TestLaunchApkTool.ANY_DIRECTORY
-            )
+            f"java -jar {TestLaunchApkTool.ANY_APKTOOL} -q decode -f {TestLaunchApkTool.ANY_PATH} "
+            f"-o {TestLaunchApkTool.ANY_DIRECTORY}"
         )
 
 

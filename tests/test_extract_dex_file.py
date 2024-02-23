@@ -36,6 +36,7 @@ class TestExtractDexFile(unittest.TestCase):
         mock_os.path.join.assert_called_once_with(TestExtractDexFile.ANY_DIRECTORY, TestExtractDexFile.ANY_DEX_FILE)
         mock_os.path.split.assert_called_once_with(TestExtractDexFile.ANY_DEX_PATH)
         mock_file.assert_called_with(TestExtractDexFile.ANY_DEX_PATH, "wb")
+        # pylint: disable-next=unnecessary-dunder-call
         mock_shutil.copyfileobj.assert_called_once_with(mock_zip().__enter__().open().__enter__(), mock_file())
 
     @staticmethod

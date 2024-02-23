@@ -22,6 +22,6 @@ class GenerateApkInfoReport:
         self.logger.info("Generating JSON report file...")
         report_filename = GenerateApkInfoReport.__REPORT_FILENAME_PREFIX + input_filename + ".json"
         self.logger.info("Creating %s/%s...", output_directory, report_filename)
-        with open(os.path.join(output_directory, report_filename), "w") as file:
+        with open(os.path.join(output_directory, report_filename), "w", encoding="utf-8") as file:
             apk_info = json.dumps(apk.as_dict(), sort_keys=True, ensure_ascii=False, indent=4)
             file.write(apk_info)

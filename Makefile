@@ -12,20 +12,14 @@ build:
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod -R 755 ninjadroid/dex2jar/
-	@pip3 install -r requirements.txt
+	@which pipenv || pip3 install pipenv
+	@pipenv install --dev
 
 build-macos:
-	#make build
+	make build
 	sudo chmod 755 ninjadroid/aapt/aapt
 	sudo chmod 755 ninjadroid/apktool/apktool.jar
 	sudo chmod -R 755 ninjadroid/dex2jar/
-	@pip3 install coverage==5.5
-	@pip3 install parameterized==0.8.1
-	@pip3 install pylint==2.6.2
-	@pip3 install python-dateutil==2.8.1
-	@pip3 install typing==3.7.4
-	@pip3 install tzlocal==2.1
-	@pip3 install pyaxmlparser==0.3.24 --user
 	mv -f ninjadroid/aapt/aapt_macos ninjadroid/aapt/aapt
 
 build-linux:
@@ -47,6 +41,7 @@ build-flatpak:
 build-snap:
 	find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf
 	rm -f ninjadroid_*.snap
+	@pipenv requirements > requirements.txt
 	@snapcraft clean
 	@snapcraft
 
@@ -85,7 +80,7 @@ uninstall-githooks:
 # Run:
 .PHONY: run
 run:
-	@python3 ninjadroid.py $(apk)
+	@pipenv run python3 ninjadroid.py $(apk)
 
 .PHONY: run-docker
 run-docker:
@@ -99,12 +94,12 @@ run-flatpak:
 # Test:
 .PHONY: test
 test:
-	@python3 -m unittest
+	@pipenv run python3 -m unittest
 
 .PHONY: test-coverage
 test-coverage:
-	@coverage3 run --source=. --omit="tests/*,regression/*" -m unittest
-	@coverage3 report
+	@pipenv run coverage3 run --source=. --omit="tests/*,regression/*" -m unittest
+	@pipenv run coverage3 report
 
 .PHONY: test-docker
 test-docker:
@@ -112,24 +107,24 @@ test-docker:
 
 .PHONY: regression
 regression:
-	@python3 regression/native.py
+	@pipenv run python3 regression/native.py
 
 .PHONY: regression-docker
 regression-docker:
-	@python3 regression/docker.py
+	@pipenv run python3 regression/docker.py
 
 .PHONY: regression-flatpak
 regression-flatpak:
-	@python3 regression/flatpak.py
+	@pipenv run python3 regression/flatpak.py
 
 .PHONY: regression-snap
 regression-snap:
-	@python3 regression/snap.py
+	@pipenv run python3 regression/snap.py
 
 .PHONY: checkstyle
 checkstyle:
-	pycodestyle --max-line-length=120 ninjadroid.py ninjadroid/ tests/ regression/
-	pylint ninjadroid.py ninjadroid/ tests/ regression/
+	@pipenv run pycodestyle --max-line-length=120 ninjadroid.py ninjadroid/ tests/ regression/
+	@pipenv run pylint ninjadroid.py ninjadroid/ tests/ regression/
 
 .PHONY: checkstyle-docker
 checkstyle-docker:

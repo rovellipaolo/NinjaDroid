@@ -12,7 +12,7 @@ ENV ANDROID_SDK_EXTRAS=""
 # Install general dependencies
 
 RUN apt update \
-    && apt install -qy python3 python3-pip unzip wget binutils
+    && apt install -qy python3 pipenv unzip wget binutils
 
 # Install Android SDK
 
@@ -29,13 +29,14 @@ RUN mkdir -p /opt/android-sdk && cd /opt \
 RUN useradd -ms /bin/bash ${NINJADROID_USER} && \
     mkdir -p ${NINJADROID_HOME}
 
-COPY requirements/ ${NINJADROID_HOME}/requirements/
-COPY requirements.txt ${NINJADROID_HOME}
+COPY Pipfile ${NINJADROID_HOME}/Pipfile
+COPY Pipfile.lock ${NINJADROID_HOME}/Pipfile.lock
 COPY ninjadroid.py ${NINJADROID_HOME}
 COPY ninjadroid/ ${NINJADROID_HOME}/ninjadroid/
 
-#RUN pip3 install -r ${NINJADROID_HOME}/requirements/prod.txt \
-RUN pip3 install -r ${NINJADROID_HOME}/requirements.txt --break-system-packages \
+# NOTE: To install only production dependencies remove the "--dev" flag from the below "pipenv install" command!
+#RUN PIPENV_PIPFILE=${NINJADROID_HOME}/Pipfile pipenv install --system --deploy \
+RUN PIPENV_PIPFILE=${NINJADROID_HOME}/Pipfile pipenv install --dev --system --deploy \
     && ln -s ${ANDROID_HOME}/build-tools/${ANDROID_SDK_BUILD_TOOLS_VERSION}/aapt ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_HOME}/ninjadroid/aapt/aapt \
     && chmod a+x ${NINJADROID_HOME}/ninjadroid/apktool/apktool.jar \

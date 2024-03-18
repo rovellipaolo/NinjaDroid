@@ -17,7 +17,7 @@ parts:
     plugin: python
     python-version: python3
     requirements:
-      - "requirements/prod.txt"
+      - "requirements.txt"
     source: .
     build-packages:
       # NOTE: the following dependency is needed to be able to upload the snap to snapcraft.io...

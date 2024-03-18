@@ -26,12 +26,7 @@ class SnapRegressionSuite(RegressionSuite):
 
     @RegressionSuite.test
     def show_extended(self):
-        expected = self.read_plain_text_file(
-            "regression/expected/extended.txt",
-            overrides={
-                22: "\t\tsignature: SHA1withRSA (weak)"
-            }
-        )
+        expected = self.read_plain_text_file("regression/expected/extended.txt")
 
         result = self.execute_command(self.BASE_PATH + "ninjadroid regression/data/Example.apk --all")
 

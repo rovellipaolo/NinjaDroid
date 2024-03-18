@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyaxmlparser = "==0.3.*"
+python-dateutil = "==2.*"
+typing = "==3.*"
+tzlocal = "==2.1"
+
+[dev-packages]
+coverage = "==7.*"
+parameterized = "==0.9.*"
+pycodestyle = "==2.*"
+pylint = "==3.*"

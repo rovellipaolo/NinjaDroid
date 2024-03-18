@@ -1,5 +1,0 @@
--r prod.txt
-coverage==7.*
-parameterized==0.9.*
-pycodestyle==2.*
-pylint==3.*

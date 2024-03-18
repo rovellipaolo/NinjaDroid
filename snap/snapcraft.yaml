@@ -1,13 +1,13 @@
 name: ninjadroid
-base: core18
-version: '4.5'
+base: core22
+version: '4.5.1'
 summary: Ninja Reverse Engineering on Android APK packages
 description: |
   NinjaDroid is a simple tool to reverse engineering Android APK packages.
 
 architectures:
   - build-on: amd64
-    run-on: amd64
+    build-for: amd64
 
 grade: stable
 confinement: strict
@@ -15,23 +15,23 @@ confinement: strict
 parts:
   dependencies:
     plugin: python
-    python-version: python3
-    requirements:
-      - "requirements.txt"
+    python-packages:
+      - pipenv
     source: .
     build-packages:
       # NOTE: the following dependency is needed to be able to upload the snap to snapcraft.io...
       # (see: https://forum.snapcraft.io/t/resolve-package-contains-external-symlinks-error-when-trying-to-snap/2963/2)
-      - openjdk-11-jdk
+      - openjdk-21-jdk
     stage-packages:
       - binutils
-      - openjdk-11-jdk
+      - openjdk-21-jdk
   ninjadroid:
     after:
       - dependencies
     plugin: nil
     source: .
     override-build: |
+      pipenv install --system --deploy
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin
       cp -av ninjadroid.py $SNAPCRAFT_PART_INSTALL/bin/ninjadroid.py
       cp -avr ninjadroid $SNAPCRAFT_PART_INSTALL/bin/ninjadroid
@@ -40,7 +40,7 @@ apps:
   ninjadroid:
     command: usr/bin/python3 $SNAP/bin/ninjadroid.py
     environment:
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-amd64
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64
       PATH: $JAVA_HOME/bin:$PATH
     plugs:
       - home

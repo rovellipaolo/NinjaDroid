@@ -8,6 +8,8 @@ pyaxmlparser = "==0.3.*"
 python-dateutil = "==2.*"
 typing = "==3.*"
 tzlocal = "==2.1"
+# Needed only for Python < 3.11:
+tomli = "==2.*"
 
 [dev-packages]
 coverage = "==7.*"

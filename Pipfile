@@ -10,6 +10,7 @@ typing = "==3.*"
 tzlocal = "==2.1"
 # Needed only for Python < 3.11:
 tomli = "==2.*"
+typing_extensions = "==4.*"
 
 [dev-packages]
 coverage = "==7.*"

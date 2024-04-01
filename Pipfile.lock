@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3446e52f4f447c9811e9a45fd302ffc203ba2a083de1d83a7cfb5b3ed8304763"
+            "sha256": "36d119e8df9938871f3fb414124360ab0b244afc1929ed3b2368c4c472934cec"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -201,11 +201,11 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:4148645659b08b70d72460ed1921158027a9e53ae8b7234149b1400eddacbb93",
-                "sha256:92fcf218b89f449cdf9f7b39a269f8d5d617b27be68434912e11e79203963a17"
+                "sha256:951798f922990137ac090c53af473db7ab4e70c770e6d7fae0cec59f74411819",
+                "sha256:ac248253bfa4bd924a0de213707e7ebeeb3138abeb48d798784ead1e56d419d4"
             ],
             "markers": "python_full_version >= '3.8.0'",
-            "version": "==3.0.3"
+            "version": "==3.1.0"
         },
         "coverage": {
             "hashes": [
@@ -318,12 +318,12 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:59ab3532506f32affefeb50d5057a221bb351f5a1383fa36c424c2c6c05e7005",
-                "sha256:d73b70b3fff8f3fbdcb49a209b9c7d71d8090c138d61d576d1895e152cb392b3"
+                "sha256:507a5b60953874766d8a366e8e8c7af63e058b26345cfcb5f91f89d987fd6b74",
+                "sha256:6a69beb4a6f63debebaab0a3477ecd0f559aa726af4954fc948c51f7a2549e23"
             ],
             "index": "pypi",
             "markers": "python_full_version >= '3.8.0'",
-            "version": "==3.0.4"
+            "version": "==3.1.0"
         },
         "tomlkit": {
             "hashes": [

@@ -46,8 +46,8 @@ modules:
     cleanup:
       - /app/NinjaDroid/docs
       - /app/NinjaDroid/README.md
-      - /app/NinjaDroid/requirements
-      - /app/NinjaDroid/requirements.txt
+      - /app/NinjaDroid/Pipfile
+      - /app/NinjaDroid/Pipfile.lock
       - /app/NinjaDroid/docker
       - /app/NinjaDroid/flatpak
       - /app/NinjaDroid/snap

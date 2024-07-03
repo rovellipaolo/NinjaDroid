@@ -39,7 +39,7 @@ Furthermore, NinjaDroid uses [apktool](https://github.com/iBotPeaches/Apktool) a
 
 
 
-## Installation
+## Build
 
 The first step is cloning the NinjaDroid repository, or downloading its source code.
 
@@ -117,40 +117,16 @@ $ ninjadroid --help
 **NOTE:** The `-e`/`--extract` option does not work correctly when the snap is installed without using the `--devmode` option (see: https://github.com/rovellipaolo/NinjaDroid/issues/20).
 
 
+## Test
 
-## Checkstyle
-
-Once you've configured it (see the _"Installation"_ section), you can also run NinjaDroid checkstyle as follows.
-
-### Native
-To run the checkstyle in your local machine, launch the following command:
-```shell
-$ make checkstyle
-```
-**NOTE:** This is using [`pylint`](https://github.com/PyCQA/pylint) under-the-hood.
-
-You can also run the checkstyle automatically at every git commit by launching the following command:
-```shell
-$ make install-githooks
-```
-
-### Docker
-To run the checkstyle in Docker, launch the following command:
-```shell
-$ make checkstyle-docker
-```
-
-
-
-## Tests
-
-Once you've configured it (see the _"Installation"_ section), you can also run NinjaDroid tests as follows.
+Once you've configured it (see the _"Installation"_ section), you can also run the tests and checkstyle as follows.
 
 ### Native
-To run unit and regression tests in your local machine, launch the following commands:
+To run them in your local machine, launch the following commands:
 ```shell
 $ make test
 $ make regression
+$ make checkstyle
 ```
 
 You can also run the tests with coverage by launching the following command:
@@ -158,21 +134,27 @@ You can also run the tests with coverage by launching the following command:
 $ make test-coverage
 ```
 
+And/or configure the checkstyle to run automatically at every git commit by launching the following command:
+```
+$ make install-githooks
+```
+
 ### Docker
-To run unit and regression tests in Docker, launch the following commands:
+To run them in Docker, launch the following commands:
 ```shell
 $ make test-docker
 $ make regression-docker
+$ make checkstyle-docker
 ```
 
 ### Flatpak
-To run regression tests in Flatpak, launch the following command:
+To run the regression tests in Flatpak, launch the following command:
 ```shell
 $ make regression-flatpak
 ```
 
 ### Snap
-To run regression tests in Snap, launch the following command:
+To run the regression tests in Snap, launch the following command:
 ```shell
 $ make regression-snap
 ```

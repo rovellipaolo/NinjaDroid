@@ -117,6 +117,7 @@ $ ninjadroid --help
 **NOTE:** The `-e`/`--extract` option does not work correctly when the snap is installed without using the `--devmode` option (see: https://github.com/rovellipaolo/NinjaDroid/issues/20).
 
 
+
 ## Test
 
 Once you've configured it (see the _"Installation"_ section), you can also run the tests and checkstyle as follows.

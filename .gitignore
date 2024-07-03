@@ -1,6 +1,7 @@
 *.pyc
 __pycache__
 .coverage
+coverage.xml
 .DS_Store
 .idea/*
 output/*

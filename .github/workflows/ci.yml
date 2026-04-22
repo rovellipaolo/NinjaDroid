@@ -57,4 +57,4 @@ jobs:
       - name: Show coverage report in GitHub Actions summary (macOS fallback)
         if: ${{ matrix.os == 'macos-latest' && hashFiles('.coverage') != '' }}
         run: |
-          echo "$(coverage3 report --data-file=".coverage" --show-missing)" >> $GITHUB_STEP_SUMMARY
+          echo "$(coverage report --data-file=".coverage" --show-missing)" >> $GITHUB_STEP_SUMMARY

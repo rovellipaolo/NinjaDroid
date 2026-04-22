@@ -98,9 +98,9 @@ test:
 
 .PHONY: test-coverage
 test-coverage:
-	@pipenv run coverage3 run --branch --source=. --omit="tests/*,regression/*" --data-file=".coverage" -m unittest
-	@pipenv run coverage3 xml --data-file=".coverage" -o "coverage.xml"
-	@pipenv run coverage3 report --data-file=".coverage" --show-missing
+	@pipenv run coverage run --branch --source=. --omit="tests/*,regression/*" --data-file=".coverage" -m unittest
+	@pipenv run coverage xml --data-file=".coverage" -o "coverage.xml"
+	@pipenv run coverage report --data-file=".coverage" --show-missing
 
 .PHONY: test-docker
 test-docker:

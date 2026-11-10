@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from ninjadroid.parsers.file import File, FileParsingError
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def any_file(
         filename: str = "any-file-name",
         size: str = 10,

@@ -9,7 +9,7 @@ from ninjadroid.parsers.manifest import AndroidManifest, AndroidManifestParser, 
     AppActivity, AppBroadcastReceiver, AppService, AppSdk, AppVersion
 
 
-# pylint: disable=too-many-arguments,too-many-locals,unused-argument
+# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals,unused-argument
 class TestAndroidManifestParser(unittest.TestCase):
     """
     Test AndroidManifest parser.

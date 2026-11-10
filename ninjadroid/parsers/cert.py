@@ -92,7 +92,7 @@ class CertParticipant:
    CERT owner/issuer information.
    """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
             self,
             name: str,
@@ -166,7 +166,7 @@ class Cert(File):
    Android CERT.RSA/DSA certificate file information.
    """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
             self,
             filename: str,

@@ -14,7 +14,7 @@ class File:
     Generic file information.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, filename: str, size: str, md5hash: str, sha1hash: str, sha256hash: str, sha512hash: str):
         self.__name = filename
         self.__size = size

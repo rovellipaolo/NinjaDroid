@@ -111,7 +111,7 @@ class AppActivity(AppComponent):
     AndroidManifest activity information.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
             self,
             name: str,
@@ -160,7 +160,7 @@ class AppService(AppComponent):
     AndroidManifest service information.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
             self,
             name: str,
@@ -217,7 +217,7 @@ class AppBroadcastReceiver(AppComponent):
     AndroidManifest broadcast-receiver information.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
             self,
             name: str,
@@ -258,7 +258,7 @@ class AndroidManifest(File):
     AndroidManifest.xml file information.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
             self,
             filename: str,

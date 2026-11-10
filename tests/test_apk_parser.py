@@ -11,7 +11,7 @@ from ninjadroid.parsers.file import File, FileParsingError
 from tests.utils.file import any_file, assert_file_equal
 
 
-# pylint: disable=too-many-arguments,too-many-locals
+# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
 class TestApkParser(unittest.TestCase):
     """
     Test APK parser.

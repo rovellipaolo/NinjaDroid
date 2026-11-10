@@ -6,7 +6,7 @@ from tests.utils.file import any_file, assert_file_equal
 from ninjadroid.parsers.file import FileParser, FileParsingError
 
 
-# pylint: disable=too-many-arguments,line-too-long
+# pylint: disable=too-many-arguments,too-many-positional-arguments,line-too-long
 class TestFileParser(unittest.TestCase):
     """
     Test File parser.
